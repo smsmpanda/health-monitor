@@ -1,0 +1,57 @@
+﻿<Window x:Class="HealthMonitor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HealthMonitor"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        Title="健康监测" Height="300" Width="550">
+    <Window.Resources>
+        <Style x:Key="JRButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="10" Background="AliceBlue">
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <ContentPresenter x:Name="contentPresenter" Content="{TemplateBinding Content}"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <DockPanel Margin="10">
+        <TabControl Name="tcSample" Margin="10" BorderBrush="Gainsboro">
+            <TabItem Header="应用进程监测">
+                <ListBox ItemsSource="{Binding ProcessHealthItems}"  HorizontalAlignment="Left"  Name="lbProcess" VerticalAlignment="Top" BorderThickness="0">
+                    <ListBox.ItemTemplate>
+                        <HierarchicalDataTemplate>
+                            <CheckBox IsChecked="{Binding IsCheck}" Checked="Process_CheckChanged" Unchecked="Process_UnCheckChanged">
+                                <TextBlock>
+				                 <Run Foreground="Green" FontWeight="Bold" Text="{Binding ProcessName}"></Run>
+                                 <Run Foreground="Green" FontWeight="Bold" Text="{Binding Status}"></Run>
+                                </TextBlock>
+                            </CheckBox>
+                        </HierarchicalDataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem Header="数据库监测">
+                <ListBox ItemsSource="{Binding DbHealthItems}"  HorizontalAlignment="Left"  Name="lbDb" VerticalAlignment="Top" BorderThickness="0">
+                    <ListBox.ItemTemplate>
+                        <HierarchicalDataTemplate>
+                            <CheckBox IsChecked="{Binding IsCheck}" Checked="Db_CheckChanged" Unchecked="Db_UnCheckChanged">
+                                <TextBlock>
+				                 <Run Foreground="Green" FontWeight="Bold" Text="{Binding DbName}"></Run>
+                                 <Run Foreground="Green" FontWeight="Bold" Text="{Binding Status}"></Run>
+                                </TextBlock>
+                            </CheckBox>
+                        </HierarchicalDataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>
