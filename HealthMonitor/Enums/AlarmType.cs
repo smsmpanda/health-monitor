@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HealthMonitor.Enums
+{
+    internal enum AlarmType
+    {
+        /// <summary>
+        /// 数据库状态异常
+        /// </summary>
+        ATP_DATABASE_ERROR,
+
+        /// <summary>
+        /// 进程退出
+        /// </summary>
+        ATP_PROCESS_EXIT
+    }
+}

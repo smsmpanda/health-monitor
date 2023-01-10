@@ -1,7 +1,12 @@
-﻿using System;
+﻿using HealthMonitor.Enums;
+using HealthMonitor.Model;
+using HealthMonitor.Services;
+using HealthMonitor.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,54 +22,19 @@ namespace HealthMonitor.ViewModel
         /// <summary>
         /// 数据库IP
         /// </summary>
-        private string _dbName;
-        public string DbName
-        {
-            get { return this._dbName; }
-            set
-            {
-                if (this._dbName != value)
-                {
-                    this._dbName = value;
-                    this.NotifyPropertyChanged("DbName");
-                }
-            }
-        }
+        public string DbName { get; set; }
 
 
         /// <summary>
         /// 数据库类型（Mysql/MSSQL/Oracl）
         /// </summary>
-        private string _dbType;
-        public string DbType
-        {
-            get { return this._dbType; }
-            set
-            {
-                if (this._dbType != value)
-                {
-                    this._dbType = value;
-                    this.NotifyPropertyChanged("DbType");
-                }
-            }
-        }
+        public string DbType { get; set; }
+        
 
         /// <summary>
         /// 数据库连接串
         /// </summary>
-        private string _connectionString;
-        public string ConnectionString
-        {
-            get { return _connectionString; }
-            set
-            {
-                if (this._connectionString != value)
-                {
-                    this._connectionString = value;
-                    this.NotifyPropertyChanged("ConnectionString");
-                }
-            }
-        }
+        public string ConnectionString { get; set; }
 
         /// <summary>
         /// 是否开启监测
@@ -78,8 +48,9 @@ namespace HealthMonitor.ViewModel
                 if (this._isCheck != value)
                 {
                     this._isCheck = value;
-                    this.NotifyPropertyChanged("IsCheck");
+                    NotifyPropertyChanged();
                 }
+                StartMonitor();
             }
         }
 
@@ -95,15 +66,36 @@ namespace HealthMonitor.ViewModel
                 if (this._status != value)
                 {
                     this._status = value;
-                    this.NotifyPropertyChanged("Status");
+                    NotifyPropertyChanged();
                 }
             }
         }
 
-        public void NotifyPropertyChanged(string propName)
+        public void NotifyPropertyChanged([CallerMemberName] string propName = "Default")
         {
             if (this.PropertyChanged != null)
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
+        }
+
+        private void StartMonitor() 
+        {
+            Task.Run(async() =>
+            {
+                while (this._isCheck)
+                {
+                    this.Status = DbFactory
+                                .GetDbByType(this.ConnectionString, (DbType)Enum.Parse(typeof(DbType), this.DbType, true))
+                                .HealthCheck();
+
+                    //异常时将报警信息入库
+                    if (!this.Status)
+                    {
+                        await RYDWDbContext.InsertAlarmAsync(new AlarmRecord($"{AlarmType.ATP_DATABASE_ERROR}", $"[{this.DbName}]-数据库异常", DateTime.Now));
+                    }
+
+                    Task.Delay(4000).GetAwaiter().GetResult();
+                }
+            });
         }
     }
 }

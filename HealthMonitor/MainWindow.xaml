@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:HealthMonitor"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="健康监测" Height="300" Width="550">
+        Title="健康监测" Height="450" Width="650">
     <Window.Resources>
         <Style x:Key="JRButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Template">
@@ -21,36 +21,99 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
     </Window.Resources>
     <DockPanel Margin="10">
         <TabControl Name="tcSample" Margin="10" BorderBrush="Gainsboro">
             <TabItem Header="应用进程监测">
-                <ListBox ItemsSource="{Binding ProcessHealthItems}"  HorizontalAlignment="Left"  Name="lbProcess" VerticalAlignment="Top" BorderThickness="0">
-                    <ListBox.ItemTemplate>
-                        <HierarchicalDataTemplate>
-                            <CheckBox IsChecked="{Binding IsCheck}" Checked="Process_CheckChanged" Unchecked="Process_UnCheckChanged">
-                                <TextBlock>
-				                 <Run Foreground="Green" FontWeight="Bold" Text="{Binding ProcessName}"></Run>
-                                 <Run Foreground="Green" FontWeight="Bold" Text="{Binding Status}"></Run>
-                                </TextBlock>
-                            </CheckBox>
-                        </HierarchicalDataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                <ListView Margin="10" Name="lvUsers" ItemsSource="{Binding ProcessHealthItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="" Width="30">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsCheck}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="标识" Width="150" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ProcessName}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="名称" Width="150">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ProcessIdentity}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="是否退出" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Status}"  Foreground="Blue" Cursor="Hand" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </TabItem>
             <TabItem Header="数据库监测">
-                <ListBox ItemsSource="{Binding DbHealthItems}"  HorizontalAlignment="Left"  Name="lbDb" VerticalAlignment="Top" BorderThickness="0">
-                    <ListBox.ItemTemplate>
-                        <HierarchicalDataTemplate>
-                            <CheckBox IsChecked="{Binding IsCheck}" Checked="Db_CheckChanged" Unchecked="Db_UnCheckChanged">
-                                <TextBlock>
-				                 <Run Foreground="Green" FontWeight="Bold" Text="{Binding DbName}"></Run>
-                                 <Run Foreground="Green" FontWeight="Bold" Text="{Binding Status}"></Run>
-                                </TextBlock>
-                            </CheckBox>
-                        </HierarchicalDataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                <ListView Margin="10" ItemsSource="{Binding DbHealthItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="" Width="30">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsCheck}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="数据库" Width="150" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DbName}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="类型" Width="150">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DbType}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="状态" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Status}"  Foreground="Blue" Cursor="Hand" HorizontalAlignment="Center" >
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="No" />
+                                                    <Setter Property="Foreground" Value="Red" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=cbSample, Path=Status}" Value="True">
+                                                            <Setter Property="Text" Value="Yes!" />
+                                                            <Setter Property="Foreground" Value="Green" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </TabItem>
         </TabControl>
     </DockPanel>

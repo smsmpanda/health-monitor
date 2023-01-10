@@ -1,4 +1,7 @@
-﻿using System;
+﻿using HealthMonitor.Enums;
+using HealthMonitor.Model;
+using HealthMonitor.Utility;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -15,37 +18,12 @@ namespace HealthMonitor.ViewModel
         /// <summary>
         /// 进程名称
         /// </summary>
-        private string _processName;
-        public string ProcessName
-        {
-            get { return _processName; }
-            set
-            {
-                if (this._processName != value)
-                {
-                    this._processName = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
+        public string ProcessName { get; set; }
 
         /// <summary>
-        /// 进程启动位置
+        /// 进程标识
         /// </summary>
-        private string _location;
-        public string Location
-        {
-            get { return _location; }
-            set
-            {
-                if (this._location != value)
-                {
-                    this._location = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
+        public string ProcessIdentity { get; set; }
 
         /// <summary>
         /// 是否开启监测
@@ -92,13 +70,17 @@ namespace HealthMonitor.ViewModel
         /// </summary>
         private void StartMonitor() 
         {
-            Task.Run(() =>
+            Task.Run(async() =>
             {
                 while (this._isCheck)
                 {
-                    this.Status = DateTime.Now.Second % 3 == 0 ? true : false;
+                    this.Status= ProcessHelper.GetProcessByProcessName(this.ProcessName);
 
-                    System.Diagnostics.Debug.WriteLine(this.Status); //Debug
+                    //异常时将报警信息入库
+                    if (!this.Status)
+                    {
+                        await RYDWDbContext.InsertAlarmAsync(new AlarmRecord($"{AlarmType.ATP_PROCESS_EXIT}", $"{this.ProcessName}-进程退出", DateTime.Now));
+                    }
 
                     Task.Delay(2000).GetAwaiter().GetResult();
                 }

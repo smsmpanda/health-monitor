@@ -28,25 +28,5 @@ namespace HealthMonitor
             _healthMonitorDataContext = new HealthMonitorDataContext();
             this.DataContext = _healthMonitorDataContext;
         }
-
-        private void Process_CheckChanged(object sender, RoutedEventArgs e)
-        {
-            Console.WriteLine(1);
-        }
-
-        private void Process_UnCheckChanged(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Db_CheckChanged(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Db_UnCheckChanged(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

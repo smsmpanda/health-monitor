@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Configuration;
@@ -14,8 +15,6 @@ namespace HealthMonitor.ViewModel
         {
             Init();
         }
-
-        
 
         /// <summary>
         /// 监测数据库
@@ -34,16 +33,25 @@ namespace HealthMonitor.ViewModel
             InitProcessesByConfigData();
         }
 
+        /// <summary>
+        /// 初始化进程监控资源配置
+        /// </summary>
         private void InitProcessesByConfigData()
         {
             this.ProcessHealthItems = new ObservableCollection<VMProcess>();
             var settings = (IDictionary)ConfigurationManager.GetSection("checkProcesses");
-            foreach (var value in settings.Values)
+
+            ConfigSectionMapArray(settings, out string[] keys, out string[] values);
+
+            for (int i = 0; i < keys.Length; i++)
             {
-                this.ProcessHealthItems.Add(new VMProcess { IsCheck = true, ProcessName = $"{value}" });
+                this.ProcessHealthItems.Add(new VMProcess { IsCheck = false, ProcessIdentity = $"{keys[i]}", ProcessName = $"{values[i]}" });
             }
         }
 
+        /// <summary>
+        /// 初始化数据库监控配置
+        /// </summary>
         private void InitDatabaseByConfigData()
         {
             this.DbHealthItems = new ObservableCollection<VMDatabase>();
@@ -54,11 +62,11 @@ namespace HealthMonitor.ViewModel
             for (int i = 0; i < keys.Length; i++)
             {
                 string[] vals = $"{values[i]}".Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-                this.DbHealthItems.Add(new VMDatabase { IsCheck = true, DbName = keys[i], ConnectionString = $"{vals[1]}", DbType = vals[0] });
+                this.DbHealthItems.Add(new VMDatabase { IsCheck = false, DbName = keys[i], ConnectionString = $"{vals[1]}", DbType = vals[0] });
             }
         }
 
-        private void ConfigSectionMapArray(IDictionary settings,out string[]keys,out string[]values) 
+        private void ConfigSectionMapArray(IDictionary settings, out string[] keys, out string[] values)
         {
             keys = new string[settings.Keys.Count];
             values = new string[settings.Values.Count];
