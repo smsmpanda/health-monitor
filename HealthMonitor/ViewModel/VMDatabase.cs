@@ -10,7 +10,7 @@ namespace HealthMonitor.ViewModel
     /// <summary>
     /// 数据库健康监测类
     /// </summary>
-    public class VMDatabase: INotifyPropertyChanged
+    public class VMDatabase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -21,8 +21,9 @@ namespace HealthMonitor.ViewModel
         public string DbName
         {
             get { return this._dbName; }
-            set {
-                if (this._dbName != value) 
+            set
+            {
+                if (this._dbName != value)
                 {
                     this._dbName = value;
                     this.NotifyPropertyChanged("DbName");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace HealthMonitor.ViewModel
@@ -7,7 +8,7 @@ namespace HealthMonitor.ViewModel
     /// <summary>
     /// 指定进程监测
     /// </summary>
-    public class VMProcess
+    public class VMProcess : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -23,7 +24,7 @@ namespace HealthMonitor.ViewModel
                 if (this._processName != value)
                 {
                     this._processName = value;
-                    this.NotifyPropertyChanged("ProcessName");
+                    NotifyPropertyChanged();
                 }
             }
         }
@@ -40,7 +41,7 @@ namespace HealthMonitor.ViewModel
                 if (this._location != value)
                 {
                     this._location = value;
-                    this.NotifyPropertyChanged("Location");
+                    NotifyPropertyChanged();
                 }
             }
         }
@@ -58,9 +59,9 @@ namespace HealthMonitor.ViewModel
                 if (this._isCheck != value)
                 {
                     this._isCheck = value;
-                    this.NotifyPropertyChanged("IsCheck");
+                    NotifyPropertyChanged();
                 }
-                //this.StartMonitor();
+                this.StartMonitor();
             }
         }
 
@@ -76,12 +77,12 @@ namespace HealthMonitor.ViewModel
                 if (this._status != value)
                 {
                     this._status = value;
-                    this.NotifyPropertyChanged("Status");
+                    NotifyPropertyChanged();
                 }
             }
         }
 
-        public void NotifyPropertyChanged(string propName)
+        public void NotifyPropertyChanged([CallerMemberName] string propName = "Default")
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
