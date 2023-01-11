@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:HealthMonitor"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
         Title="健康监测" Height="450" Width="650">
@@ -26,6 +25,7 @@
         </Style>
         <Style x:Key="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Height" Value="30" />
         </Style>
     </Window.Resources>
     <DockPanel Margin="10">
@@ -70,7 +70,7 @@
                 <ListView Margin="10" ItemsSource="{Binding DbHealthItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="" Width="30">
+                            <GridViewColumn Width="30">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding IsCheck}" HorizontalAlignment="Center" />
