@@ -26,11 +26,17 @@ namespace HealthMonitor.ViewModel
         /// </summary>
         public ObservableCollection<VMProcess> ProcessHealthItems { get; private set; }
 
+        /// <summary>
+        /// 监测FTP
+        /// </summary>
+        public ObservableCollection<VMFtp> FTPItems { get; private set; }
+
         #region 初始化配置
         private void Init()
         {
             InitDatabaseByConfigData();
             InitProcessesByConfigData();
+            InitFTPByConfigData();
         }
 
         /// <summary>
@@ -63,6 +69,23 @@ namespace HealthMonitor.ViewModel
             {
                 string[] vals = $"{values[i]}".Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                 this.DbHealthItems.Add(new VMDatabase { IsCheck = false, DbName = keys[i], ConnectionString = $"{vals[1]}", DbType = vals[0] });
+            }
+        }
+
+        /// <summary>
+        /// 初始化FTP监测配置
+        /// </summary>
+        private void InitFTPByConfigData()
+        {
+            this.FTPItems = new ObservableCollection<VMFtp>();
+            var settings = (IDictionary)ConfigurationManager.GetSection("checkFtp");
+
+            ConfigSectionMapArray(settings, out string[] keys, out string[] values);
+
+            for (int i = 0; i < keys.Length; i++)
+            {
+                string[] vals = $"{values[i]}".Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                this.FTPItems.Add(new VMFtp { IsCheck = false, FTPName = keys[i], FTPServerHost = $"{vals[0]}", FTPServerPort = int.Parse(vals[1]), FTPUser = vals[2], FTPPassword = vals[3] });
             }
         }
 

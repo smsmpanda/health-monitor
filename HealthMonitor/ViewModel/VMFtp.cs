@@ -8,22 +8,35 @@ using System.Threading.Tasks;
 
 namespace HealthMonitor.ViewModel
 {
-    /// <summary>
-    /// 指定进程监测
-    /// </summary>
-    public class VMProcess : INotifyPropertyChanged
+    public class VMFtp : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// 进程名称
+        /// FTP名称
         /// </summary>
-        public string ProcessName { get; set; }
+        public string FTPName { get; set; }
 
         /// <summary>
-        /// 进程标识
+        /// FTP服务IP地址
         /// </summary>
-        public string ProcessIdentity { get; set; }
+        public string FTPServerHost { get; set; }
+
+        /// <summary>
+        /// FTP服务端口
+        /// </summary>
+        public int FTPServerPort { get; set; }
+
+        /// <summary>
+        /// FTP用户登录账户
+        /// </summary>
+        public string FTPUser { get; set; }
+
+        /// <summary>
+        /// FTP用户登录密码
+        /// </summary>
+        public string FTPPassword { get; set; }
+
 
         /// <summary>
         /// 是否开启监测
@@ -39,7 +52,7 @@ namespace HealthMonitor.ViewModel
                     this._isCheck = value;
                     NotifyPropertyChanged();
                 }
-                this.StartMonitor();
+                StartMonitor();
             }
         }
 
@@ -62,30 +75,31 @@ namespace HealthMonitor.ViewModel
 
         public void NotifyPropertyChanged([CallerMemberName] string propName = "Default")
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
-        /// <summary>
-        /// 开始监测进程状态
-        /// </summary>
+
         private void StartMonitor()
         {
             Task.Run(async () =>
             {
                 while (this._isCheck)
                 {
-                    this.Status = ProcessHelper.GetProcessByProcessName(this.ProcessName);
+
+                    this.Status =await  FTPHelper.TryConnectFTPAsync(this.FTPServerHost,this.FTPUser,this.FTPPassword,this.FTPServerPort);
 
                     //异常时将报警信息入库
-                    AlarmRecord alarmRecord = AlarmRecord.GenerateAlarm($"{AlarmType.ATP_PROCESS_EXIT}", $"{this.ProcessName}-进程退出", this.ProcessName, DateTime.Now);
-
+                    AlarmRecord alarmRecord = AlarmRecord.GenerateAlarm($"{AlarmType.ATP_FTP_ERROR}", $"FTP连接异常", this.FTPName, DateTime.Now);
                     if (this.Status)
                     {
                         await RYDWDbContext.TransferAlarmRecordAsync(alarmRecord);
                     }
-                    else {
+                    else
+                    {
                         await RYDWDbContext.InsertAlarmAsync(alarmRecord);
                     }
+
                     await Task.Delay(2000);
                 }
             });

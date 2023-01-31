@@ -20,7 +20,7 @@ namespace HealthMonitor.ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// 数据库IP
+        /// 数据库名称
         /// </summary>
         public string DbName { get; set; }
 
@@ -29,7 +29,7 @@ namespace HealthMonitor.ViewModel
         /// 数据库类型（Mysql/MSSQL/Oracl）
         /// </summary>
         public string DbType { get; set; }
-        
+
 
         /// <summary>
         /// 数据库连接串
@@ -77,9 +77,9 @@ namespace HealthMonitor.ViewModel
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
-        private void StartMonitor() 
+        private void StartMonitor()
         {
-            Task.Run(async() =>
+            Task.Run(async () =>
             {
                 while (this._isCheck)
                 {
@@ -88,12 +88,17 @@ namespace HealthMonitor.ViewModel
                                 .HealthCheck();
 
                     //异常时将报警信息入库
-                    if (!this.Status)
+                    AlarmRecord alarmRecord = AlarmRecord.GenerateAlarm($"{AlarmType.ATP_DATABASE_ERROR}", $"数据库异常", this.DbName, DateTime.Now);
+                    if (this.Status)
                     {
-                        await RYDWDbContext.InsertAlarmAsync(new AlarmRecord($"{AlarmType.ATP_DATABASE_ERROR}", $"[{this.DbName}]-数据库异常", DateTime.Now));
+                        await RYDWDbContext.TransferAlarmRecordAsync(alarmRecord);
+                    }
+                    else 
+                    {
+                        await RYDWDbContext.InsertAlarmAsync(alarmRecord);
                     }
 
-                    Task.Delay(4000).GetAwaiter().GetResult();
+                    await Task.Delay(2000);
                 }
             });
         }

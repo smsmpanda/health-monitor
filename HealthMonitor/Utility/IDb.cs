@@ -10,7 +10,7 @@ using System.Windows.Ink;
 
 namespace HealthMonitor.Utility
 {
-    internal abstract class BaseDb
+    public abstract class BaseDb
     {
         protected bool DbStatus { get; }
         protected string _connectionString;
@@ -18,14 +18,15 @@ namespace HealthMonitor.Utility
         {
             this._connectionString = connectionString;
         }
-        public IDbConnection Connection => CreateDbConnection();
 
-        protected abstract IDbConnection CreateDbConnection();
+
+        public abstract IDbConnection CreateConnection();
         public bool HealthCheck()
         {
+            IDbConnection conn = null;
             try
             {
-                this.CreateDbConnection();
+                conn = CreateConnection();
                 return true;
             }
             catch (Exception)
@@ -34,23 +35,26 @@ namespace HealthMonitor.Utility
             }
             finally
             {
-                this.Connection.Close();
-                this.Connection.Dispose();
+                conn?.Close();
+                conn?.Dispose();
             }
         }
     }
 
-    internal class OracleDb : BaseDb
+    public class OracleDb : BaseDb
     {
         public OracleDb(string connectionString) : base(connectionString)
         { }
-        protected override IDbConnection CreateDbConnection()
+        public override IDbConnection CreateConnection()
         {
             try
             {
-                var connection = new OracleConnection(this._connectionString);
-                connection.Open();
-                return connection;
+                var conn = new OracleConnection(this._connectionString);
+                if (conn.State != ConnectionState.Open)
+                {
+                    conn.Open();
+                }
+                return conn;
             }
             catch (Exception)
             {
@@ -58,18 +62,21 @@ namespace HealthMonitor.Utility
             }
         }
     }
-    internal class SQLServerDb : BaseDb
+    public class SQLServerDb : BaseDb
     {
         public SQLServerDb(string connectionString) : base(connectionString)
         { }
 
-        protected override IDbConnection CreateDbConnection()
+        public override IDbConnection CreateConnection()
         {
             try
             {
-                var connection = new SqlConnection(this._connectionString);
-                connection.Open();
-                return connection;
+                var conn = new SqlConnection(this._connectionString);
+                if (conn.State != ConnectionState.Open)
+                {
+                    conn.Open();
+                }
+                return conn;
             }
             catch (Exception)
             {
@@ -77,11 +84,11 @@ namespace HealthMonitor.Utility
             }
         }
     }
-    internal class MySqlDb : BaseDb
+    public class MySqlDb : BaseDb
     {
         public MySqlDb(string connectionString) : base(connectionString)
         { }
-        protected override IDbConnection CreateDbConnection()
+        public override IDbConnection CreateConnection()
         {
             try
             {

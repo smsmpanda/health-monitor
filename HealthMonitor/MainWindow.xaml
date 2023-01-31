@@ -4,34 +4,100 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        ResizeMode="CanMinimize"
-        Title="健康监测" Height="450" Width="650">
+        BorderBrush="Red" BorderThickness="3"
+        ResizeMode="CanResizeWithGrip"
+        Title="健康监测" Height="450" Width="800" FontFamily="微软亚黑" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <Style x:Key="JRButtonStyle" TargetType="{x:Type Button}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="10" Background="AliceBlue">
-                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <ContentPresenter x:Name="contentPresenter" Content="{TemplateBinding Content}"/>
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <Style TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="16" />
         </Style>
         <Style x:Key="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="Height" Value="30" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+        
+        <Style x:Key="TabItemExWithUnderLineStyle"  TargetType="{x:Type TabItem}">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#FFACACAC"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid x:Name="templateRoot"  SnapsToDevicePixels="True" Background="Transparent">
+                            <Border x:Name="_underline" BorderBrush="#EEC900" BorderThickness="0" Margin="{TemplateBinding Margin}"/>
+                            <Grid>
+                                <TextBlock x:Name="txt" Visibility="Visible" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{TemplateBinding Header}" ToolTip="{TemplateBinding Header}" Foreground="{TemplateBinding Foreground}" TextTrimming="CharacterEllipsis" />
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}" Value="Top"/>
+                                </MultiDataTrigger.Conditions>
+
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                <Setter Property="Foreground" TargetName="txt" Value="#EEC900"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}" Value="Left"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Opacity" TargetName="templateRoot" Value="0.56"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}" Value="Bottom"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Opacity" TargetName="templateRoot" Value="0.56"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}" Value="Right"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Opacity" TargetName="templateRoot" Value="0.56"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}" Value="Top"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Opacity" TargetName="templateRoot" Value="0.56"/>
+                            </MultiDataTrigger>
+
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}" Value="Top"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                <Setter Property="Panel.ZIndex" Value="1"/>
+                                <Setter Property="Foreground" TargetName="txt" Value="#EEC900"/>
+                                <Setter Property="BorderThickness" TargetName="_underline" Value="0 0 0 2"/>
+                            </MultiDataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
-    <DockPanel Margin="10">
-        <TabControl Name="tcSample" Margin="10" BorderBrush="Gainsboro">
-            <TabItem Header="应用进程监测">
-                <ListView Margin="10" Name="lvUsers" ItemsSource="{Binding ProcessHealthItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
+    <DockPanel Background="#00ffffff" Margin="0">
+        <!--<Grid Background="Red" DockPanel.Dock="Top">
+            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="X"></Button>
+            </WrapPanel>
+        </Grid>-->
+        <TabControl DockPanel.Dock="Bottom"  Foreground="Black" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+            <TabItem Header="进程"  Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="18" >
+                <ListView Name="lvUsers" ItemsSource="{Binding ProcessHealthItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="" Width="30">
@@ -55,10 +121,26 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="是否退出" Width="100">
+                            <GridViewColumn Header="状态" Width="100">
                                 <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <!--<DataTemplate>
                                         <TextBlock Text="{Binding Status}"  Foreground="Blue" Cursor="Hand" HorizontalAlignment="Center" />
+                                    </DataTemplate>-->
+                                    <DataTemplate>
+                                        <TextBlock  Cursor="Hand" HorizontalAlignment="Center" >
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="异常" />
+                                                    <Setter Property="Foreground" Value="Red" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="True">
+                                                            <Setter Property="Text" Value="正常" />
+                                                            <Setter Property="Foreground" Value="Green" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -66,8 +148,8 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem Header="数据库监测">
-                <ListView Margin="10" ItemsSource="{Binding DbHealthItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
+            <TabItem Header="数据库" Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="18">
+                <ListView ItemsSource="{Binding DbHealthItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Width="30">
@@ -94,14 +176,70 @@
                             <GridViewColumn Header="状态" Width="100">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Status}"  Foreground="Blue" Cursor="Hand" HorizontalAlignment="Center" >
+                                        <TextBlock  Cursor="Hand" HorizontalAlignment="Center" >
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
-                                                    <Setter Property="Text" Value="No" />
+                                                    <Setter Property="Text" Value="异常" />
                                                     <Setter Property="Foreground" Value="Red" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding ElementName=cbSample, Path=Status}" Value="True">
-                                                            <Setter Property="Text" Value="Yes!" />
+                                                        <DataTrigger Binding="{Binding Status}" Value="True">
+                                                            <Setter Property="Text" Value="正常" />
+                                                            <Setter Property="Foreground" Value="Green" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+            <TabItem Header="FTP" Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="18">
+                <ListView ItemsSource="{Binding FTPItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Width="30">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsCheck}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="FTP名称" Width="150" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FTPName}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="账户" Width="150" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FTPUser}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="密码" Width="150" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FTPPassword}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="状态" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock  Cursor="Hand" HorizontalAlignment="Center" >
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="异常" />
+                                                    <Setter Property="Foreground" Value="Red" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="True">
+                                                            <Setter Property="Text" Value="正常" />
                                                             <Setter Property="Foreground" Value="Green" />
                                                         </DataTrigger>
                                                     </Style.Triggers>

@@ -16,6 +16,11 @@ namespace HealthMonitor.Enums
         /// <summary>
         /// 进程退出
         /// </summary>
-        ATP_PROCESS_EXIT
+        ATP_PROCESS_EXIT,
+
+        /// <summary>
+        /// FTP服务异常
+        /// </summary>
+        ATP_FTP_ERROR
     }
 }
