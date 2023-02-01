@@ -102,6 +102,10 @@ namespace HealthMonitor.ViewModel
 
                     await Task.Delay(2000);
                 }
+
+                //停止监听删除相应的实时报警记录
+                await RYDWDbContext.DeleteAlarmRecord(AlarmRecord.GenerateAlarm($"{AlarmType.ATP_FTP_ERROR}", string.Empty, this.FTPName, DateTime.Now));
+                this.Status = false;
             });
         }
     }

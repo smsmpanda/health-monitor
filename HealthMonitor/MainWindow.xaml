@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
-        BorderBrush="Red" BorderThickness="3"
-        ResizeMode="CanResizeWithGrip"
-        Title="健康监测" Height="450" Width="800" FontFamily="微软亚黑" WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Title="健康监测" Height="450" Width="1000">
     <Window.Resources>
         <Style TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -17,7 +17,6 @@
             <Setter Property="Height" Value="30" />
             <Setter Property="FontSize" Value="14" />
         </Style>
-        
         <Style x:Key="TabItemExWithUnderLineStyle"  TargetType="{x:Type TabItem}">
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -90,13 +89,8 @@
         </Style>
     </Window.Resources>
     <DockPanel Background="#00ffffff" Margin="0">
-        <!--<Grid Background="Red" DockPanel.Dock="Top">
-            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="X"></Button>
-            </WrapPanel>
-        </Grid>-->
         <TabControl DockPanel.Dock="Bottom"  Foreground="Black" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
-            <TabItem Header="进程"  Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="18" >
+            <TabItem Header="进程监测"  Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="18" >
                 <ListView Name="lvUsers" ItemsSource="{Binding ProcessHealthItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
                     <ListView.View>
                         <GridView>
@@ -104,6 +98,28 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding IsCheck}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="监测状态" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsCheck}" Value="True">
+                                                            <Setter Property="Text" Value="监测中..." />
+                                                            <Setter Property="Foreground" Value="Green" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsCheck}" Value="False">
+                                                            <Setter Property="Text" Value="未监测" />
+                                                            <Setter Property="Foreground" Value="#CCC" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -121,26 +137,24 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="状态" Width="100">
+
+                            <GridViewColumn Header="健康状态" Width="100">
                                 <GridViewColumn.CellTemplate>
-                                    <!--<DataTemplate>
-                                        <TextBlock Text="{Binding Status}"  Foreground="Blue" Cursor="Hand" HorizontalAlignment="Center" />
-                                    </DataTemplate>-->
                                     <DataTemplate>
-                                        <TextBlock  Cursor="Hand" HorizontalAlignment="Center" >
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Text" Value="异常" />
-                                                    <Setter Property="Foreground" Value="Red" />
+                                        <Image Width="25" Height="25">
+                                            <Image.Style>
+                                                <Style TargetType="Image">
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding Status}" Value="True">
-                                                            <Setter Property="Text" Value="正常" />
-                                                            <Setter Property="Foreground" Value="Green" />
+                                                            <Setter Property="Source" Value="/Resource/right1.png" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="False">
+                                                            <Setter Property="Source" Value="/Resource/error1.png" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
+                                            </Image.Style>
+                                        </Image>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -148,7 +162,7 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem Header="数据库" Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="18">
+            <TabItem Header="数据库监测" Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="18">
                 <ListView ItemsSource="{Binding DbHealthItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
                     <ListView.View>
                         <GridView>
@@ -156,6 +170,28 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding IsCheck}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="监测状态" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsCheck}" Value="True">
+                                                            <Setter Property="Text" Value="监测中..." />
+                                                            <Setter Property="Foreground" Value="Green" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsCheck}" Value="False">
+                                                            <Setter Property="Text" Value="未监测" />
+                                                            <Setter Property="Foreground" Value="#CCC" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -173,23 +209,23 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="状态" Width="100">
+                            <GridViewColumn Header="健康状态" Width="100">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock  Cursor="Hand" HorizontalAlignment="Center" >
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Text" Value="异常" />
-                                                    <Setter Property="Foreground" Value="Red" />
+                                        <Image Width="25" Height="25">
+                                            <Image.Style>
+                                                <Style TargetType="Image">
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding Status}" Value="True">
-                                                            <Setter Property="Text" Value="正常" />
-                                                            <Setter Property="Foreground" Value="Green" />
+                                                            <Setter Property="Source" Value="/Resource/right1.png" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="False">
+                                                            <Setter Property="Source" Value="/Resource/error1.png" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
+                                            </Image.Style>
+                                        </Image>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -197,7 +233,7 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem Header="FTP" Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="18">
+            <TabItem Header="FTP监测" Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="18">
                 <ListView ItemsSource="{Binding FTPItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
                     <ListView.View>
                         <GridView>
@@ -208,10 +244,46 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="FTP名称" Width="150" >
+                            <GridViewColumn Header="监测状态" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsCheck}" Value="True">
+                                                            <Setter Property="Text" Value="监测中..." />
+                                                            <Setter Property="Foreground" Value="Green" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsCheck}" Value="False">
+                                                            <Setter Property="Text" Value="未监测" />
+                                                            <Setter Property="Foreground" Value="#CCC" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="名称" Width="150" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding FTPName}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="主机" Width="150" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FTPServerHost}" HorizontalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="端口" Width="150" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FTPServerPort}" HorizontalAlignment="Center" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -222,30 +294,23 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="密码" Width="150" >
+                            <GridViewColumn Header="健康状态" Width="100">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding FTPPassword}" HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="状态" Width="100">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock  Cursor="Hand" HorizontalAlignment="Center" >
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Text" Value="异常" />
-                                                    <Setter Property="Foreground" Value="Red" />
+                                        <Image Width="25" Height="25">
+                                            <Image.Style>
+                                                <Style TargetType="Image">
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding Status}" Value="True">
-                                                            <Setter Property="Text" Value="正常" />
-                                                            <Setter Property="Foreground" Value="Green" />
+                                                            <Setter Property="Source" Value="/Resource/right1.png" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="False">
+                                                            <Setter Property="Source" Value="/Resource/error1.png" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
+                                            </Image.Style>
+                                        </Image>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

@@ -65,5 +65,13 @@ namespace HealthMonitor.Utility
                 }
             }
         }
+
+        public static async Task DeleteAlarmRecord(AlarmRecord alarm) 
+        {
+            using (IDbConnection conn = DbFactory.GetDbByType(_connectionString, Enums.DbType.ORACLE).CreateConnection())
+            {
+                await conn.ExecuteAsync(AlarmSql.DeleteAlarmSql, alarm);
+            }
+        }
     }
 }
