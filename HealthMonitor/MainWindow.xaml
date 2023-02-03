@@ -162,7 +162,7 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem Header="数据库监测" Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="18">
+            <TabItem Header="数据库监测" Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="120"  Margin="5 0" FontSize="18">
                 <ListView ItemsSource="{Binding DbHealthItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
                     <ListView.View>
                         <GridView>

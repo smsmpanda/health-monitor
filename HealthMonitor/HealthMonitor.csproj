@@ -189,5 +189,8 @@
     <Resource Include="Resource\error1.png" />
     <Resource Include="Resource\right1.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
