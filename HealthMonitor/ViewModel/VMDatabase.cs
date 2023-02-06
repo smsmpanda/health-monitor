@@ -24,6 +24,11 @@ namespace HealthMonitor.ViewModel
         /// </summary>
         public string DbName { get; set; }
 
+        /// <summary>
+        /// 序号
+        /// </summary>
+        public int Number { get; set; }
+
 
         /// <summary>
         /// 数据库类型（Mysql/MSSQL/Oracl）

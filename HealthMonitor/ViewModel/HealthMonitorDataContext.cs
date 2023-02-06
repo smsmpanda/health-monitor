@@ -51,7 +51,7 @@ namespace HealthMonitor.ViewModel
 
             for (int i = 0; i < keys.Length; i++)
             {
-                this.ProcessHealthItems.Add(new VMProcess { IsCheck = false, ProcessIdentity = $"{keys[i]}", ProcessName = $"{values[i]}" });
+                this.ProcessHealthItems.Add(new VMProcess { Number = i + 1, IsCheck = false, ProcessIdentity = $"{keys[i]}", ProcessName = $"{values[i]}" });
             }
         }
 
@@ -68,7 +68,7 @@ namespace HealthMonitor.ViewModel
             for (int i = 0; i < keys.Length; i++)
             {
                 string[] vals = $"{values[i]}".Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-                this.DbHealthItems.Add(new VMDatabase { IsCheck = false, DbName = keys[i], ConnectionString = $"{vals[1]}", DbType = vals[0] });
+                this.DbHealthItems.Add(new VMDatabase { Number = i + 1, IsCheck = false, DbName = keys[i], ConnectionString = $"{vals[1]}", DbType = vals[0] });
             }
         }
 
@@ -85,7 +85,7 @@ namespace HealthMonitor.ViewModel
             for (int i = 0; i < keys.Length; i++)
             {
                 string[] vals = $"{values[i]}".Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-                this.FTPItems.Add(new VMFtp { IsCheck = false, FTPName = keys[i], FTPServerHost = $"{vals[0]}", FTPServerPort = int.Parse(vals[1]), FTPUser = vals[2], FTPPassword = vals[3] });
+                this.FTPItems.Add(new VMFtp { Number = i + 1, IsCheck = false, FTPName = keys[i], FTPServerHost = $"{vals[0]}", FTPServerPort = int.Parse(vals[1]), FTPUser = vals[2], FTPPassword = vals[3] });
             }
         }
 

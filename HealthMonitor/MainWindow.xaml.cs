@@ -1,6 +1,7 @@
 ﻿using HealthMonitor.ViewModel;
 using System;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Interop;
 
 namespace HealthMonitor
@@ -21,8 +22,9 @@ namespace HealthMonitor
             this.DataContext = _healthMonitorDataContext;
 
             var exit = new System.Windows.Forms.MenuItem("关闭应用");
-            exit.Click += (s, e) => {
-                if (MessageBox.Show("确定退出系统?", "退出系统", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK) 
+            exit.Click += (s, e) =>
+            {
+                if (MessageBox.Show("确定退出系统?", "退出系统", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {
                     this.Close();
                 }
@@ -87,6 +89,32 @@ namespace HealthMonitor
             this.notifyIcon.Icon = null;
             this.notifyIcon.Dispose();
             base.OnClosed(e);
+        }
+
+        private void Border_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.DragMove();
+            }
+        }
+
+        bool IsMaximized = false;
+        private void Border_LeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                if (IsMaximized)
+                {
+                    this.WindowState = WindowState.Normal;
+                    IsMaximized = false;
+                }
+                else
+                {
+                    this.WindowState = WindowState.Maximized;
+                    IsMaximized = true;
+                }
+            }
         }
     }
 }

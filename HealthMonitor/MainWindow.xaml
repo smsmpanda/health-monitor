@@ -3,11 +3,20 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
         WindowStartupLocation="CenterScreen"
-        Title="健康监测" Height="450" Width="1000">
+        Title="健康监测" Height="650" Width="780"
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
     <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="RHTitle">
+            <Setter Property="FontSize" Value="18"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="Margin" Value="10,0"></Setter>
+            <Setter Property="Foreground" Value="#ffffff"></Setter>
+        </Style>
         <Style TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="FontSize" Value="16" />
@@ -18,7 +27,7 @@
             <Setter Property="FontSize" Value="14" />
         </Style>
         <Style x:Key="TabItemExWithUnderLineStyle"  TargetType="{x:Type TabItem}">
-            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Foreground" Value="#eac100"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="#FFACACAC"/>
             <Setter Property="Margin" Value="0"/>
@@ -28,7 +37,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TabItem}">
                         <Grid x:Name="templateRoot"  SnapsToDevicePixels="True" Background="Transparent">
-                            <Border x:Name="_underline" BorderBrush="#EEC900" BorderThickness="0" Margin="{TemplateBinding Margin}"/>
+                            <Border x:Name="_underline" BorderBrush="#17b978" BorderThickness="0" Margin="{TemplateBinding Margin}"/>
                             <Grid>
                                 <TextBlock x:Name="txt" Visibility="Visible" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{TemplateBinding Header}" ToolTip="{TemplateBinding Header}" Foreground="{TemplateBinding Foreground}" TextTrimming="CharacterEllipsis" />
                             </Grid>
@@ -79,7 +88,7 @@
                                 </MultiDataTrigger.Conditions>
                                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                                 <Setter Property="Panel.ZIndex" Value="1"/>
-                                <Setter Property="Foreground" TargetName="txt" Value="#EEC900"/>
+                                <Setter Property="Foreground" TargetName="txt" Value="#eec900"/>
                                 <Setter Property="BorderThickness" TargetName="_underline" Value="0 0 0 2"/>
                             </MultiDataTrigger>
                         </ControlTemplate.Triggers>
@@ -87,237 +96,533 @@
                 </Setter.Value>
             </Setter>
         </Style>
-    </Window.Resources>
-    <DockPanel Background="#00ffffff" Margin="0">
-        <TabControl DockPanel.Dock="Bottom"  Foreground="Black" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
-            <TabItem Header="进程监测"  Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="18" >
-                <ListView Name="lvUsers" ItemsSource="{Binding ProcessHealthItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="" Width="30">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsCheck}" HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="监测状态" Width="100">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsCheck}" Value="True">
-                                                            <Setter Property="Text" Value="监测中..." />
-                                                            <Setter Property="Foreground" Value="Green" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsCheck}" Value="False">
-                                                            <Setter Property="Text" Value="未监测" />
-                                                            <Setter Property="Foreground" Value="#CCC" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="标识" Width="150" >
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding ProcessName}" HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="名称" Width="150">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding ProcessIdentity}" HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+        <Style x:Key="DataGridRowStyle1" TargetType="{x:Type DataGridRow}">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#5d5d5a"/>
+            <Setter Property="Margin" Value="0 4 0 0"/>
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
+            <Setter Property="ValidationErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <TextBlock Foreground="Red" Margin="2,0,0,0" Text="!" VerticalAlignment="Center"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridRow}">
+                        <Border x:Name="DGR_Border" Padding="0 8" Background="{TemplateBinding Background}" BorderThickness="0" CornerRadius="5" SnapsToDevicePixels="True">
+                            <SelectiveScrollingGrid>
+                                <SelectiveScrollingGrid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </SelectiveScrollingGrid.ColumnDefinitions>
+                                <SelectiveScrollingGrid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </SelectiveScrollingGrid.RowDefinitions>
+                                <DataGridCellsPresenter Grid.Column="1" ItemsPanel="{TemplateBinding ItemsPanel}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                <DataGridDetailsPresenter Grid.Column="1" Grid.Row="1" SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding AreRowDetailsFrozen, ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}, Converter={x:Static DataGrid.RowDetailsScrollingConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Visibility="{TemplateBinding DetailsVisibility}"/>
+                                <DataGridRowHeader Grid.RowSpan="2" SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Row}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                            </SelectiveScrollingGrid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
 
-                            <GridViewColumn Header="健康状态" Width="100">
-                                <GridViewColumn.CellTemplate>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#f0f0f0"/>
+                    <Setter Property="Foreground" Value="#5d5d5a"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#f0f0f0"/>
+                    <Setter Property="Foreground" Value="#5d5d5a"/>
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsSelected" Value="True"></Condition>
+                        <Condition Property="Selector.IsSelectionActive" Value="False"></Condition>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="#f0f0f0"></Setter>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Cursor" Value="SizeWE"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DataGridColumnHeaderStyle1" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#69717d"/>
+            <Setter Property="Margin" Value="15 0 15 10"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                        <Grid>
+                            <theme:DataGridHeaderBorder Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" IsPressed="{TemplateBinding IsPressed}" IsHovered="{TemplateBinding IsMouseOver}" IsClickable="{TemplateBinding CanUserSort}" Padding="{TemplateBinding Padding}" SortDirection="{TemplateBinding SortDirection}" SeparatorVisibility="{TemplateBinding SeparatorVisibility}" SeparatorBrush="{TemplateBinding SeparatorBrush}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </theme:DataGridHeaderBorder>
+                            <Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Style="{StaticResource ColumnHeaderGripperStyle}"/>
+                            <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderGripperStyle}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
+        <Style x:Key="DataGridCellStyle1" TargetType="{x:Type DataGridCell}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#5d5d5a"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Margin" Value="15 0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Border Background="{TemplateBinding Background}"  BorderThickness="0" SnapsToDevicePixels="True">
+                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Rectangle x:Name="Border" Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" SnapsToDevicePixels="True"/>
+                            <Polygon x:Name="Arrow" Fill="Black" HorizontalAlignment="Right" Margin="8,8,3,3" Opacity="0.15" Points="0,10 10,10 10,0" Stretch="Uniform" VerticalAlignment="Bottom"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Stroke" TargetName="Border" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Fill" TargetName="Border" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Visibility" TargetName="Arrow" Value="Collapsed"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#222528"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="AutoGenerateColumns" Value="False"></Setter>
+            <Setter Property="HeadersVisibility" Value="Column"></Setter>
+            <Setter Property="Margin" Value="0 10 0 0"></Setter>
+            <Setter Property="SelectionMode" Value="Single"></Setter>
+            <Setter Property="SelectionUnit" Value="FullRow"></Setter>
+            <Setter Property="CanUserResizeRows" Value="False"></Setter>
+            <Setter Property="CanUserReorderColumns" Value="False"></Setter>
+            <Setter Property="CanUserAddRows" Value="False"></Setter>
+            <Setter Property="FontSize" Value="13"></Setter>
+            <Setter Property="ColumnWidth" Value="*"></Setter>
+            <Setter Property="GridLinesVisibility" Value="None"></Setter>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGrid}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
+                                <ScrollViewer.Template>
+                                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Button Command="{x:Static DataGrid.SelectAllCommand}" Focusable="false" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                                            <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                                            <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" Grid.ColumnSpan="2" Grid.Row="1"/>
+                                            <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="2" Maximum="{TemplateBinding ScrollableHeight}" Orientation="Vertical" Grid.Row="1" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                                            <Grid Grid.Column="1" Grid.Row="2">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <ScrollBar x:Name="PART_HorizontalScrollBar" Grid.Column="1" Maximum="{TemplateBinding ScrollableWidth}" Orientation="Horizontal" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                                            </Grid>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </ScrollViewer.Template>
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsGrouping" Value="true"/>
+                        <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <SolidColorBrush x:Key="OptionMark.Static.Background" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="OptionMark.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="#FF212121"/>
+        <SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="#FFF3F9FF"/>
+        <SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="#FF5593FF"/>
+        <SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="#FF212121"/>
+        <SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="#FFD9ECFF"/>
+        <SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="#FF3C77DD"/>
+        <SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="#FF212121"/>
+        <SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="#FFE6E6E6"/>
+        <SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="#FFBCBCBC"/>
+        <SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="#FF707070"/>
+        <Style x:Key="CheckBoxStyle1" TargetType="{x:Type CheckBox}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Background" Value="{StaticResource OptionMark.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="#dae2ea"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="checkBoxBorder" CornerRadius="3" Padding="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <Grid x:Name="markGrid">
+                                    <Path x:Name="optionMark" Data="F1 M 9.97498,1.22334L 4.6983,9.09834L 4.52164,9.09834L 0,5.19331L 1.27664,3.52165L 4.255,6.08833L 8.33331,1.52588e-005L 9.97498,1.22334 Z " Fill="{StaticResource OptionMark.Static.Glyph}" Margin="1" Opacity="0" Stretch="None"/>
+                                    <Rectangle x:Name="indeterminateMark" Fill="{StaticResource OptionMark.Static.Glyph}" Margin="2" Opacity="0"/>
+                                </Grid>
+                            </Border>
+                            <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasContent" Value="true">
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                <Setter Property="Padding" Value="4,-1,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="#9575cd"/>
+                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.MouseOver.Glyph}"/>
+                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.MouseOver.Glyph}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Disabled.Border}"/>
+                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.Disabled.Glyph}"/>
+                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.Disabled.Glyph}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="#9575cd"/>
+                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.Pressed.Glyph}"/>
+                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.Pressed.Glyph}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Opacity" TargetName="optionMark" Value="1"/>
+                                <Setter Property="Opacity" TargetName="indeterminateMark" Value="0"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="{x:Null}">
+                                <Setter Property="Opacity" TargetName="optionMark" Value="0"/>
+                                <Setter Property="Opacity" TargetName="indeterminateMark" Value="1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Border BorderThickness="1"  CornerRadius="5" Background="#f7f6f4" MouseDown="Border_MouseDown" MouseLeftButtonDown="Border_LeftButtonDown">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Background="Transparent">
+                <Border BorderThickness="0.1" BorderBrush="Transparent"  CornerRadius="5,5,0,0" Background="#17b978"  />
+                <TextBlock DockPanel.Dock="Right"  Text="健康监测" Style="{StaticResource RHTitle}"></TextBlock>
+            </Grid>
+            <TabControl Padding="5" Grid.Row="1"  Foreground="Black" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+                <TabItem Header="进程监测"  Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="15" >
+                    <DataGrid x:Name="memberDataGrid" ItemsSource="{Binding ProcessHealthItems}" Style="{DynamicResource DataGridStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" Grid.Row="5">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="" CanUserResize="False" Width="50">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Image Width="25" Height="25">
-                                            <Image.Style>
-                                                <Style TargetType="Image">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Status}" Value="True">
-                                                            <Setter Property="Source" Value="/Resource/right1.png" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="False">
-                                                            <Setter Property="Source" Value="/Resource/error1.png" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Image.Style>
-                                        </Image>
+                                        <CheckBox IsChecked="{Binding IsCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CheckBoxStyle1}" />
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </TabItem>
-            <TabItem Header="数据库监测" Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="120"  Margin="5 0" FontSize="18">
-                <ListView ItemsSource="{Binding DbHealthItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="30">
-                                <GridViewColumn.CellTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTextColumn Binding="{Binding Number}" Header="#" IsReadOnly="True" CanUserResize="False" Width="auto"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding ProcessIdentity}" Header="名称" IsReadOnly="True"  Width="*"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding ProcessName}" Header="标识" IsReadOnly="True"  Width="*"></DataGridTextColumn>
+                            <DataGridTemplateColumn Header="健康状态" IsReadOnly="True"  Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsCheck}" HorizontalAlignment="Center" />
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Width="50" Height="25" CornerRadius="2">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Style.Triggers>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsCheck}" Value="false"></Condition>
+                                                                    <Condition Binding="{Binding Status}" Value="false"></Condition>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <Setter Property="Background" Value="#CCCCCC" />
+                                                            </MultiDataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsCheck}" Value="true"></Condition>
+                                                                    <Condition Binding="{Binding Status}" Value="false"></Condition>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <Setter Property="Background" Value="#ffd615" />
+                                                            </MultiDataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsCheck}" Value="true"></Condition>
+                                                                    <Condition Binding="{Binding Status}" Value="true"></Condition>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <Setter Property="Background" Value="#17b978" />
+                                                            </MultiDataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Padding="8" Margin="0 0 0 1">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsCheck}" Value="false"></Condition>
+                                                                        <Condition Binding="{Binding Status}" Value="false"></Condition>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="未知" />
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsCheck}" Value="true"></Condition>
+                                                                        <Condition Binding="{Binding Status}" Value="false"></Condition>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="异常" />
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsCheck}" Value="true"></Condition>
+                                                                        <Condition Binding="{Binding Status}" Value="true"></Condition>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="正常" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Border>
+                                        </StackPanel>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="监测状态" Width="100">
-                                <GridViewColumn.CellTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="数据库监测" Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="120"  Margin="5 0" FontSize="15">
+                    <DataGrid ItemsSource="{Binding DbHealthItems}" Style="{DynamicResource DataGridStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" Grid.Row="5">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="" CanUserResize="False" Width="50">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsCheck}" Value="True">
-                                                            <Setter Property="Text" Value="监测中..." />
-                                                            <Setter Property="Foreground" Value="Green" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsCheck}" Value="False">
-                                                            <Setter Property="Text" Value="未监测" />
-                                                            <Setter Property="Foreground" Value="#CCC" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
+                                        <CheckBox IsChecked="{Binding IsCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CheckBoxStyle1}" />
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="数据库" Width="150" >
-                                <GridViewColumn.CellTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Binding="{Binding Number}" Header="#" IsReadOnly="True" CanUserResize="False" Width="auto"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding DbName}" Header="数据库" IsReadOnly="True"  Width="*"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding DbType}" Header="类型" IsReadOnly="True"  Width="*"></DataGridTextColumn>
+                            <DataGridTemplateColumn Header="健康状态" IsReadOnly="True"  Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding DbName}" HorizontalAlignment="Center" />
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Width="50" Height="25" CornerRadius="2">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Style.Triggers>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsCheck}" Value="false"></Condition>
+                                                                    <Condition Binding="{Binding Status}" Value="false"></Condition>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <Setter Property="Background" Value="#CCCCCC" />
+                                                            </MultiDataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsCheck}" Value="true"></Condition>
+                                                                    <Condition Binding="{Binding Status}" Value="false"></Condition>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <Setter Property="Background" Value="#ffd615" />
+                                                            </MultiDataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsCheck}" Value="true"></Condition>
+                                                                    <Condition Binding="{Binding Status}" Value="true"></Condition>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <Setter Property="Background" Value="#17b978" />
+                                                            </MultiDataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Padding="8" Margin="0 0 0 1">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsCheck}" Value="false"></Condition>
+                                                                        <Condition Binding="{Binding Status}" Value="false"></Condition>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="未知" />
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsCheck}" Value="true"></Condition>
+                                                                        <Condition Binding="{Binding Status}" Value="false"></Condition>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="异常" />
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsCheck}" Value="true"></Condition>
+                                                                        <Condition Binding="{Binding Status}" Value="true"></Condition>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="正常" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Border>
+                                        </StackPanel>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="类型" Width="150">
-                                <GridViewColumn.CellTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="FTP监测" Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="15">
+                    <DataGrid ItemsSource="{Binding FTPItems}" Style="{DynamicResource DataGridStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" Grid.Row="5">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="" CanUserResize="False" Width="50">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding DbType}" HorizontalAlignment="Center" />
+                                        <CheckBox IsChecked="{Binding IsCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CheckBoxStyle1}" />
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="健康状态" Width="100">
-                                <GridViewColumn.CellTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Binding="{Binding Number}" Header="#" IsReadOnly="True" CanUserResize="False" Width="auto"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding FTPName}" Header="名称" IsReadOnly="True"  Width="*"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding FTPServerHost}" Header="主机" IsReadOnly="True"  Width="*"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding FTPServerPort}" Header="端口" IsReadOnly="True"  Width="*"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding FTPUser}" Header="账户" IsReadOnly="True"  Width="*"></DataGridTextColumn>
+                            <DataGridTemplateColumn Header="健康状态" IsReadOnly="True"  Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Image Width="25" Height="25">
-                                            <Image.Style>
-                                                <Style TargetType="Image">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Status}" Value="True">
-                                                            <Setter Property="Source" Value="/Resource/right1.png" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="False">
-                                                            <Setter Property="Source" Value="/Resource/error1.png" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Image.Style>
-                                        </Image>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Width="50" Height="25" CornerRadius="2">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Style.Triggers>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsCheck}" Value="false"></Condition>
+                                                                    <Condition Binding="{Binding Status}" Value="false"></Condition>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <Setter Property="Background" Value="#CCCCCC" />
+                                                            </MultiDataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsCheck}" Value="true"></Condition>
+                                                                    <Condition Binding="{Binding Status}" Value="false"></Condition>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <Setter Property="Background" Value="#ffd615" />
+                                                            </MultiDataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsCheck}" Value="true"></Condition>
+                                                                    <Condition Binding="{Binding Status}" Value="true"></Condition>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <Setter Property="Background" Value="#17b978" />
+                                                            </MultiDataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Padding="8" Margin="0 0 0 1">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsCheck}" Value="false"></Condition>
+                                                                        <Condition Binding="{Binding Status}" Value="false"></Condition>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="未知" />
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsCheck}" Value="true"></Condition>
+                                                                        <Condition Binding="{Binding Status}" Value="false"></Condition>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="异常" />
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsCheck}" Value="true"></Condition>
+                                                                        <Condition Binding="{Binding Status}" Value="true"></Condition>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="正常" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Border>
+                                        </StackPanel>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </TabItem>
-            <TabItem Header="FTP监测" Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="18">
-                <ListView ItemsSource="{Binding FTPItems}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="30">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsCheck}" HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="监测状态" Width="100">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsCheck}" Value="True">
-                                                            <Setter Property="Text" Value="监测中..." />
-                                                            <Setter Property="Foreground" Value="Green" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsCheck}" Value="False">
-                                                            <Setter Property="Text" Value="未监测" />
-                                                            <Setter Property="Foreground" Value="#CCC" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="名称" Width="150" >
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding FTPName}" HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="主机" Width="150" >
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding FTPServerHost}" HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="端口" Width="150" >
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding FTPServerPort}" HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="账户" Width="150" >
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding FTPUser}" HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="健康状态" Width="100">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Image Width="25" Height="25">
-                                            <Image.Style>
-                                                <Style TargetType="Image">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Status}" Value="True">
-                                                            <Setter Property="Source" Value="/Resource/right1.png" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="False">
-                                                            <Setter Property="Source" Value="/Resource/error1.png" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Image.Style>
-                                        </Image>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </TabItem>
-        </TabControl>
-    </DockPanel>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Border>
 </Window>

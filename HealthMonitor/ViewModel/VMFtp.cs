@@ -13,6 +13,11 @@ namespace HealthMonitor.ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
+        /// 序号
+        /// </summary>
+        public int Number { get; set; }
+
+        /// <summary>
         /// FTP名称
         /// </summary>
         public string FTPName { get; set; }

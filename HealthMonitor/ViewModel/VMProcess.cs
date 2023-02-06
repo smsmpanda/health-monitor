@@ -16,6 +16,11 @@ namespace HealthMonitor.ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
+        /// 序号
+        /// </summary>
+        public int Number { get; set; }
+
+        /// <summary>
         /// 进程名称
         /// </summary>
         public string ProcessName { get; set; }
