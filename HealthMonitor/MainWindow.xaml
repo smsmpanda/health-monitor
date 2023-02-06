@@ -12,7 +12,7 @@
     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
     <Window.Resources>
         <Style TargetType="TextBlock" x:Key="RHTitle">
-            <Setter Property="FontSize" Value="18"></Setter>
+            <Setter Property="FontSize" Value="14"></Setter>
             <Setter Property="VerticalAlignment" Value="Center"></Setter>
             <Setter Property="Margin" Value="10,0"></Setter>
             <Setter Property="Foreground" Value="#ffffff"></Setter>
@@ -370,7 +370,15 @@
             </Grid.RowDefinitions>
             <Grid Background="Transparent">
                 <Border BorderThickness="0.1" BorderBrush="Transparent"  CornerRadius="5,5,0,0" Background="#17b978"  />
-                <TextBlock DockPanel.Dock="Right"  Text="健康监测" Style="{StaticResource RHTitle}"></TextBlock>
+                <DockPanel>
+                    <Image Width="30" Height="30" Margin="5 0 0 0" HorizontalAlignment="Left" Source="/Resource/sub-logo-1.png" />
+                    <TextBlock Text="健康监测" Style="{StaticResource RHTitle}"></TextBlock>
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="btnMin" Background="#17b978" BorderThickness="0" Content="—" Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                        <Button x:Name="btnMax" Background="#17b978" BorderThickness="0"  Content="☐" Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                        <Button x:Name="btnClose" Background="#17b978" BorderThickness="0"  Content="✕" Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                    </StackPanel>
+                </DockPanel>
             </Grid>
             <TabControl Padding="5" Grid.Row="1"  Foreground="Black" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
                 <TabItem Header="进程监测"  Style="{StaticResource TabItemExWithUnderLineStyle}" Height="40" Width="100"  Margin="5 0" FontSize="15" >

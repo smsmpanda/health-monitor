@@ -24,10 +24,7 @@ namespace HealthMonitor
             var exit = new System.Windows.Forms.MenuItem("关闭应用");
             exit.Click += (s, e) =>
             {
-                if (MessageBox.Show("确定退出系统?", "退出系统", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
-                {
-                    this.Close();
-                }
+                ConfirmWhenCloseApp();
             };
 
 
@@ -48,6 +45,22 @@ namespace HealthMonitor
                     this.Activate();
                     this.WindowState = WindowState.Normal;
                 }
+            };
+
+            btnClose.Click += (s, e) => {
+                ConfirmWhenCloseApp();
+            };
+            btnMax.Click += (s, e) => {
+                if (WindowState == WindowState.Maximized) { 
+                    WindowState= WindowState.Normal;
+                }
+                else
+                {
+                    WindowState = WindowState.Maximized;
+                }
+            };
+            btnMin.Click += (s, e) => {
+                WindowState = WindowState.Minimized;
             };
         }
 
@@ -114,6 +127,14 @@ namespace HealthMonitor
                     this.WindowState = WindowState.Maximized;
                     IsMaximized = true;
                 }
+            }
+        }
+
+        private void ConfirmWhenCloseApp() 
+        {
+            if (MessageBox.Show("确定退出系统?", "退出系统", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+            {
+                this.Close();
             }
         }
     }
