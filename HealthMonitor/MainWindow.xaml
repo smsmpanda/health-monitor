@@ -362,17 +362,24 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Border BorderThickness="1"  CornerRadius="5" Background="#f7f6f4" MouseDown="Border_MouseDown" MouseLeftButtonDown="Border_LeftButtonDown">
+    <Border BorderThickness="1"  CornerRadius="5" Background="#f7f6f4">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="auto"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid Background="Transparent">
-                <Border BorderThickness="0.1" BorderBrush="Transparent"  CornerRadius="5,5,0,0" Background="#17b978"  />
+                <Border BorderThickness="0.1" BorderBrush="Transparent"  CornerRadius="5,5,0,0" Background="#17b978" MouseDown="Border_MouseDown" MouseLeftButtonDown="Border_LeftButtonDown" />
                 <DockPanel>
                     <Image Width="30" Height="30" Margin="5 0 0 0" HorizontalAlignment="Left" Source="/Resource/sub-logo-1.png" />
-                    <TextBlock Text="健康监测" Style="{StaticResource RHTitle}"></TextBlock>
+                    <TextBlock Style="{StaticResource RHTitle}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0}（{1}）">
+                                <Binding Path="ApplicationName" />
+                                <Binding Path="ApplicationVersion" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                     <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button x:Name="btnMin" Background="#17b978" BorderThickness="0" Content="—" Style="{StaticResource MaterialDesignFlatMidBgButton}" />
                         <Button x:Name="btnMax" Background="#17b978" BorderThickness="0"  Content="☐" Style="{StaticResource MaterialDesignFlatMidBgButton}" />

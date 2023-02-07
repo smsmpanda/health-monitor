@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Reflection;
 
 namespace HealthMonitor.ViewModel
 {
@@ -30,6 +31,16 @@ namespace HealthMonitor.ViewModel
         /// 监测FTP
         /// </summary>
         public ObservableCollection<VMFtp> FTPItems { get; private set; }
+
+        /// <summary>
+        /// 产品名称
+        /// </summary>
+        public string ApplicationName => this.GetType().Assembly.GetCustomAttribute<AssemblyProductAttribute>().Product;
+
+        /// <summary>
+        /// 产品版本号
+        /// </summary>
+        public string ApplicationVersion => this.GetType().Assembly.GetName().Version.ToString();
 
         #region 初始化配置
         private void Init()

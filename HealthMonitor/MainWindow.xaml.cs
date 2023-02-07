@@ -1,5 +1,6 @@
 ﻿using HealthMonitor.ViewModel;
 using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -11,99 +12,26 @@ namespace HealthMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly HealthMonitorDataContext _healthMonitorDataContext;
+        private readonly HealthMonitorDataContext dataContext;
 
-        private readonly System.Windows.Forms.NotifyIcon notifyIcon;
-        private const string HealCheckMonitor = "健康监测";
+        private System.Windows.Forms.NotifyIcon notifyIcon;
+
         public MainWindow()
         {
             InitializeComponent();
-            _healthMonitorDataContext = new HealthMonitorDataContext();
-            this.DataContext = _healthMonitorDataContext;
+            dataContext = new HealthMonitorDataContext();
+            this.DataContext = dataContext;
 
-            var exit = new System.Windows.Forms.MenuItem("关闭应用");
-            exit.Click += (s, e) =>
-            {
-                ConfirmWhenCloseApp();
-            };
-
-
-            this.Title = $"{HealCheckMonitor}";
-            this.notifyIcon = new System.Windows.Forms.NotifyIcon
-            {
-                Visible = true,
-                Text = HealCheckMonitor,
-                ContextMenu = new System.Windows.Forms.ContextMenu(new[] { exit }),
-                Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath)
-            };
-
-            this.notifyIcon.MouseClick += (s, e) =>
-            {
-                if (e.Button == System.Windows.Forms.MouseButtons.Left)
-                {
-                    this.Show();
-                    this.Activate();
-                    this.WindowState = WindowState.Normal;
-                }
-            };
-
-            btnClose.Click += (s, e) => {
-                ConfirmWhenCloseApp();
-            };
-            btnMax.Click += (s, e) => {
-                if (WindowState == WindowState.Maximized) { 
-                    WindowState= WindowState.Normal;
-                }
-                else
-                {
-                    WindowState = WindowState.Maximized;
-                }
-            };
-            btnMin.Click += (s, e) => {
-                WindowState = WindowState.Minimized;
-            };
+            WindowsTrayNotify();
+            WindowTopOperations();
         }
 
-        /// <summary>
-        /// 拦截最小化事件
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            base.OnSourceInitialized(e);
-
-            var hwndSource = (HwndSource)PresentationSource.FromVisual(this);
-            hwndSource.AddHook(WndProc);
-
-            IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-            {
-                const int WM_SYSCOMMAND = 0x112;
-                const int SC_MINIMIZE = 0xf020;
-                const int SC_CLOSE = 0xf060;
-
-                if (msg == WM_SYSCOMMAND)
-                {
-                    if (wParam.ToInt32() == SC_MINIMIZE || wParam.ToInt32() == SC_CLOSE)
-                    {
-                        this.Hide();
-                        handled = true;
-                    }
-                }
-                return IntPtr.Zero;
-            }
-        }
-
-        /// <summary>
-        /// 关闭时
-        /// </summary>
-        /// <param name="e"></param>
         protected override void OnClosed(EventArgs e)
         {
             this.notifyIcon.Icon = null;
             this.notifyIcon.Dispose();
             base.OnClosed(e);
         }
-
         private void Border_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
@@ -136,6 +64,58 @@ namespace HealthMonitor
             {
                 this.Close();
             }
+        }
+
+        private void WindowsTrayNotify() 
+        {
+            var exit = new System.Windows.Forms.MenuItem("关闭应用");
+            exit.Click += (s, e) =>
+            {
+                ConfirmWhenCloseApp();
+            };
+
+
+            this.Title = $"{dataContext.ApplicationName}";
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon
+            {
+                Visible = true,
+                Text = dataContext.ApplicationName,
+                ContextMenu = new System.Windows.Forms.ContextMenu(new[] { exit }),
+                Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath)
+            };
+
+            this.notifyIcon.MouseClick += (s, e) =>
+            {
+                if (e.Button == System.Windows.Forms.MouseButtons.Left)
+                {
+                    this.Show();
+                    this.Activate();
+                    this.WindowState = WindowState.Normal;
+                }
+            };
+        }
+
+        /// <summary>
+        /// Window窗体最大化，最小化，退出操作处理
+        /// </summary>
+        private void WindowTopOperations() 
+        {
+            btnClose.Click += (s, e) => {
+                ConfirmWhenCloseApp();
+            };
+            btnMax.Click += (s, e) => {
+                if (WindowState == WindowState.Maximized)
+                {
+                    WindowState = WindowState.Normal;
+                }
+                else
+                {
+                    WindowState = WindowState.Maximized;
+                }
+            };
+            btnMin.Click += (s, e) => {
+                WindowState = WindowState.Minimized;
+            };
         }
     }
 }

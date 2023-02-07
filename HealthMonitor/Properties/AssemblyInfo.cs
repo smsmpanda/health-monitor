@@ -7,8 +7,8 @@ using System.Windows;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("联网上报-监测")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("健康监测")]
+[assembly: AssemblyDescription("此系统用户监测指定进程、数据库监听程序、FTP等")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("健康监测")]
