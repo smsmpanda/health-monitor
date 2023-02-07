@@ -132,7 +132,7 @@ namespace HealthMonitor
 
         private void ConfirmWhenCloseApp() 
         {
-            if (MessageBox.Show("确定退出系统?", "退出系统", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+            if (MessageBox.Show("（当前应用正在监测指定数据库及联网上报等程序运行状况，请谨慎操作！）确定退出系统?", "温馨提示", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
             {
                 this.Close();
             }
