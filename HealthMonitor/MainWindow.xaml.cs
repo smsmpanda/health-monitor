@@ -19,11 +19,22 @@ namespace HealthMonitor
         public MainWindow()
         {
             InitializeComponent();
+            WindowOutStyleControl();
+
             dataContext = new HealthMonitorDataContext();
             this.DataContext = dataContext;
 
             WindowsTrayNotify();
             WindowTopOperations();
+        }
+
+        /// <summary>
+        /// 窗体外观控制
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        private void WindowOutStyleControl()
+        {
+            this.MaxHeight = SystemParameters.PrimaryScreenHeight;
         }
 
         protected override void OnClosed(EventArgs e)

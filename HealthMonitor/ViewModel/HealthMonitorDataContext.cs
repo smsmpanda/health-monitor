@@ -42,6 +42,11 @@ namespace HealthMonitor.ViewModel
         /// </summary>
         public string ApplicationVersion => this.GetType().Assembly.GetName().Version.ToString();
 
+        /// <summary>
+        /// 报警设置页面地址
+        /// </summary>
+        public string AlarmSettingAddress => ConfigurationManager.AppSettings["AlarmSettingAddress"];
+
         #region 初始化配置
         private void Init()
         {
