@@ -577,7 +577,7 @@
                     Height="40"
                     Margin="5,0"
                     FontSize="15"
-                    Header="报警监测"
+                    Header="报警设置"
                     Style="{StaticResource TabItemExWithUnderLineStyle}">
                     <Grid>
                         <wpf:ChromiumWebBrowser
