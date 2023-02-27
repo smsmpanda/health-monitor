@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CefSharp;
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -13,6 +14,12 @@ namespace HealthMonitor
     {
         private const string MUTEX_NAME = "Global\\HealthMonitor";
         private static Mutex AppMutex;
+
+        public App()
+        {
+            CefRuntime.SubscribeAnyCpuAssemblyResolver();
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             /*创建具有唯一名称的互斥锁*/
