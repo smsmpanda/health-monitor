@@ -20,7 +20,7 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <TabControl materialDesign:ColorZoneAssist.Foreground="#FF673AB7" materialDesign:ColorZoneAssist.Mode="Custom">
+        <TabControl materialDesign:ColorZoneAssist.Mode="PrimaryDark">
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -109,7 +109,6 @@
                                                                 <Condition Binding="{Binding IsCheck}" Value="true" />
                                                                 <Condition Binding="{Binding Status}" Value="true" />
                                                             </MultiDataTrigger.Conditions>
-                                                            <Setter Property="Background" Value="#17b978" />
                                                         </MultiDataTrigger>
                                                     </Style.Triggers>
                                                 </Style>

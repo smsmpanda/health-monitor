@@ -2,6 +2,7 @@
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -14,9 +15,24 @@ namespace HealthMonitor.Domain
     {
         public DataCompareViewModel()
         {
-
+            DbCompareTasks = new ObservableCollection<DataCompareTask>()
+            {
+                new DataCompareTask("任务1",DateTime.Now,null,null),
+                new DataCompareTask("任务2",DateTime.Now,null,null),
+                new DataCompareTask("任务3",DateTime.Now,null,null),
+                new DataCompareTask("任务4",DateTime.Now,null,null),
+                new DataCompareTask("任务4",DateTime.Now,null,null),
+                new DataCompareTask("任务4",DateTime.Now,null,null),
+                new DataCompareTask("任务4",DateTime.Now,null,null),
+                new DataCompareTask("任务4",DateTime.Now,null,null),
+                new DataCompareTask("任务4",DateTime.Now,null,null),
+                new DataCompareTask("任务4",DateTime.Now,null,null),
+                new DataCompareTask("任务4",DateTime.Now,null,null),
+                new DataCompareTask("任务4",DateTime.Now,null,null),
+            };
         }
 
+        public ObservableCollection<DataCompareTask> DbCompareTasks { get; }
 
         public ICommand RunDialogCommand => new AnotherCommandImplementation(ExecuteRunDialog);
 

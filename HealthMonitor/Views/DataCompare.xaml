@@ -13,34 +13,50 @@
     <Grid>
         <materialDesign:DialogHost DialogTheme="Inherit" Identifier="DbcRootDialog">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <ListBox
-                    x:Name="DemoItemsListBox"
-                    HorizontalAlignment="Center"
-                    ItemsSource="{Binding DbCompareTaskList}"
-                    Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
-                    <ListBox.Resources>
-                        <Style BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" TargetType="ScrollBar" />
-                    </ListBox.Resources>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate DataType="domain:DataCompareTask">
-                            <Border>
-                                <StackPanel>
-                                    <TextBlock
-                                        HorizontalAlignment="Center"
-                                        FontSize="10"
-                                        Foreground="#fff"
-                                        Text="{Binding TaskName}" />
-                                </StackPanel>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="200" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <ItemsControl ItemsSource="{Binding DbCompareTasks}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="10" Background="Orange">
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Margin="15,0" Kind="Alarm" />
+                                        <TextBlock Text="{Binding TaskName}" />
+                                    </StackPanel>
+                                    <Canvas ClipToBounds="True">
+                                        <Border
+                                            Canvas.Top="10"
+                                            Canvas.Right="-50"
+                                            Width="120"
+                                            Height="120"
+                                            Background="#fff"
+                                            CornerRadius="100"
+                                            Opacity="0.1" />
+                                        <Border
+                                            Canvas.Top="80"
+                                            Canvas.Right="-30"
+                                            Width="120"
+                                            Height="120"
+                                            Background="#fff"
+                                            CornerRadius="100"
+                                            Opacity="0.1" />
+                                    </Canvas>
+                                </Grid>
                             </Border>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
                 <Button
-                    Grid.Column="1"
+                    Grid.Row="1"
                     Width="120"
                     Height="50"
                     Command="{Binding RunDialogCommand}">

@@ -10,13 +10,18 @@
     Width="1280"
     Height="720"
     AllowsTransparency="True"
-    Background="Transparent"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="微软雅黑"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
     <Border
         x:Name="windowBorder"
-        Background="#FFF7F4F5"
         BorderBrush="#ccc"
         BorderThickness="0,1,1,1">
         <Grid>
@@ -25,29 +30,28 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Border Background="#FF673AB7">
-                <StackPanel Orientation="Vertical">
-                    <StackPanel Height="50">
-                        <Image
-                            Width="30"
-                            Height="50"
-                            Margin="0,0,0,0"
-                            Source="/Resource/safe.png" />
-                    </StackPanel>
+            <materialDesign:ColorZone
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Mode="PrimaryDark">
+                <DockPanel LastChildFill="True">
+                    <Image
+                        Width="30"
+                        Height="50"
+                        Margin="0,0,0,0"
+                        DockPanel.Dock="Top"
+                        Source="/Resource/safe.png" />
                     <ListBox
                         x:Name="DemoItemsListBox"
-                        HorizontalAlignment="Center"
+                        DockPanel.Dock="Bottom"
+                        ItemContainerStyle="{StaticResource MenuListBoxItem}"
                         ItemsSource="{Binding DemoItems}"
                         SelectedIndex="{Binding SelectedIndex}"
-                        SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
-                        <ListBox.Resources>
-                            <Style BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" TargetType="ScrollBar" />
-                        </ListBox.Resources>
+                        SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
                         <ListBox.ItemTemplate>
-                            <DataTemplate DataType="domain:DemoItem">
+                            <DataTemplate>
                                 <Border>
-                                    <StackPanel>
+                                    <StackPanel Background="Transparent">
                                         <materialDesign:PackIcon
                                             Width="25"
                                             Height="25"
@@ -64,18 +68,20 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                </StackPanel>
-            </Border>
+                </DockPanel>
+            </materialDesign:ColorZone>
 
 
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Border
-                    Background="#FFF7F4F5"
+                <materialDesign:ColorZone
+                    Height="45"
+                    VerticalAlignment="Center"
+                    Mode="Custom"
                     MouseDown="Border_MouseDown"
                     MouseLeftButtonDown="Border_LeftButtonDown">
                     <DockPanel>
@@ -91,43 +97,25 @@
                             HorizontalAlignment="Right"
                             DockPanel.Dock="Right"
                             Orientation="Horizontal">
-                            <Button
-                                x:Name="btnMin"
-                                Background="#FFF7F4F5"
-                                BorderThickness="0"
-                                Foreground="#FF999999"
-                                Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                            <Button x:Name="btnMin" Style="{StaticResource MaterialDesignFlatButton}">
                                 <Button.Content>
                                     <materialDesign:PackIcon Kind="Minus" />
                                 </Button.Content>
                             </Button>
-                            <Button
-                                x:Name="btnMax"
-                                Background="#FFF7F4F5"
-                                BorderThickness="0"
-                                Foreground="#FF999999"
-                                Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                            <Button x:Name="btnMax" Style="{StaticResource MaterialDesignFlatButton}">
                                 <Button.Content>
                                     <materialDesign:PackIcon Kind="CheckboxBlankOutline" />
 
                                 </Button.Content>
                             </Button>
-                            <Button
-                                x:Name="btnClose"
-                                Background="#FFF7F4F5"
-                                BorderThickness="0"
-                                Foreground="#FF999999"
-                                Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                            <Button x:Name="btnClose" Style="{StaticResource MaterialDesignFlatButton}">
                                 <Button.Content>
                                     <materialDesign:PackIcon Kind="Close" />
                                 </Button.Content>
                             </Button>
                         </StackPanel>
                     </DockPanel>
-
-                </Border>
-
-
+                </materialDesign:ColorZone>
                 <Border
                     Grid.Row="1"
                     Background="#FFF9F9F9"
