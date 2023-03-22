@@ -1,18 +1,17 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using HealthMonitor.Domain;
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Configuration;
-using System.Reflection;
 
 namespace HealthMonitor.ViewModel
 {
     /// <summary>
     /// 监测数据
     /// </summary>
-    public class HealthMonitorDataContext
+    public class MonitorViewModel : ViewModelBase
     {
-        public HealthMonitorDataContext()
+        public MonitorViewModel()
         {
             Init();
         }
@@ -32,20 +31,10 @@ namespace HealthMonitor.ViewModel
         /// </summary>
         public ObservableCollection<VMFtp> FTPItems { get; private set; }
 
-        /// <summary>
-        /// 产品名称
-        /// </summary>
-        public string ApplicationName => this.GetType().Assembly.GetCustomAttribute<AssemblyProductAttribute>().Product;
+        public string AlarmSettingAddress => 
+            ConfigurationManager.AppSettings["AlarmSettingAddress"];
 
-        /// <summary>
-        /// 产品版本号
-        /// </summary>
-        public string ApplicationVersion => this.GetType().Assembly.GetName().Version.ToString();
 
-        /// <summary>
-        /// 报警设置页面地址
-        /// </summary>
-        public string AlarmSettingAddress => ConfigurationManager.AppSettings["AlarmSettingAddress"];
 
         #region 初始化配置
         private void Init()

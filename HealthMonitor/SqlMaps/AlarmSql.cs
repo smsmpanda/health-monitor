@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HealthMonitor.SqlMaps
+﻿namespace HealthMonitor.SqlMaps
 {
     public struct AlarmSql
     {
@@ -22,7 +16,7 @@ namespace HealthMonitor.SqlMaps
         /// 转存报警记录
         /// </summary>
         public const string TransferAlarmSql = "INSERT INTO TB_EMP_ALARM_RECORD(ALARMTYPE,DESCRIPTION,ALARMMANNAME,STARTDATE) SELECT ALARMTYPE,DESCRIPTION,ALARMMANNAME,STARTDATE FROM TB_EMP_REALTIME_ALARM WHERE ALARMTYPE = :ALARMTYPE AND ALARMMANNAME = :ALARMMANNAME";
-        
+
         /// <summary>
         /// 删除报警记录
         /// </summary>

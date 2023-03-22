@@ -1,16 +1,14 @@
-﻿using HealthMonitor.Enums;
+﻿using HealthMonitor.Domain;
+using HealthMonitor.Enums;
 using HealthMonitor.Model;
 using HealthMonitor.Utility;
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace HealthMonitor.ViewModel
 {
-    public class VMFtp : INotifyPropertyChanged
+    public class VMFtp : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// 序号
@@ -52,11 +50,7 @@ namespace HealthMonitor.ViewModel
             get { return _isCheck; }
             set
             {
-                if (this._isCheck != value)
-                {
-                    this._isCheck = value;
-                    NotifyPropertyChanged();
-                }
+                SetProperty(ref _isCheck, value);
                 StartMonitor();
             }
         }
@@ -70,18 +64,8 @@ namespace HealthMonitor.ViewModel
             get { return _status; }
             set
             {
-                if (this._status != value)
-                {
-                    this._status = value;
-                    NotifyPropertyChanged();
-                }
+                SetProperty(ref _status, value);
             }
-        }
-
-        public void NotifyPropertyChanged([CallerMemberName] string propName = "Default")
-        {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
 
@@ -92,7 +76,7 @@ namespace HealthMonitor.ViewModel
                 while (this._isCheck)
                 {
 
-                    this.Status =await  FTPHelper.TryConnectFTPAsync(this.FTPServerHost,this.FTPUser,this.FTPPassword,this.FTPServerPort);
+                    this.Status = await FTPHelper.TryConnectFTPAsync(this.FTPServerHost, this.FTPUser, this.FTPPassword, this.FTPServerPort);
 
                     //异常时将报警信息入库
                     AlarmRecord alarmRecord = AlarmRecord.GenerateAlarm($"{AlarmType.ATP_FTP_ERROR}", $"FTP连接异常", this.FTPName, DateTime.Now);

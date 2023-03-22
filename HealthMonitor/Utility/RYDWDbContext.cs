@@ -3,11 +3,8 @@ using HealthMonitor.Model;
 using HealthMonitor.Services;
 using HealthMonitor.SqlMaps;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HealthMonitor.Utility
@@ -66,7 +63,7 @@ namespace HealthMonitor.Utility
             }
         }
 
-        public static async Task DeleteAlarmRecord(AlarmRecord alarm) 
+        public static async Task DeleteAlarmRecord(AlarmRecord alarm)
         {
             using (IDbConnection conn = DbFactory.GetDbByType(_connectionString, Enums.DbType.ORACLE).CreateConnection())
             {

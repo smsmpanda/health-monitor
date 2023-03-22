@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace HealthMonitor.UserControls
+namespace HealthMonitor.Views
 {
     /// <summary>
-    /// Loading.xaml 的交互逻辑
+    /// DataCompare.xaml 的交互逻辑
     /// </summary>
-    public partial class Loading : UserControl
+    public partial class DataCompare : UserControl
     {
-        public Loading()
+        public DataCompare()
         {
             InitializeComponent();
         }

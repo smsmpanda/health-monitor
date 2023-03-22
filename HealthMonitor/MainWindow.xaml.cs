@@ -1,9 +1,9 @@
-﻿using HealthMonitor.ViewModel;
+﻿using HealthMonitor.Domain;
 using System;
-using System.Reflection;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Interop;
+using System.Windows.Media;
 
 namespace HealthMonitor
 {
@@ -12,29 +12,20 @@ namespace HealthMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly HealthMonitorDataContext dataContext;
-
+        private bool IsMaximized = false;
         private System.Windows.Forms.NotifyIcon notifyIcon;
+        private readonly MainWindowViewModel dataContext;
 
         public MainWindow()
         {
-            InitializeComponent();
+            dataContext = new MainWindowViewModel();
+            DataContext = dataContext;
+
             WindowOutStyleControl();
+            ApplicationSystemTrapMount();
 
-            dataContext = new HealthMonitorDataContext();
-            this.DataContext = dataContext;
-
-            WindowsTrayNotify();
-            WindowTopOperations();
-        }
-
-        /// <summary>
-        /// 窗体外观控制
-        /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
-        private void WindowOutStyleControl()
-        {
-            this.MaxHeight = SystemParameters.PrimaryScreenHeight;
+            InitializeComponent();
+            ApplicationTopBtnEventBind();
         }
 
         protected override void OnClosed(EventArgs e)
@@ -43,16 +34,16 @@ namespace HealthMonitor
             this.notifyIcon.Dispose();
             base.OnClosed(e);
         }
-        private void Border_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+
+        //鼠标左键应用拖动
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
             {
                 this.DragMove();
             }
         }
-
-        bool IsMaximized = false;
-        private void Border_LeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Border_LeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
             {
@@ -69,7 +60,8 @@ namespace HealthMonitor
             }
         }
 
-        private void ConfirmWhenCloseApp() 
+        //关闭应用时事件处理
+        private void ApplicationExitHandler()
         {
             if (MessageBox.Show("（当前应用正在监测指定数据库及联网上报等程序运行状况，请谨慎操作！）确定退出系统?", "温馨提示", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
             {
@@ -77,14 +69,13 @@ namespace HealthMonitor
             }
         }
 
-        private void WindowsTrayNotify() 
+        //应用系统托盘菜单创建
+        private void ApplicationSystemTrapMount()
         {
-            var exit = new System.Windows.Forms.MenuItem("关闭应用");
-            exit.Click += (s, e) =>
+            var exit = new System.Windows.Forms.MenuItem("关闭应用", (s, e) =>
             {
-                ConfirmWhenCloseApp();
-            };
-
+                ApplicationExitHandler();
+            });
 
             this.Title = $"{dataContext.ApplicationName}";
             this.notifyIcon = new System.Windows.Forms.NotifyIcon
@@ -106,15 +97,15 @@ namespace HealthMonitor
             };
         }
 
-        /// <summary>
-        /// Window窗体最大化，最小化，退出操作处理
-        /// </summary>
-        private void WindowTopOperations() 
+        //应用顶栏最大化|最小化|关闭按钮时间绑定
+        private void ApplicationTopBtnEventBind()
         {
-            btnClose.Click += (s, e) => {
-                ConfirmWhenCloseApp();
+            btnClose.Click += (s, e) =>
+            {
+                ApplicationExitHandler();
             };
-            btnMax.Click += (s, e) => {
+            btnMax.Click += (s, e) =>
+            {
                 if (WindowState == WindowState.Maximized)
                 {
                     WindowState = WindowState.Normal;
@@ -124,9 +115,16 @@ namespace HealthMonitor
                     WindowState = WindowState.Maximized;
                 }
             };
-            btnMin.Click += (s, e) => {
+            btnMin.Click += (s, e) =>
+            {
                 WindowState = WindowState.Minimized;
             };
+        }
+
+        //避免全屏时应用高度超出Windows底栏
+        private void WindowOutStyleControl()
+        {
+            this.MaxHeight = SystemParameters.PrimaryScreenHeight;
         }
     }
 }

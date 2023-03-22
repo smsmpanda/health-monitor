@@ -1,12 +1,8 @@
-﻿using Dapper;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using Oracle.ManagedDataAccess.Client;
 using System;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Threading.Tasks;
-using System.Windows.Ink;
 
 namespace HealthMonitor.Utility
 {

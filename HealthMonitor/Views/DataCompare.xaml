@@ -1,0 +1,55 @@
+﻿<UserControl
+    x:Class="HealthMonitor.Views.DataCompare"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:domain="clr-namespace:HealthMonitor.Domain"
+    xmlns:local="clr-namespace:HealthMonitor.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="350"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid>
+        <materialDesign:DialogHost DialogTheme="Inherit" Identifier="DbcRootDialog">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <ListBox
+                    x:Name="DemoItemsListBox"
+                    HorizontalAlignment="Center"
+                    ItemsSource="{Binding DbCompareTaskList}"
+                    Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
+                    <ListBox.Resources>
+                        <Style BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" TargetType="ScrollBar" />
+                    </ListBox.Resources>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="domain:DataCompareTask">
+                            <Border>
+                                <StackPanel>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontSize="10"
+                                        Foreground="#fff"
+                                        Text="{Binding TaskName}" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button
+                    Grid.Column="1"
+                    Width="120"
+                    Height="50"
+                    Command="{Binding RunDialogCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon VerticalAlignment="Center" Kind="ShapeSquarePlus" />
+                        <TextBlock Margin="10,0" VerticalAlignment="Center">新建比对</TextBlock>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </materialDesign:DialogHost>
+    </Grid>
+</UserControl>

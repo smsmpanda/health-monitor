@@ -1,9 +1,8 @@
-﻿using HealthMonitor.Enums;
+﻿using HealthMonitor.Domain;
+using HealthMonitor.Enums;
 using HealthMonitor.Model;
 using HealthMonitor.Utility;
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace HealthMonitor.ViewModel
@@ -11,10 +10,8 @@ namespace HealthMonitor.ViewModel
     /// <summary>
     /// 指定进程监测
     /// </summary>
-    public class VMProcess : INotifyPropertyChanged
+    public class VMProcess : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         /// <summary>
         /// 序号
         /// </summary>
@@ -39,11 +36,7 @@ namespace HealthMonitor.ViewModel
             get { return _isCheck; }
             set
             {
-                if (this._isCheck != value)
-                {
-                    this._isCheck = value;
-                    NotifyPropertyChanged();
-                }
+                SetProperty(ref _isCheck, value);
                 this.StartMonitor();
             }
         }
@@ -57,18 +50,10 @@ namespace HealthMonitor.ViewModel
             get { return _status; }
             set
             {
-                if (this._status != value)
-                {
-                    this._status = value;
-                    NotifyPropertyChanged();
-                }
+                SetProperty(ref _status, value);
             }
         }
 
-        public void NotifyPropertyChanged([CallerMemberName] string propName = "Default")
-        {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-        }
 
         /// <summary>
         /// 开始监测进程状态
@@ -88,7 +73,8 @@ namespace HealthMonitor.ViewModel
                     {
                         await RYDWDbContext.TransferAlarmRecordAsync(alarmRecord);
                     }
-                    else {
+                    else
+                    {
                         await RYDWDbContext.InsertAlarmAsync(alarmRecord);
                     }
                     await Task.Delay(2000);

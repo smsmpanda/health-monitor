@@ -1,13 +1,9 @@
-﻿using HealthMonitor.Enums;
+﻿using HealthMonitor.Domain;
+using HealthMonitor.Enums;
 using HealthMonitor.Model;
 using HealthMonitor.Services;
 using HealthMonitor.Utility;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HealthMonitor.ViewModel
@@ -15,10 +11,8 @@ namespace HealthMonitor.ViewModel
     /// <summary>
     /// 数据库健康监测类
     /// </summary>
-    public class VMDatabase : INotifyPropertyChanged
+    public class VMDatabase : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         /// <summary>
         /// 数据库名称
         /// </summary>
@@ -50,11 +44,7 @@ namespace HealthMonitor.ViewModel
             get { return _isCheck; }
             set
             {
-                if (this._isCheck != value)
-                {
-                    this._isCheck = value;
-                    NotifyPropertyChanged();
-                }
+                SetProperty(ref _isCheck, value);
                 StartMonitor();
             }
         }
@@ -68,18 +58,8 @@ namespace HealthMonitor.ViewModel
             get { return _status; }
             set
             {
-                if (this._status != value)
-                {
-                    this._status = value;
-                    NotifyPropertyChanged();
-                }
+                SetProperty(ref _status, value);
             }
-        }
-
-        public void NotifyPropertyChanged([CallerMemberName] string propName = "Default")
-        {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
         private void StartMonitor()
@@ -98,7 +78,7 @@ namespace HealthMonitor.ViewModel
                     {
                         await RYDWDbContext.TransferAlarmRecordAsync(alarmRecord);
                     }
-                    else 
+                    else
                     {
                         await RYDWDbContext.InsertAlarmAsync(alarmRecord);
                     }
@@ -107,7 +87,7 @@ namespace HealthMonitor.ViewModel
                 }
 
                 //停止监听删除相应的实时报警记录
-                await RYDWDbContext.DeleteAlarmRecord(AlarmRecord.GenerateAlarm($"{AlarmType.ATP_DATABASE_ERROR}",string.Empty,this.DbName,DateTime.Now));
+                await RYDWDbContext.DeleteAlarmRecord(AlarmRecord.GenerateAlarm($"{AlarmType.ATP_DATABASE_ERROR}", string.Empty, this.DbName, DateTime.Now));
                 this.Status = false;
             });
         }
