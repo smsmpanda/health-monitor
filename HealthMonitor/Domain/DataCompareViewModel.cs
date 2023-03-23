@@ -15,54 +15,73 @@ namespace HealthMonitor.Domain
 {
     public class DataCompareViewModel : ViewModelBase
     {
-        private DataCompareDbItem _dbcItemA;
-        private DataCompareDbItem _dbcItemB;
+        private bool _isBottomDrawOpen;
+        private DataBaseItem _dataBaseItemForDw;
+        private DataBaseItem _dataBaseItemForHm;
+        public DataCompareFilter _filters;
+        public ObservableCollection<DwInOutwellModel> _inOutWellList;
         public DataCompareViewModel()
         {
-            DbCompareTasks = new ObservableCollection<DataCompareTask>()
-            {
-                new DataCompareTask("任务1",DateTime.Now,null,null),
-                new DataCompareTask("任务2",DateTime.Now,null,null),
-                new DataCompareTask("任务3",DateTime.Now,null,null),
-                new DataCompareTask("任务4",DateTime.Now,null,null),
-                new DataCompareTask("任务4",DateTime.Now,null,null),
-                new DataCompareTask("任务4",DateTime.Now,null,null),
-                new DataCompareTask("任务4",DateTime.Now,null,null),
-                new DataCompareTask("任务4",DateTime.Now,null,null),
-                new DataCompareTask("任务4",DateTime.Now,null,null),
-                new DataCompareTask("任务4",DateTime.Now,null,null),
-                new DataCompareTask("任务4",DateTime.Now,null,null),
-                new DataCompareTask("任务4",DateTime.Now,null,null),
-            };
-
-            _dbcItemA = new DataCompareDbItem();
-            _dbcItemB = new DataCompareDbItem();
+            _dataBaseItemForDw = new DataBaseItem();
+            _dataBaseItemForHm = new DataBaseItem();
+            _filters = new DataCompareFilter();
+            _inOutWellList= new ObservableCollection<DwInOutwellModel>();
         }
 
-
-        public ObservableCollection<DataCompareTask> DbCompareTasks { get; }
-
-
-        public DataCompareDbItem DbcItemA
+        public DataBaseItem DataBaseForDw
         {
-            get => _dbcItemA;
-            set => _dbcItemA = value;
+            get => _dataBaseItemForDw;
+            set => SetProperty(ref _dataBaseItemForDw, value);
         }
 
-        public DataCompareDbItem DbcItemB
+        public DataBaseItem DataBaseItemForHm
         {
-            get => _dbcItemB;
-            set => _dbcItemB = value;
+            get => _dataBaseItemForHm;
+            set => SetProperty(ref _dataBaseItemForHm, value);
         }
+
+        public ObservableCollection<DwInOutwellModel> InOutWellList
+        {
+            get => _inOutWellList;
+            set => SetProperty(ref _inOutWellList, value);
+        }
+
+        public DataCompareFilter Filters
+        {
+            get => _filters;
+            set => SetProperty(ref _filters, value);
+        }
+
+        public bool IsBottomDrawOpen
+        {
+            get => _isBottomDrawOpen;
+            set => SetProperty(ref _isBottomDrawOpen, value);
+        }
+
 
         public List<string> DbTypeItems => new List<string> { $"{DbType.MYSQL}", $"{DbType.ORACLE}", $"{DbType.MSSQL}" };
 
-        public ICommand AddNewDbCompareCommand => new AnotherCommandImplementation(AddNewDbCompare, CanExecuteAddNewDbCompare);
-        public ICommand DataTestConnectionCommand => new AnotherCommandImplementation(DataBaseConnection, CanExecuteAddNewDbCompare);
+        public ICommand AddNewDbCompareCommand => 
+            new AnotherCommandImplementation(AddNewDbCompare, CanExecuteAddNewDbCompare);
+        
+        public ICommand DataTestConnectionCommand => 
+            new AnotherCommandImplementation(DataBaseConnection, CanExecuteAddNewDbCompare);
+        
+        public ICommand ExpandBottomDrawCommand => 
+            new AnotherCommandImplementation(ExpandBottomDraw);
 
-        public void AddNewDbCompare(Object m)
+
+        public void ExpandBottomDraw(object m) 
         {
-            this.DbCompareTasks.Add(new DataCompareTask($"比对{DateTime.Now:G}", DateTime.Now, this.DbcItemA, this.DbcItemB));
+            IsBottomDrawOpen = !IsBottomDrawOpen;
+        }
+
+        public void AddNewDbCompare(object m)
+        {
+            for (int i = 1; i <= 100; i++)
+            {
+                _inOutWellList.Add(new DwInOutwellModel() { DepartMentName=$"部门{i}" });
+            }
         }
 
         public void DataBaseConnection(object m)
@@ -70,7 +89,7 @@ namespace HealthMonitor.Domain
             Task.Factory.StartNew(async () =>
             {
 
-                foreach (var dbItem in new List<DataCompareDbItem> { DbcItemA, DbcItemB })
+                foreach (var dbItem in new List<DataBaseItem> { DataBaseForDw, DataBaseItemForHm })
                 {
                     DbConfig config = new DbConfig()
                     {
@@ -88,16 +107,16 @@ namespace HealthMonitor.Domain
 
         public bool CanExecuteAddNewDbCompare(object m)
         {
-            if (string.IsNullOrWhiteSpace(this.DbcItemA.DbHost)
-                || string.IsNullOrWhiteSpace(this.DbcItemA.DbPort)
-                || string.IsNullOrWhiteSpace(this.DbcItemA.DbUser)
-                || string.IsNullOrWhiteSpace(this.DbcItemA.DbPwd)
-                || string.IsNullOrWhiteSpace(this.DbcItemA.DbType)
-                || string.IsNullOrWhiteSpace(this.DbcItemB.DbHost)
-                || string.IsNullOrWhiteSpace(this.DbcItemB.DbPort)
-                || string.IsNullOrWhiteSpace(this.DbcItemB.DbUser)
-                || string.IsNullOrWhiteSpace(this.DbcItemB.DbPwd)
-                || string.IsNullOrWhiteSpace(this.DbcItemB.DbType))
+            if (string.IsNullOrWhiteSpace(this.DataBaseForDw.DbHost)
+                || string.IsNullOrWhiteSpace(this.DataBaseForDw.DbPort)
+                || string.IsNullOrWhiteSpace(this.DataBaseForDw.DbUser)
+                || string.IsNullOrWhiteSpace(this.DataBaseForDw.DbPwd)
+                || string.IsNullOrWhiteSpace(this.DataBaseForDw.DbType)
+                || string.IsNullOrWhiteSpace(this.DataBaseItemForHm.DbHost)
+                || string.IsNullOrWhiteSpace(this.DataBaseItemForHm.DbPort)
+                || string.IsNullOrWhiteSpace(this.DataBaseItemForHm.DbUser)
+                || string.IsNullOrWhiteSpace(this.DataBaseItemForHm.DbPwd)
+                || string.IsNullOrWhiteSpace(this.DataBaseItemForHm.DbType))
             {
                 return false;
             }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HealthMonitor.Domain
 {
-    public class DataCompareDbItem : ViewModelBase
+    public class DataBaseItem : ViewModelBase
     {
         private string _dbHost;
         public string DbHost

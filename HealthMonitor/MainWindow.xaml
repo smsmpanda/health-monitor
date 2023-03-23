@@ -104,7 +104,7 @@
                             </Button>
                             <Button x:Name="btnMax" Style="{StaticResource MaterialDesignFlatButton}">
                                 <Button.Content>
-                                    <materialDesign:PackIcon Kind="CheckboxBlankOutline" />
+                                    <materialDesign:PackIcon x:Name="btnMaxIcon" Kind="CheckboxBlankOutline" />
 
                                 </Button.Content>
                             </Button>
@@ -120,11 +120,11 @@
                     Grid.Row="1"
                     Background="#FFF9F9F9"
                     BorderBrush="#FFE5E5E5"
-                    BorderThickness="1,1,0,0"
+                    BorderThickness="2,1,0,0"
                     CornerRadius="5 0 0 0">
                     <materialDesign:DialogHost DialogTheme="Inherit" Identifier="RootDialog1">
                         <ContentControl
-                            Margin="{Binding MarginRequirement, FallbackValue=0}"
+                            Margin="0,0,1,0"
                             Content="{Binding Content, UpdateSourceTrigger=PropertyChanged, FallbackValue={x:Null}}"
                             DataContext="{Binding SelectedItem}"
                             DockPanel.Dock="Bottom" />

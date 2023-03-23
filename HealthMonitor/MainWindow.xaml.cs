@@ -21,7 +21,7 @@ namespace HealthMonitor
             dataContext = new MainWindowViewModel();
             DataContext = dataContext;
 
-            WindowOutStyleControl();
+            //WindowOutStyleControl();
             ApplicationSystemTrapMount();
 
             InitializeComponent();
@@ -109,10 +109,14 @@ namespace HealthMonitor
                 if (WindowState == WindowState.Maximized)
                 {
                     WindowState = WindowState.Normal;
+                    this.WindowState = WindowState.Normal;
+                    btnMaxIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.WindowMaximize;
                 }
                 else
                 {
+                    this.MaxHeight = SystemParameters.WorkArea.Height;
                     WindowState = WindowState.Maximized;
+                    btnMaxIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.WindowRestore;
                 }
             };
             btnMin.Click += (s, e) =>
@@ -125,6 +129,7 @@ namespace HealthMonitor
         private void WindowOutStyleControl()
         {
             this.MaxHeight = SystemParameters.PrimaryScreenHeight;
+            this.MaxWidth = SystemParameters.PrimaryScreenWidth;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace HealthMonitor.Domain
 {
     public class DataCompareTask : ViewModelBase
     {
-        public DataCompareTask(string taskName, DateTime taskStartDate, DataCompareDbItem dbcItemA, DataCompareDbItem dbcItemB)
+        public DataCompareTask(string taskName, DateTime taskStartDate, DataBaseItem dbcItemA, DataBaseItem dbcItemB)
         {
             TaskName = taskName;
             TaskStartDate = taskStartDate;
@@ -20,7 +20,7 @@ namespace HealthMonitor.Domain
        
         public DateTime TaskStartDate { get; }
 
-        public DataCompareDbItem DbcItemA { get; }
-        public DataCompareDbItem DbcItemB { get; }
+        public DataBaseItem DbcItemA { get; }
+        public DataBaseItem DbcItemB { get; }
     }
 }
