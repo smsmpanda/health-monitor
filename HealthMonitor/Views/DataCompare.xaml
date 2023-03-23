@@ -3,69 +3,358 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:domain="clr-namespace:HealthMonitor.Domain"
-    xmlns:local="clr-namespace:HealthMonitor.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="350"
-    d:DesignWidth="800"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
     mc:Ignorable="d">
     <Grid>
-        <materialDesign:DialogHost DialogTheme="Inherit" Identifier="DbcRootDialog">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="200" />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <ItemsControl ItemsSource="{Binding DbCompareTasks}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+        <materialDesign:DialogHost
+            Margin="0,0,0,0"
+            DialogTheme="Inherit"
+            Identifier="DbcRootDialog">
+            <materialDesign:DrawerHost IsBottomDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+                <materialDesign:DrawerHost.BottomDrawerContent>
+                    <Grid
+                        Height="auto"
+                        MinWidth="500"
+                        Margin="20,20,20,40">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Foreground="#FF002983">
+                            <Label.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon
+                                        Width="30"
+                                        Height="30"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Kind="Database" />
+                                    <TextBlock VerticalAlignment="Center">定位数据库</TextBlock>
+                                </StackPanel>
+                            </Label.Content>
+                        </Label>
+                        <!--  DB1  -->
+                        <TextBox
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            wpf:HintAssist.Hint="主机"
+                            FontSize="18"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding DbcItemA.DbHost, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Margin="0,8,0,0"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            wpf:HintAssist.Hint="端口"
+                            FontSize="18"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding DbcItemA.DbPort, UpdateSourceTrigger=PropertyChanged}" />
+                        <ComboBox
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            materialDesign:HintAssist.IsFloating="true"
+                            wpf:HintAssist.Hint="数据库类型"
+                            FontSize="18"
+                            ItemsSource="{Binding DbTypeItems}"
+                            SelectedItem="{Binding DbcItemA.DbType}" />
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Margin="10" Background="Orange">
-                                <Grid>
+                        <TextBox
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            Margin="0,8,0,0"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            wpf:HintAssist.Hint="数据库"
+                            FontSize="18"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding DbcItemA.DbCatalog, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBox
+                            Grid.Row="6"
+                            Grid.Column="0"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            wpf:HintAssist.Hint="用户名"
+                            FontSize="18"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding DbcItemA.DbUser, UpdateSourceTrigger=PropertyChanged}" />
+                        <PasswordBox
+                            Grid.Row="7"
+                            Grid.Column="0"
+                            Margin="0,5"
+                            materialDesign:HintAssist.Hint="密码"
+                            materialDesign:PasswordBoxAssist.Password="{Binding DbcItemA.DbPwd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            FontSize="18"
+                            Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}" />
+
+
+                        <!--  DB2  -->
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Margin="0,5"
+                            FontSize="16"
+                            Foreground="#FF002983">
+                            <Label.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon
+                                        Width="30"
+                                        Height="30"
+                                        VerticalAlignment="Center"
+                                        Kind="Database" />
+                                    <TextBlock VerticalAlignment="Center">虹膜数据库</TextBlock>
+                                </StackPanel>
+                            </Label.Content>
+                        </Label>
+                        <TextBox
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            wpf:HintAssist.Hint="主机"
+                            FontSize="18"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding DbcItemB.DbHost, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            Margin="0,8,0,0"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            wpf:HintAssist.Hint="端口"
+                            FontSize="18"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding DbcItemB.DbPort, UpdateSourceTrigger=PropertyChanged}" />
+                        <ComboBox
+                            Grid.Row="4"
+                            Grid.Column="2"
+                            materialDesign:HintAssist.IsFloating="true"
+                            wpf:HintAssist.Hint="数据库类型"
+                            FontSize="18"
+                            ItemsSource="{Binding DbTypeItems}"
+                            SelectedItem="{Binding DbcItemB.DbType, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBox
+                            Grid.Row="5"
+                            Grid.Column="2"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            wpf:HintAssist.Hint="数据库"
+                            FontSize="18"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding DbcItemB.DbCatalog, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBox
+                            Grid.Row="6"
+                            Grid.Column="2"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            wpf:HintAssist.Hint="用户名"
+                            FontSize="18"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding DbcItemB.DbUser, UpdateSourceTrigger=PropertyChanged}" />
+
+
+                        <PasswordBox
+                            Grid.Row="7"
+                            Grid.Column="2"
+                            Margin="0,5"
+                            materialDesign:HintAssist.Hint="密码"
+                            materialDesign:PasswordBoxAssist.Password="{Binding DbcItemB.DbPwd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            FontSize="18"
+                            Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}" />
+
+
+                        <StackPanel Grid.Row="8" Grid.Column="0">
+                            <TextBlock Text="{Binding DbcItemA.DbTestMessage}" TextWrapping="Wrap">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="Green" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DbcItemA.DbStatus}" Value="false">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="8" Grid.Column="2">
+                            <TextBlock Text="{Binding DbcItemB.DbTestMessage}" TextWrapping="Wrap">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="Green" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DbcItemB.DbStatus}" Value="false">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <DockPanel
+                            Grid.Row="9"
+                            Grid.ColumnSpan="3"
+                            Margin="0,20,0,0"
+                            LastChildFill="True">
+                            <Button
+                                Margin="8,0,5,0"
+                                Command="{Binding DataTestConnectionCommand}"
+                                DockPanel.Dock="Left"
+                                IsCancel="True"
+                                Style="{StaticResource MaterialDesignFlatDarkBgButton}">
+                                <Button.CommandParameter>
+                                    <system:Boolean>False</system:Boolean>
+                                </Button.CommandParameter>
+                                测试连接
+                            </Button>
+                            <Button
+                                Command="{Binding AddNewDbCompareCommand}"
+                                DockPanel.Dock="Left"
+                                IsDefault="True"
+                                Style="{StaticResource MaterialDesignFlatDarkBgButton}">
+                                开始比对
+                            </Button>
+                        </DockPanel>
+                    </Grid>
+                </materialDesign:DrawerHost.BottomDrawerContent>
+                <Grid Margin="0,5,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <DockPanel>
+                        <Grid DockPanel.Dock="Left">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="150" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox
+                                Grid.Column="0"
+                                Margin="5,0,5,0"
+                                materialDesign:HintAssist.Hint="姓名"
+                                materialDesign:HintAssist.IsFloating="True"
+                                Text="{Binding ConditionEmployeeName}" />
+                            <TextBox
+                                Grid.Column="1"
+                                Margin="5,0,5,0"
+                                materialDesign:HintAssist.Hint="标识卡号"
+                                materialDesign:HintAssist.IsFloating="True"
+                                Text="{Binding ConditionEmployeeName}" />
+                            <TextBox
+                                Grid.Column="2"
+                                Margin="5,0,5,0"
+                                materialDesign:HintAssist.Hint="定位入井时间"
+                                materialDesign:HintAssist.IsFloating="True"
+                                Text="{Binding ConditionEmployeeName}" />
+                        </Grid>
+                        <StackPanel
+                            HorizontalAlignment="Right"
+                            DockPanel.Dock="Right"
+                            Orientation="Horizontal">
+
+                            <Button Margin="5,0,5,0" Command="{Binding RunDialogCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon VerticalAlignment="Center" Kind="Export" />
+                                    <TextBlock Margin="10,0" VerticalAlignment="Center">导出</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <ToggleButton
+                                x:Name="MenuToggleButton"
+                                Width="30"
+                                Height="30"
+                                IsChecked="False"
+                                Style="{StaticResource MaterialDesignHamburgerToggleButton}">
+                                <ToggleButton.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Margin="15,0" Kind="Alarm" />
-                                        <TextBlock Text="{Binding TaskName}" />
+                                        <materialDesign:PackIcon Kind="Add" />
+                                        <TextBlock FontSize="12" Text="新增比对" />
                                     </StackPanel>
-                                    <Canvas ClipToBounds="True">
-                                        <Border
-                                            Canvas.Top="10"
-                                            Canvas.Right="-50"
-                                            Width="120"
-                                            Height="120"
-                                            Background="#fff"
-                                            CornerRadius="100"
-                                            Opacity="0.1" />
-                                        <Border
-                                            Canvas.Top="80"
-                                            Canvas.Right="-30"
-                                            Width="120"
-                                            Height="120"
-                                            Background="#fff"
-                                            CornerRadius="100"
-                                            Opacity="0.1" />
-                                    </Canvas>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <Button
-                    Grid.Row="1"
-                    Width="120"
-                    Height="50"
-                    Command="{Binding RunDialogCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon VerticalAlignment="Center" Kind="ShapeSquarePlus" />
-                        <TextBlock Margin="10,0" VerticalAlignment="Center">新建比对</TextBlock>
-                    </StackPanel>
-                </Button>
-            </Grid>
+                                </ToggleButton.Content>
+                            </ToggleButton>
+                        </StackPanel>
+                    </DockPanel>
+                    <DataGrid
+                        Grid.Row="1"
+                        ItemsSource="{Binding DwList}"
+                        SelectionMode="Extended"
+                        SelectionUnit="FullRow">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="auto"
+                                Binding="{Binding Id}"
+                                CanUserResize="False"
+                                Header="#"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding DepartMentName}"
+                                CanUserResize="False"
+                                Header="部门"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding GroupClass}"
+                                CanUserResize="False"
+                                Header="班组"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding EmployeeName}"
+                                Header="姓名"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding TagMac}"
+                                Header="标识卡号"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding DwInwellTime}"
+                                Header="定位入井时间"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding HmInwellTime}"
+                                Header="虹膜入井时间"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding HmOutwellTime}"
+                                Header="虹膜出井时间"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding HmResult}"
+                                Header="虹膜结果"
+                                IsReadOnly="True" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </materialDesign:DrawerHost>
         </materialDesign:DialogHost>
     </Grid>
 </UserControl>

@@ -3,6 +3,7 @@ using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace HealthMonitor.Utility
 {
@@ -16,18 +17,18 @@ namespace HealthMonitor.Utility
         }
 
 
-        public abstract IDbConnection CreateConnection();
-        public bool HealthCheck()
+        public abstract Task<IDbConnection> CreateConnectionAsync();
+        public async Task<(bool health,string message)> HealthCheckAsync()
         {
             IDbConnection conn = null;
             try
             {
-                conn = CreateConnection();
-                return true;
+                conn = await CreateConnectionAsync();
+                return (true,"连接成功");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return false;
+                return (false,ex.Message);
             }
             finally
             {
@@ -41,14 +42,14 @@ namespace HealthMonitor.Utility
     {
         public OracleDb(string connectionString) : base(connectionString)
         { }
-        public override IDbConnection CreateConnection()
+        public override async Task<IDbConnection> CreateConnectionAsync()
         {
             try
             {
                 var conn = new OracleConnection(this._connectionString);
                 if (conn.State != ConnectionState.Open)
                 {
-                    conn.Open();
+                    await conn.OpenAsync();
                 }
                 return conn;
             }
@@ -63,14 +64,14 @@ namespace HealthMonitor.Utility
         public SQLServerDb(string connectionString) : base(connectionString)
         { }
 
-        public override IDbConnection CreateConnection()
+        public override async Task<IDbConnection> CreateConnectionAsync()
         {
             try
             {
                 var conn = new SqlConnection(this._connectionString);
                 if (conn.State != ConnectionState.Open)
                 {
-                    conn.Open();
+                    await conn.OpenAsync();
                 }
                 return conn;
             }
@@ -84,7 +85,7 @@ namespace HealthMonitor.Utility
     {
         public MySqlDb(string connectionString) : base(connectionString)
         { }
-        public override IDbConnection CreateConnection()
+        public override async Task<IDbConnection> CreateConnectionAsync()
         {
             try
             {
@@ -92,7 +93,7 @@ namespace HealthMonitor.Utility
                 conn.ConnectionString = this._connectionString;
                 if (conn.State != ConnectionState.Open)
                 {
-                    conn.Open();
+                    await conn.OpenAsync();
                 }
                 return conn;
             }

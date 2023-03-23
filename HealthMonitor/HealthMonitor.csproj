@@ -173,6 +173,8 @@
     <Compile Include="Domain\DataCompareTask.cs" />
     <Compile Include="Domain\DataCompareDbItem.cs" />
     <Compile Include="Domain\DemoItem.cs" />
+    <Compile Include="Domain\DwInOutwellModel.cs" />
+    <Compile Include="Domain\HmInOutwellModel.cs" />
     <Compile Include="Domain\HomeViewModel.cs" />
     <Compile Include="Domain\DataCompareViewModel.cs" />
     <Compile Include="Domain\MainWindowViewModel.cs" />
@@ -181,6 +183,8 @@
     <Compile Include="Enums\AlarmType.cs" />
     <Compile Include="Enums\DbType.cs" />
     <Compile Include="Model\AlarmRecord.cs" />
+    <Compile Include="Services\DbConfig.cs" />
+    <Compile Include="Services\DbConnectionTemplate.cs" />
     <Compile Include="Services\DbFactory.cs" />
     <Compile Include="SqlMaps\AlarmSql.cs" />
     <Compile Include="Views\DataCompare.xaml.cs">

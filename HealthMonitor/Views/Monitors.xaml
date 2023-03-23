@@ -20,7 +20,7 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <TabControl materialDesign:ColorZoneAssist.Mode="PrimaryDark">
+        <TabControl>
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">

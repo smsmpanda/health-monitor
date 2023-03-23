@@ -1,4 +1,6 @@
-﻿using HealthMonitor.Views;
+﻿using HealthMonitor.Enums;
+using HealthMonitor.Services;
+using HealthMonitor.Views;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,8 @@ namespace HealthMonitor.Domain
 {
     public class DataCompareViewModel : ViewModelBase
     {
+        private DataCompareDbItem _dbcItemA;
+        private DataCompareDbItem _dbcItemB;
         public DataCompareViewModel()
         {
             DbCompareTasks = new ObservableCollection<DataCompareTask>()
@@ -30,31 +34,74 @@ namespace HealthMonitor.Domain
                 new DataCompareTask("任务4",DateTime.Now,null,null),
                 new DataCompareTask("任务4",DateTime.Now,null,null),
             };
+
+            _dbcItemA = new DataCompareDbItem();
+            _dbcItemB = new DataCompareDbItem();
         }
+
 
         public ObservableCollection<DataCompareTask> DbCompareTasks { get; }
 
-        public ICommand RunDialogCommand => new AnotherCommandImplementation(ExecuteRunDialog);
 
-        private async void ExecuteRunDialog(object _)
+        public DataCompareDbItem DbcItemA
         {
-            //let's set up a little MVVM, cos that's what the cool kids are doing:
-            var view = new DataCompareDialog
-            {
-                DataContext = new DataCompareDialogViewModel()
-            };
-
-            //show the dialog
-            var result = await DialogHost.Show(view, "DbcRootDialog", null, ClosingEventHandler, ClosedEventHandler);
-
-            //check the result...
-            Debug.WriteLine("Dialog was closed, the CommandParameter used to close it was: " + (result ?? "NULL"));
+            get => _dbcItemA;
+            set => _dbcItemA = value;
         }
 
-        private void ClosingEventHandler(object sender, DialogClosingEventArgs eventArgs)
-            => Debug.WriteLine("You can intercept the closing event, and cancel here.");
+        public DataCompareDbItem DbcItemB
+        {
+            get => _dbcItemB;
+            set => _dbcItemB = value;
+        }
 
-        private void ClosedEventHandler(object sender, DialogClosedEventArgs eventArgs)
-            => Debug.WriteLine("You can intercept the closed event here (1).");
+        public List<string> DbTypeItems => new List<string> { $"{DbType.MYSQL}", $"{DbType.ORACLE}", $"{DbType.MSSQL}" };
+
+        public ICommand AddNewDbCompareCommand => new AnotherCommandImplementation(AddNewDbCompare, CanExecuteAddNewDbCompare);
+        public ICommand DataTestConnectionCommand => new AnotherCommandImplementation(DataBaseConnection, CanExecuteAddNewDbCompare);
+
+        public void AddNewDbCompare(Object m)
+        {
+            this.DbCompareTasks.Add(new DataCompareTask($"比对{DateTime.Now:G}", DateTime.Now, this.DbcItemA, this.DbcItemB));
+        }
+
+        public void DataBaseConnection(object m)
+        {
+            Task.Factory.StartNew(async () =>
+            {
+
+                foreach (var dbItem in new List<DataCompareDbItem> { DbcItemA, DbcItemB })
+                {
+                    DbConfig config = new DbConfig()
+                    {
+                        DbType = (DbType)Enum.Parse(typeof(DbType), dbItem.DbType, true),
+                        DbCatalog = dbItem.DbCatalog,
+                        Host = dbItem.DbHost,
+                        Port = dbItem.DbPort,
+                        Password = dbItem.DbPwd,
+                        User = dbItem.DbUser
+                    };
+                    (dbItem.DbStatus, dbItem.DbTestMessage) = await DbFactory.DbConnectionTestAsync(config);
+                }
+            });
+        }
+
+        public bool CanExecuteAddNewDbCompare(object m)
+        {
+            if (string.IsNullOrWhiteSpace(this.DbcItemA.DbHost)
+                || string.IsNullOrWhiteSpace(this.DbcItemA.DbPort)
+                || string.IsNullOrWhiteSpace(this.DbcItemA.DbUser)
+                || string.IsNullOrWhiteSpace(this.DbcItemA.DbPwd)
+                || string.IsNullOrWhiteSpace(this.DbcItemA.DbType)
+                || string.IsNullOrWhiteSpace(this.DbcItemB.DbHost)
+                || string.IsNullOrWhiteSpace(this.DbcItemB.DbPort)
+                || string.IsNullOrWhiteSpace(this.DbcItemB.DbUser)
+                || string.IsNullOrWhiteSpace(this.DbcItemB.DbPwd)
+                || string.IsNullOrWhiteSpace(this.DbcItemB.DbType))
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

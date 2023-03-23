@@ -68,9 +68,9 @@ namespace HealthMonitor.ViewModel
             {
                 while (this._isCheck)
                 {
-                    this.Status = DbFactory
-                                .GetDbByType(this.ConnectionString, (DbType)Enum.Parse(typeof(DbType), this.DbType, true))
-                                .HealthCheck();
+                    (this.Status,_) = await DbFactory
+                                .GetDbInstance(this.ConnectionString, (DbType)Enum.Parse(typeof(DbType), this.DbType, true))
+                                .HealthCheckAsync();
 
                     //异常时将报警信息入库
                     AlarmRecord alarmRecord = AlarmRecord.GenerateAlarm($"{AlarmType.ATP_DATABASE_ERROR}", $"数据库异常", this.DbName, DateTime.Now);

@@ -23,7 +23,7 @@ namespace HealthMonitor.Utility
         {
             try
             {
-                using (IDbConnection conn = DbFactory.GetDbByType(_connectionString, Enums.DbType.ORACLE).CreateConnection())
+                using (IDbConnection conn = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
                 {
                     var alarm_record = await conn.QueryFirstOrDefaultAsync<AlarmRecord>(AlarmSql.QueryAlarmSql, alarm);
 
@@ -46,7 +46,7 @@ namespace HealthMonitor.Utility
         public static async Task TransferAlarmRecordAsync(AlarmRecord alarm)
         {
             //转存至报警日志记录
-            using (IDbConnection conn = DbFactory.GetDbByType(_connectionString, Enums.DbType.ORACLE).CreateConnection())
+            using (IDbConnection conn = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
             {
                 IDbTransaction transaction = conn.BeginTransaction();
                 try
@@ -65,7 +65,7 @@ namespace HealthMonitor.Utility
 
         public static async Task DeleteAlarmRecord(AlarmRecord alarm)
         {
-            using (IDbConnection conn = DbFactory.GetDbByType(_connectionString, Enums.DbType.ORACLE).CreateConnection())
+            using (IDbConnection conn = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
             {
                 await conn.ExecuteAsync(AlarmSql.DeleteAlarmSql, alarm);
             }
