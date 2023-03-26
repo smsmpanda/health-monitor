@@ -1,6 +1,4 @@
-﻿using HealthMonitor.ViewModel;
-
-namespace HealthMonitor.UserControls
+﻿namespace HealthMonitor.UserControls
 {
     /// <summary>
     /// Monitors.xaml 的交互逻辑

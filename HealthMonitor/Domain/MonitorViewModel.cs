@@ -31,7 +31,7 @@ namespace HealthMonitor.ViewModel
         /// </summary>
         public ObservableCollection<VMFtp> FTPItems { get; private set; }
 
-        public string AlarmSettingAddress => 
+        public string AlarmSettingAddress =>
             ConfigurationManager.AppSettings["AlarmSettingAddress"];
 
 

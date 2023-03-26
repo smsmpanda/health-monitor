@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace HealthMonitor.Domain
@@ -24,7 +20,7 @@ namespace HealthMonitor.Domain
             _canExecute = canExecute ?? (x => true);
         }
 
-        public event EventHandler CanExecuteChanged 
+        public event EventHandler CanExecuteChanged
         {
             add
             {
@@ -38,7 +34,7 @@ namespace HealthMonitor.Domain
 
         public bool CanExecute(object parameter)
         {
-             return _canExecute(parameter);
+            return _canExecute(parameter);
         }
 
         public void Execute(object parameter)

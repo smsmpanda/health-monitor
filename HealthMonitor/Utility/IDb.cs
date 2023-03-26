@@ -18,17 +18,17 @@ namespace HealthMonitor.Utility
 
 
         public abstract Task<IDbConnection> CreateConnectionAsync();
-        public async Task<(bool health,string message)> HealthCheckAsync()
+        public async Task<(bool health, string message)> HealthCheckAsync()
         {
             IDbConnection conn = null;
             try
             {
                 conn = await CreateConnectionAsync();
-                return (true,"连接成功");
+                return (true, "连接成功");
             }
             catch (Exception ex)
             {
-                return (false,ex.Message);
+                return (false, ex.Message);
             }
             finally
             {

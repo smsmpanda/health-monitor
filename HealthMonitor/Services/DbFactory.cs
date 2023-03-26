@@ -1,6 +1,6 @@
 ﻿using HealthMonitor.Utility;
+using System.Data;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using HealthMonitorDbType = HealthMonitor.Enums.DbType;
 
 namespace HealthMonitor.Services
@@ -22,7 +22,13 @@ namespace HealthMonitor.Services
             }
         }
 
-        public static string CreateConnectionString(DbConfig config) 
+        public static async Task<IDbConnection> GetDbConnection(DbConfig config)
+        {
+            string connectionStr = CreateConnectionString(config);
+            return await GetDbInstance(connectionStr, config.DbType).CreateConnectionAsync();
+        }
+
+        public static string CreateConnectionString(DbConfig config)
         {
             switch (config.DbType)
             {
@@ -37,7 +43,7 @@ namespace HealthMonitor.Services
             }
         }
 
-        public static async Task<(bool health,string message)> DbConnectionTestAsync(DbConfig config) 
+        public static async Task<(bool health, string message)> DbConnectionTestAsync(DbConfig config)
         {
             string connectionStr = CreateConnectionString(config);
             return await GetDbInstance(connectionStr, config.DbType).HealthCheckAsync();

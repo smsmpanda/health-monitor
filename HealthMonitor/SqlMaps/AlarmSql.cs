@@ -27,4 +27,14 @@
         /// </summary>
         public const string UpdateAlarmByTypeSql = "UPDATE TB_EMP_REALTIME_ALARM SET STARTDATE=:STARTDATE WHERE ALARMTYPE=:ALARMTYPE and ALARMMANNAME=:ALARMMANNAME";
     }
+
+    public struct CompareDwSql
+    {
+        public const string QueryInOutwell = "";
+    }
+
+    public struct CompareHmSql
+    {
+        public const string QueryKaoqin = "";
+    }
 }

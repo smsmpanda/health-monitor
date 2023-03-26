@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HealthMonitor.Domain
 {
@@ -17,7 +13,7 @@ namespace HealthMonitor.Domain
         }
 
         public string TaskName { get; }
-       
+
         public DateTime TaskStartDate { get; }
 
         public DataBaseItem DbcItemA { get; }

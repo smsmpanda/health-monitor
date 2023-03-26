@@ -68,7 +68,7 @@ namespace HealthMonitor.ViewModel
             {
                 while (this._isCheck)
                 {
-                    (this.Status,_) = await DbFactory
+                    (this.Status, _) = await DbFactory
                                 .GetDbInstance(this.ConnectionString, (DbType)Enum.Parse(typeof(DbType), this.DbType, true))
                                 .HealthCheckAsync();
 

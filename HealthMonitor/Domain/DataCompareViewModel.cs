@@ -1,13 +1,9 @@
 ﻿using HealthMonitor.Enums;
+using HealthMonitor.Extensions;
 using HealthMonitor.Services;
-using HealthMonitor.Views;
-using MaterialDesignThemes.Wpf;
-using System;
+using HealthMonitor.Services.imp;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -16,28 +12,28 @@ namespace HealthMonitor.Domain
     public class DataCompareViewModel : ViewModelBase
     {
         private bool _isBottomDrawOpen;
-        private DataBaseItem _dataBaseItemForDw;
-        private DataBaseItem _dataBaseItemForHm;
+        private DataBaseItem _dataBaseDw;
+        private DataBaseItem _dataBaseHm;
         public DataCompareFilter _filters;
         public ObservableCollection<DwInOutwellModel> _inOutWellList;
         public DataCompareViewModel()
         {
-            _dataBaseItemForDw = new DataBaseItem();
-            _dataBaseItemForHm = new DataBaseItem();
+            _dataBaseDw = new DataBaseItem();
+            _dataBaseHm = new DataBaseItem();
             _filters = new DataCompareFilter();
-            _inOutWellList= new ObservableCollection<DwInOutwellModel>();
+            _inOutWellList = new ObservableCollection<DwInOutwellModel>();
         }
 
-        public DataBaseItem DataBaseForDw
+        public DataBaseItem DataBaseDw
         {
-            get => _dataBaseItemForDw;
-            set => SetProperty(ref _dataBaseItemForDw, value);
+            get => _dataBaseDw;
+            set => SetProperty(ref _dataBaseDw, value);
         }
 
-        public DataBaseItem DataBaseItemForHm
+        public DataBaseItem DataBaseHm
         {
-            get => _dataBaseItemForHm;
-            set => SetProperty(ref _dataBaseItemForHm, value);
+            get => _dataBaseHm;
+            set => SetProperty(ref _dataBaseHm, value);
         }
 
         public ObservableCollection<DwInOutwellModel> InOutWellList
@@ -61,66 +57,74 @@ namespace HealthMonitor.Domain
 
         public List<string> DbTypeItems => new List<string> { $"{DbType.MYSQL}", $"{DbType.ORACLE}", $"{DbType.MSSQL}" };
 
-        public ICommand AddNewDbCompareCommand => 
-            new AnotherCommandImplementation(AddNewDbCompare, CanExecuteAddNewDbCompare);
-        
-        public ICommand DataTestConnectionCommand => 
-            new AnotherCommandImplementation(DataBaseConnection, CanExecuteAddNewDbCompare);
-        
-        public ICommand ExpandBottomDrawCommand => 
+        public ICommand StartNewCompareCommand =>
+            new AnotherCommandImplementation(StartNewCompare, CanExceuteStartCompare);
+
+        public ICommand DataTestConnectionCommand =>
+            new AnotherCommandImplementation(DataBaseConnection, CanExecuteTestConnection);
+
+        public ICommand ExpandBottomDrawCommand =>
             new AnotherCommandImplementation(ExpandBottomDraw);
 
 
-        public void ExpandBottomDraw(object m) 
+        public void ExpandBottomDraw(object m)
         {
             IsBottomDrawOpen = !IsBottomDrawOpen;
         }
 
-        public void AddNewDbCompare(object m)
+        public void StartNewCompare(object m)
         {
-            for (int i = 1; i <= 100; i++)
+            DbConfig dwDbConfig = ManualMapperExtension.DbItemMapperDbConfig(DataBaseDw);
+            DbConfig hmDbConfig = ManualMapperExtension.DbItemMapperDbConfig(DataBaseHm);
+
+            Task.Factory.StartNew(async () =>
             {
-                _inOutWellList.Add(new DwInOutwellModel() { DepartMentName=$"部门{i}" });
-            }
+                (DataBaseDw.DbStatus, DataBaseDw.DbTestMessage) = await DbFactory.DbConnectionTestAsync(dwDbConfig);
+                (DataBaseHm.DbStatus, DataBaseHm.DbTestMessage) = await DbFactory.DbConnectionTestAsync(hmDbConfig);
+            }).ContinueWith(async (s) =>
+            {
+                if (DataBaseDw.DbStatus && DataBaseHm.DbStatus)
+                {
+                    IInOutwellDataCompareService service = new InOutwellDataCompareService(dwDbConfig, hmDbConfig, Filters);
+                    InOutWellList = (ObservableCollection<DwInOutwellModel>)await service.StartCompareAsync();
+                }
+            });
         }
 
         public void DataBaseConnection(object m)
         {
             Task.Factory.StartNew(async () =>
             {
-
-                foreach (var dbItem in new List<DataBaseItem> { DataBaseForDw, DataBaseItemForHm })
+                foreach (var dbItem in new DataBaseItem[] { DataBaseDw, DataBaseHm })
                 {
-                    DbConfig config = new DbConfig()
-                    {
-                        DbType = (DbType)Enum.Parse(typeof(DbType), dbItem.DbType, true),
-                        DbCatalog = dbItem.DbCatalog,
-                        Host = dbItem.DbHost,
-                        Port = dbItem.DbPort,
-                        Password = dbItem.DbPwd,
-                        User = dbItem.DbUser
-                    };
+                    DbConfig config = ManualMapperExtension.DbItemMapperDbConfig(dbItem);
                     (dbItem.DbStatus, dbItem.DbTestMessage) = await DbFactory.DbConnectionTestAsync(config);
                 }
             });
         }
 
-        public bool CanExecuteAddNewDbCompare(object m)
+        public bool CanExecuteTestConnection(object m)
         {
-            if (string.IsNullOrWhiteSpace(this.DataBaseForDw.DbHost)
-                || string.IsNullOrWhiteSpace(this.DataBaseForDw.DbPort)
-                || string.IsNullOrWhiteSpace(this.DataBaseForDw.DbUser)
-                || string.IsNullOrWhiteSpace(this.DataBaseForDw.DbPwd)
-                || string.IsNullOrWhiteSpace(this.DataBaseForDw.DbType)
-                || string.IsNullOrWhiteSpace(this.DataBaseItemForHm.DbHost)
-                || string.IsNullOrWhiteSpace(this.DataBaseItemForHm.DbPort)
-                || string.IsNullOrWhiteSpace(this.DataBaseItemForHm.DbUser)
-                || string.IsNullOrWhiteSpace(this.DataBaseItemForHm.DbPwd)
-                || string.IsNullOrWhiteSpace(this.DataBaseItemForHm.DbType))
+            if (string.IsNullOrWhiteSpace(this.DataBaseDw.DbHost)
+                || string.IsNullOrWhiteSpace(this.DataBaseDw.DbPort)
+                || string.IsNullOrWhiteSpace(this.DataBaseDw.DbUser)
+                || string.IsNullOrWhiteSpace(this.DataBaseDw.DbPwd)
+                || string.IsNullOrWhiteSpace(this.DataBaseDw.DbType)
+                || string.IsNullOrWhiteSpace(this.DataBaseHm.DbHost)
+                || string.IsNullOrWhiteSpace(this.DataBaseHm.DbPort)
+                || string.IsNullOrWhiteSpace(this.DataBaseHm.DbUser)
+                || string.IsNullOrWhiteSpace(this.DataBaseHm.DbPwd)
+                || string.IsNullOrWhiteSpace(this.DataBaseHm.DbType))
             {
                 return false;
             }
             return true;
+        }
+
+        public bool CanExceuteStartCompare(object _) 
+        {
+            bool _f = CanExecuteTestConnection(_);
+            return DataBaseHm.DbStatus && DataBaseDw.DbStatus && _f;
         }
     }
 }

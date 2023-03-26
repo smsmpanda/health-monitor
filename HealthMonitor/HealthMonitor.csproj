@@ -175,7 +175,7 @@
     <Compile Include="Domain\DataBaseItem.cs" />
     <Compile Include="Domain\DemoItem.cs" />
     <Compile Include="Domain\DwInOutwellModel.cs" />
-    <Compile Include="Domain\HmInOutwellModel.cs" />
+    <Compile Include="Domain\HongmoKaoqinModel.cs" />
     <Compile Include="Domain\HomeViewModel.cs" />
     <Compile Include="Domain\DataCompareViewModel.cs" />
     <Compile Include="Domain\MainWindowViewModel.cs" />
@@ -183,11 +183,18 @@
     <Compile Include="Domain\ViewModelBase.cs" />
     <Compile Include="Enums\AlarmType.cs" />
     <Compile Include="Enums\DbType.cs" />
+    <Compile Include="Extensions\ManualMapperExtension.cs" />
     <Compile Include="Model\AlarmRecord.cs" />
+    <Compile Include="Repository\IDwRepository.cs" />
+    <Compile Include="Repository\IHmRepository.cs" />
+    <Compile Include="Repository\imp\DwRepository.cs" />
+    <Compile Include="Repository\imp\HmRepository.cs" />
+    <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Services\DbConfig.cs" />
     <Compile Include="Services\DbConnectionTemplate.cs" />
     <Compile Include="Services\DbFactory.cs" />
-    <Compile Include="Services\IDataService.cs" />
+    <Compile Include="Services\IInOutwellDataCompareService.cs" />
+    <Compile Include="Services\imp\InOutwellDataCompareService.cs" />
     <Compile Include="SqlMaps\AlarmSql.cs" />
     <Compile Include="Views\DataCompare.xaml.cs">
       <DependentUpon>DataCompare.xaml</DependentUpon>

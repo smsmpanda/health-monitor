@@ -40,13 +40,13 @@ namespace HealthMonitor.Domain
 
 
 
-        public string ApplicationName => 
+        public string ApplicationName =>
             this.GetType().Assembly.GetCustomAttribute<AssemblyProductAttribute>().Product;
 
-        public string ApplicationVersion => 
+        public string ApplicationVersion =>
             this.GetType().Assembly.GetName().Version.ToString();
 
-        public string AlarmSettingAddress => 
+        public string AlarmSettingAddress =>
             ConfigurationManager.AppSettings["AlarmSettingAddress"];
 
     }

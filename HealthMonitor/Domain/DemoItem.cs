@@ -9,13 +9,13 @@ namespace HealthMonitor.Domain
         private readonly object _dataContext;
 
         private object _content;
-        public DemoItem(string icon,string shortcout,string name, Type contentType, object dataContext = null)
+        public DemoItem(string icon, string shortcout, string name, Type contentType, object dataContext = null)
         {
             Icon = icon;
             ShortCut = shortcout;
             Name = name;
             _contentType = contentType;
-            _dataContext = dataContext; 
+            _dataContext = dataContext;
         }
 
         public string Name { get; }
