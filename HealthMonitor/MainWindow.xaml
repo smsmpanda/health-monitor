@@ -9,9 +9,9 @@
     Title="健康监测"
     Width="1280"
     Height="720"
-    AllowsTransparency="True"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="微软雅黑"
+    ResizeMode="NoResize"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -20,10 +20,7 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-    <Border
-        x:Name="windowBorder"
-        BorderBrush="#ccc"
-        BorderThickness="0,1,1,1">
+    <Border>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="60" />
@@ -79,7 +76,7 @@
                 </Grid.RowDefinitions>
 
                 <materialDesign:ColorZone
-                    Height="45"
+                    Height="50"
                     VerticalAlignment="Center"
                     Mode="Custom"
                     MouseDown="Border_MouseDown"
@@ -94,6 +91,7 @@
                             </TextBlock.Text>
                         </TextBlock>
                         <StackPanel
+                            Margin="0,0,10,0"
                             HorizontalAlignment="Right"
                             DockPanel.Dock="Right"
                             Orientation="Horizontal">

@@ -1,9 +1,7 @@
 ﻿using HealthMonitor.Domain;
 using System;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace HealthMonitor
 {
@@ -21,17 +19,18 @@ namespace HealthMonitor
             dataContext = new MainWindowViewModel();
             DataContext = dataContext;
 
-            //WindowOutStyleControl();
-            ApplicationSystemTrapMount();
-
             InitializeComponent();
+
             ApplicationTopBtnEventBind();
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            this.notifyIcon.Icon = null;
-            this.notifyIcon.Dispose();
+            if (notifyIcon != null)
+            {
+                this.notifyIcon.Icon = null;
+                this.notifyIcon.Dispose();
+            }
             base.OnClosed(e);
         }
 
@@ -49,12 +48,13 @@ namespace HealthMonitor
             {
                 if (IsMaximized)
                 {
-                    this.WindowState = WindowState.Normal;
+                    WindowState = WindowState.Normal;
                     IsMaximized = false;
                 }
                 else
                 {
-                    this.WindowState = WindowState.Maximized;
+                    this.MaxHeight = SystemParameters.WorkArea.Height;
+                    WindowState = WindowState.Maximized;
                     IsMaximized = true;
                 }
             }
@@ -123,13 +123,6 @@ namespace HealthMonitor
             {
                 WindowState = WindowState.Minimized;
             };
-        }
-
-        //避免全屏时应用高度超出Windows底栏
-        private void WindowOutStyleControl()
-        {
-            this.MaxHeight = SystemParameters.PrimaryScreenHeight;
-            this.MaxWidth = SystemParameters.PrimaryScreenWidth;
         }
     }
 }
