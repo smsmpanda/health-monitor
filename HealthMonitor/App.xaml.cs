@@ -1,4 +1,10 @@
 ﻿using CefSharp;
+using HealthMonitor.Domain;
+using HealthMonitor.UserControls;
+using HealthMonitor.ViewModel;
+using HealthMonitor.Views;
+using Prism.DryIoc;
+using Prism.Ioc;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -10,7 +16,7 @@ namespace HealthMonitor
     /// <summary>
     /// App.xaml 的交互逻辑
     /// </summary>
-    public partial class App : Application
+    public partial class App : PrismApplication
     {
         private const string MUTEX_NAME = "Global\\HealthMonitor";
         private static Mutex AppMutex;
@@ -20,9 +26,19 @@ namespace HealthMonitor
             CefRuntime.SubscribeAnyCpuAssemblyResolver();
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        [DllImport("user32.dll", EntryPoint = "SetForegroundWindow", SetLastError = true)]
+        public static extern void SetForegroundWindow(IntPtr hwnd);
+
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            /*创建具有唯一名称的互斥锁*/
+            containerRegistry.RegisterForNavigation<MainWindow, MainViewModel>();
+            containerRegistry.RegisterForNavigation<Home, HomeViewModel>();
+            containerRegistry.RegisterForNavigation<DataCompare, DataCompareViewModel>();
+            containerRegistry.RegisterForNavigation<Monitors, MonitorViewModel>();
+        }
+
+        protected override Window CreateShell()
+        {
             AppMutex = new Mutex(true, MUTEX_NAME, out var createdNew);
 
             if (!createdNew)
@@ -39,13 +55,7 @@ namespace HealthMonitor
                 }
                 Shutdown();
             }
-            else
-            {
-                base.OnStartup(e);
-            }
+            return Container.Resolve<MainWindow>();
         }
-
-        [DllImport("user32.dll", EntryPoint = "SetForegroundWindow", SetLastError = true)]
-        public static extern void SetForegroundWindow(IntPtr hwnd);
     }
 }

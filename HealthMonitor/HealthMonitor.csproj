@@ -178,12 +178,16 @@
     <Compile Include="Domain\HongmoKaoqinModel.cs" />
     <Compile Include="Domain\HomeViewModel.cs" />
     <Compile Include="Domain\DataCompareViewModel.cs" />
-    <Compile Include="Domain\MainWindowViewModel.cs" />
+    <Compile Include="Domain\MainViewModel.cs" />
+    <Compile Include="Domain\NavigationViewModel.cs" />
     <Compile Include="Domain\NotEmptyValidationRule.cs" />
     <Compile Include="Domain\ViewModelBase.cs" />
     <Compile Include="Enums\AlarmType.cs" />
     <Compile Include="Enums\DbType.cs" />
+    <Compile Include="Events\UpdateModel.cs" />
+    <Compile Include="Extensions\DialogExtension.cs" />
     <Compile Include="Extensions\ManualMapperExtension.cs" />
+    <Compile Include="Extensions\PrismManager.cs" />
     <Compile Include="Model\AlarmRecord.cs" />
     <Compile Include="Repository\IDwRepository.cs" />
     <Compile Include="Repository\IHmRepository.cs" />
@@ -220,6 +224,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Views\ProgressBarView.xaml.cs">
+      <DependentUpon>ProgressBarView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -245,6 +252,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Monitors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProgressBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

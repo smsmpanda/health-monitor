@@ -1,6 +1,9 @@
-﻿using HealthMonitor.Domain;
+﻿using HealthMonitor.Extensions;
+using HealthMonitor.Views;
+using Prism.Events;
 using System;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace HealthMonitor
@@ -10,18 +13,14 @@ namespace HealthMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool IsMaximized = false;
-        private System.Windows.Forms.NotifyIcon notifyIcon;
-        private readonly MainWindowViewModel dataContext;
+        private NotifyIcon notifyIcon;
+        public const string AppName = "健康监测";
 
         public MainWindow()
         {
-            dataContext = new MainWindowViewModel();
-            DataContext = dataContext;
-
             InitializeComponent();
-
             ApplicationTopBtnEventBind();
+            ApplicationSystemTrapMount();
         }
 
         protected override void OnClosed(EventArgs e)
@@ -42,6 +41,7 @@ namespace HealthMonitor
                 this.DragMove();
             }
         }
+        bool IsMaximized = false;
         private void Border_LeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
@@ -63,7 +63,7 @@ namespace HealthMonitor
         //关闭应用时事件处理
         private void ApplicationExitHandler()
         {
-            if (MessageBox.Show("（当前应用正在监测指定数据库及联网上报等程序运行状况，请谨慎操作！）确定退出系统?", "温馨提示", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+            if (System.Windows.MessageBox.Show("（当前应用正在监测指定数据库及联网上报等程序运行状况，请谨慎操作！）确定退出系统?", "温馨提示", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
             {
                 this.Close();
             }
@@ -72,20 +72,18 @@ namespace HealthMonitor
         //应用系统托盘菜单创建
         private void ApplicationSystemTrapMount()
         {
-            var exit = new System.Windows.Forms.MenuItem("关闭应用", (s, e) =>
+            var exit = new MenuItem("关闭应用", (s, e) =>
             {
                 ApplicationExitHandler();
             });
-
-            this.Title = $"{dataContext.ApplicationName}";
-            this.notifyIcon = new System.Windows.Forms.NotifyIcon
+            this.Title = AppName;
+            this.notifyIcon = new NotifyIcon
             {
                 Visible = true,
-                Text = dataContext.ApplicationName,
+                Text = AppName,
                 ContextMenu = new System.Windows.Forms.ContextMenu(new[] { exit }),
                 Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath)
             };
-
             this.notifyIcon.MouseClick += (s, e) =>
             {
                 if (e.Button == System.Windows.Forms.MouseButtons.Left)

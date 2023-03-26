@@ -9,7 +9,10 @@
     xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
     mc:Ignorable="d">
     <Grid>
-        <materialDesign:DialogHost DialogTheme="Inherit" Identifier="DbcRootDialog">
+        <materialDesign:DialogHost
+            Name="DataCompareDialog"
+            DialogTheme="Inherit"
+            Identifier="DbcRootDialog">
             <materialDesign:DrawerHost IsBottomDrawerOpen="{Binding IsBottomDrawOpen}">
                 <materialDesign:DrawerHost.BottomDrawerContent>
                     <Grid

@@ -2,6 +2,8 @@
 using HealthMonitor.Extensions;
 using HealthMonitor.Services;
 using HealthMonitor.Services.imp;
+using Prism.Ioc;
+using Prism.Regions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -9,14 +11,14 @@ using System.Windows.Input;
 
 namespace HealthMonitor.Domain
 {
-    public class DataCompareViewModel : ViewModelBase
+    public class DataCompareViewModel : NavigationViewModel
     {
         private bool _isBottomDrawOpen;
         private DataBaseItem _dataBaseDw;
         private DataBaseItem _dataBaseHm;
         public DataCompareFilter _filters;
         public ObservableCollection<DwInOutwellModel> _inOutWellList;
-        public DataCompareViewModel()
+        public DataCompareViewModel(IContainerProvider containerProvider) : base(containerProvider)
         {
             _dataBaseDw = new DataBaseItem();
             _dataBaseHm = new DataBaseItem();
@@ -95,11 +97,13 @@ namespace HealthMonitor.Domain
         {
             Task.Factory.StartNew(async () =>
             {
+                UpdateLoading(true);
                 foreach (var dbItem in new DataBaseItem[] { DataBaseDw, DataBaseHm })
                 {
                     DbConfig config = ManualMapperExtension.DbItemMapperDbConfig(dbItem);
                     (dbItem.DbStatus, dbItem.DbTestMessage) = await DbFactory.DbConnectionTestAsync(config);
                 }
+                UpdateLoading(false);
             });
         }
 
@@ -121,10 +125,17 @@ namespace HealthMonitor.Domain
             return true;
         }
 
-        public bool CanExceuteStartCompare(object _) 
+        public bool CanExceuteStartCompare(object _)
         {
             bool _f = CanExecuteTestConnection(_);
             return DataBaseHm.DbStatus && DataBaseDw.DbStatus && _f;
+        }
+
+        public override void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            base.OnNavigatedTo(navigationContext);
+
+            UpdateLoading(true);
         }
     }
 }

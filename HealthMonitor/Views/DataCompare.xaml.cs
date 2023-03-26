@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using HealthMonitor.Extensions;
+using Prism.Events;
+using System.Windows.Controls;
 
 namespace HealthMonitor.Views
 {
@@ -7,8 +9,16 @@ namespace HealthMonitor.Views
     /// </summary>
     public partial class DataCompare : UserControl
     {
-        public DataCompare()
+        public DataCompare(IEventAggregator eventAggregator)
         {
+            eventAggregator.Register(arg =>
+            {
+                DataCompareDialog.IsOpen = arg.IsOpen;
+                if (DataCompareDialog.IsOpen)
+                {
+                    DataCompareDialog.DialogContent = new ProgressBarView();
+                }
+            });
             InitializeComponent();
         }
     }
