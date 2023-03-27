@@ -19,16 +19,16 @@ namespace HealthMonitor.Repository.imp
 
         public async Task<IEnumerable<HongmoKaoqinModel>> GetHongMoKaoqinListByCompareDateAsync(DateTime compareDate)
         {
-            using (IDbConnection conn = DbConnection)
+            try
             {
-                try
+                using (IDbConnection conn = DbConnection)
                 {
-                    return await conn.QueryAsync<HongmoKaoqinModel>(CompareHmSql.QueryKaoqin, compareDate);
+                    return await conn.QueryAsync<HongmoKaoqinModel>(string.Format(CompareHmSql.QueryKaoqin,compareDate,compareDate.AddDays(1)));
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

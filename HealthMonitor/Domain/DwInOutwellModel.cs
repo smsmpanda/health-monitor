@@ -1,4 +1,6 @@
-﻿namespace HealthMonitor.Domain
+﻿using System;
+
+namespace HealthMonitor.Domain
 {
     public class DwInOutwellModel : ViewModelBase
     {
@@ -8,9 +10,9 @@
         public string GroupClass { get; set; }
         public string EmployeeName { get; set; }
         public string TagMac { get; set; }
-        public string DwInwellTime { get; set; }
-        public string HmInwellTime { get; set; }
-        public string HmOutwellTime { get; set; }
-        public string HmResult { get; set; }
+        public DateTime DwInwellTime { get; set; }
+        public DateTime HmInwellTime { get; set; }
+        public DateTime HmOutwellTime { get; set; }
+        public string HmResult { get; set; } = "已出井";
     }
 }

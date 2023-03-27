@@ -9,10 +9,7 @@
     xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
     mc:Ignorable="d">
     <Grid>
-        <materialDesign:DialogHost
-            Name="DataCompareDialog"
-            DialogTheme="Inherit"
-            Identifier="DbcRootDialog">
+        <materialDesign:DialogHost DialogTheme="Inherit" Identifier="DbcRootDialog">
             <materialDesign:DrawerHost IsBottomDrawerOpen="{Binding IsBottomDrawOpen}">
                 <materialDesign:DrawerHost.BottomDrawerContent>
                     <Grid
@@ -258,7 +255,7 @@
                             Grid.Column="4"
                             Margin="0,0,0,-20"
                             wpf:HintAssist.Hint="比对日期"
-                            Text="{Binding Filters.CompareDate}" />
+                            SelectedDate="{Binding Filters.CompareDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=yyyy-MM-dd}" />
                         <TextBox
                             Grid.Row="3"
                             Grid.Column="4"
@@ -336,15 +333,8 @@
                                 IsReadOnly="True" />
                             <DataGridTextColumn
                                 Width="*"
-                                Binding="{Binding DepartMentName}"
-                                CanUserResize="False"
-                                Header="部门"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding GroupClass}"
-                                CanUserResize="False"
-                                Header="班组"
+                                Binding="{Binding EmployeeID}"
+                                Header="职工标识"
                                 IsReadOnly="True" />
                             <DataGridTextColumn
                                 Width="*"
@@ -356,6 +346,19 @@
                                 Binding="{Binding TagMac}"
                                 Header="标识卡号"
                                 IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding DepartMentName}"
+                                CanUserResize="False"
+                                Header="部门"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding GroupClass}"
+                                CanUserResize="False"
+                                Header="班组"
+                                IsReadOnly="True" />
+
                             <DataGridTextColumn
                                 Width="*"
                                 Binding="{Binding DwInwellTime}"

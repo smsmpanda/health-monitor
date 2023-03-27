@@ -6,6 +6,7 @@ using Prism.Ioc;
 using Prism.Regions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -56,7 +57,6 @@ namespace HealthMonitor.Domain
             set => SetProperty(ref _isBottomDrawOpen, value);
         }
 
-
         public List<string> DbTypeItems => new List<string> { $"{DbType.MYSQL}", $"{DbType.ORACLE}", $"{DbType.MSSQL}" };
 
         public ICommand StartNewCompareCommand =>
@@ -87,8 +87,16 @@ namespace HealthMonitor.Domain
             {
                 if (DataBaseDw.DbStatus && DataBaseHm.DbStatus)
                 {
-                    IInOutwellDataCompareService service = new InOutwellDataCompareService(dwDbConfig, hmDbConfig, Filters);
-                    InOutWellList = (ObservableCollection<DwInOutwellModel>)await service.StartCompareAsync();
+                    try
+                    {
+                        IInOutwellDataCompareService service = new InOutwellDataCompareService(dwDbConfig, hmDbConfig, Filters);
+                        InOutWellList = (ObservableCollection<DwInOutwellModel>)await service.StartCompareAsync();
+                    }
+                    catch (System.Exception ex)
+                    {
+                        DataBaseDw.DbStatus = false;
+                        DataBaseDw.DbTestMessage = ex.Message;
+                    }
                 }
             });
         }
@@ -97,13 +105,11 @@ namespace HealthMonitor.Domain
         {
             Task.Factory.StartNew(async () =>
             {
-                UpdateLoading(true);
                 foreach (var dbItem in new DataBaseItem[] { DataBaseDw, DataBaseHm })
                 {
                     DbConfig config = ManualMapperExtension.DbItemMapperDbConfig(dbItem);
                     (dbItem.DbStatus, dbItem.DbTestMessage) = await DbFactory.DbConnectionTestAsync(config);
                 }
-                UpdateLoading(false);
             });
         }
 
@@ -134,8 +140,6 @@ namespace HealthMonitor.Domain
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext);
-
-            UpdateLoading(true);
         }
     }
 }

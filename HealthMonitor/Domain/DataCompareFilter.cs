@@ -2,9 +2,22 @@
 
 namespace HealthMonitor.Domain
 {
-    public class DataCompareFilter
+    public class DataCompareFilter : ViewModelBase
     {
-        public int Interval { get; set; }
-        public DateTime CompareDate { get; set; } = DateTime.Now;
+        private DateTime _compareDate = DateTime.Now;
+
+        public DateTime CompareDate
+        {
+            get => _compareDate;
+            set => SetProperty(ref _compareDate, value);
+        }
+
+        private int _interval = 30;
+
+        public int Interval
+        {
+            get => _interval;
+            set => SetProperty(ref _interval, value);
+        }
     }
 }

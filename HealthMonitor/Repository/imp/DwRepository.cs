@@ -19,16 +19,16 @@ namespace HealthMonitor.Repository.imp
 
         public async Task<IEnumerable<DwInOutwellModel>> GetInOutwellListByCompareDateAsync(DateTime compareDate)
         {
-            using (IDbConnection conn = DbConnection)
+            try
             {
-                try
+                using (IDbConnection conn = DbConnection)
                 {
-                    return await conn.QueryAsync<DwInOutwellModel>(CompareDwSql.QueryInOutwell, compareDate);
+                    return await conn.QueryAsync<DwInOutwellModel>(CompareDwSql.QueryInOutwell, new { compareStartDate = compareDate, compareEndDate = compareDate.AddDays(1) });
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

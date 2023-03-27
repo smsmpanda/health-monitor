@@ -13,11 +13,11 @@ namespace HealthMonitor.Views
         {
             eventAggregator.Register(arg =>
             {
-                DataCompareDialog.IsOpen = arg.IsOpen;
-                if (DataCompareDialog.IsOpen)
-                {
-                    DataCompareDialog.DialogContent = new ProgressBarView();
-                }
+                //DataCompareDialog.IsOpen = arg.IsOpen;
+                //if (DataCompareDialog.IsOpen)
+                //{
+                //    DataCompareDialog.DialogContent = new ProgressBarView();
+                //}
             });
             InitializeComponent();
         }

@@ -30,11 +30,30 @@
 
     public struct CompareDwSql
     {
-        public const string QueryInOutwell = "";
+        public const string QueryInOutwell = @"
+            SELECT 
+                emp.ID as EmployeeID,
+                emp.TAGNUMBER as TagMac,
+                emp.CNAME as EmployeeName,
+                emp.DEPARTNAME as DepartMentName,
+                emp.CLASSNAME as GroupClass,
+                inwell.LOGINTIME as DwInwellTime,
+            FROM TB_EMP_INEXITWELL inwell
+            INNER JOIN TB_EMP_EMPLOYEE emp
+            ON inwell.EMPLOYEENUMBER = emp.ID
+            WHERE   inwell.OFFTIME IS NULL 
+            AND inwell.LOGINTIME >= :compareStartDate 
+            AND inwell.LOGINTIME < :compareEndDate
+            ORDER BY inwell.LOGINTIME ASC";
     }
 
     public struct CompareHmSql
     {
-        public const string QueryKaoqin = "";
+        public const string QueryKaoqin = @"
+            SELECT  
+                EmployeeID,
+                OnTime,
+                OffTime 
+            FROM [kaoqin].[dbo].[kaoqin] where  OnTime>='{0}' and OnTime < '{1}' and OffTime is not null  order by OnTime";
     }
 }

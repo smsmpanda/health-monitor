@@ -3,6 +3,7 @@ using HealthMonitor.Repository;
 using HealthMonitor.Repository.imp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HealthMonitor.Services.imp
@@ -22,46 +23,81 @@ namespace HealthMonitor.Services.imp
 
         public async Task<IEnumerable<DwInOutwellModel>> GetDwInOutwellListAsync()
         {
-            IDwRepository repository = new DwRepository(await DbFactory.GetDbConnection(_dbDwConfig));
-            return await repository.GetInOutwellListByCompareDateAsync(_filters.CompareDate);
+            try
+            {
+                IDwRepository repository = new DwRepository(await DbFactory.GetDbConnection(_dbDwConfig));
+                return await repository.GetInOutwellListByCompareDateAsync(_filters.CompareDate);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<HongmoKaoqinModel>> GetHmInOutwellListAsync()
         {
-            IHmRepository repository = new HmRepository(await DbFactory.GetDbConnection(_dbHmConfig));
-            return await repository.GetHongMoKaoqinListByCompareDateAsync(_filters.CompareDate);
+            try
+            {
+                IHmRepository repository = new HmRepository(await DbFactory.GetDbConnection(_dbHmConfig));
+                return await repository.GetHongMoKaoqinListByCompareDateAsync(_filters.CompareDate);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<DwInOutwellModel>> StartCompareAsync()
         {
-            //取数据
-            Task<IEnumerable<DwInOutwellModel>> dwInOutwellDataList = GetDwInOutwellListAsync();
-            Task<IEnumerable<HongmoKaoqinModel>> hmInOutwellDataList = GetHmInOutwellListAsync();
+            try
+            {
+                //取数据
+                Task<IEnumerable<DwInOutwellModel>> dwInOutwellDataList = GetDwInOutwellListAsync();
+                Task<IEnumerable<HongmoKaoqinModel>> hmInOutwellDataList = GetHmInOutwellListAsync();
 
-            //比对
-            var result = await CompareAsync(await dwInOutwellDataList, await hmInOutwellDataList);
-
-            return result;
+                //比对
+                var result = await CompareAsync(await dwInOutwellDataList, await hmInOutwellDataList);
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         private async Task<IEnumerable<DwInOutwellModel>> CompareAsync(IEnumerable<DwInOutwellModel> dwInOutwellDataList, IEnumerable<HongmoKaoqinModel> hmInOutwellDataList)
         {
-            if (dwInOutwellDataList is null)
+            try
             {
-                throw new ArgumentNullException(nameof(dwInOutwellDataList));
+                if (dwInOutwellDataList is null)
+                {
+                    throw new ArgumentNullException(nameof(dwInOutwellDataList));
+                }
+                if (hmInOutwellDataList is null)
+                {
+                    throw new ArgumentNullException(nameof(hmInOutwellDataList));
+                }
+
+                //比对
+                List<DwInOutwellModel> result = new List<DwInOutwellModel>();
+                foreach (var dw in dwInOutwellDataList)
+                {
+                    var matchHmData = hmInOutwellDataList.FirstOrDefault(hm => dw.DwInwellTime - hm.OnTime <= TimeSpan.FromMinutes(_filters.Interval));
+
+                    if (matchHmData != null) 
+                    {
+                        dw.HmInwellTime = matchHmData.OnTime;
+                        dw.HmOutwellTime= matchHmData.OffTime;
+                        result.Add(dw);
+                    }
+                }
+
+                return await Task.FromResult(result);
             }
-            if (hmInOutwellDataList is null)
+            catch (Exception)
             {
-                throw new ArgumentNullException(nameof(hmInOutwellDataList));
+                throw;
             }
-
-
-            //比对
-
-
-
-
-            return await Task.FromResult(dwInOutwellDataList);
         }
     }
 }

@@ -23,7 +23,7 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-    <Border>
+    <Border BorderBrush="{StaticResource OptionMark.Disabled.Border}" BorderThickness="1">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="60" />
@@ -45,9 +45,7 @@
                         x:Name="DemoItemsListBox"
                         DockPanel.Dock="Bottom"
                         ItemContainerStyle="{StaticResource MenuListBoxItem}"
-                        ItemsSource="{Binding DemoItems}"
-                        SelectedIndex="{Binding SelectedIndex}"
-                        SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
+                        ItemsSource="{Binding DemoItems}">
                         <behavior:Interaction.Triggers>
                             <behavior:EventTrigger EventName="SelectionChanged">
                                 <behavior:InvokeCommandAction Command="{Binding NavigateCommand}" CommandParameter="{Binding ElementName=DemoItemsListBox, Path=SelectedItem}" />

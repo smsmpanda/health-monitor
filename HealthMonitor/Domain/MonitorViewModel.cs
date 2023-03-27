@@ -1,19 +1,21 @@
 ﻿using HealthMonitor.Domain;
+using Prism.Ioc;
+using Prism.Regions;
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Threading.Tasks;
 
 namespace HealthMonitor.ViewModel
 {
     /// <summary>
     /// 监测数据
     /// </summary>
-    public class MonitorViewModel : ViewModelBase
+    public class MonitorViewModel : NavigationViewModel
     {
-        public MonitorViewModel()
+        public MonitorViewModel(IContainerProvider containerProvider) : base(containerProvider)
         {
-            Init();
         }
 
         /// <summary>
@@ -34,14 +36,20 @@ namespace HealthMonitor.ViewModel
         public string AlarmSettingAddress =>
             ConfigurationManager.AppSettings["AlarmSettingAddress"];
 
-
+        public override void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            base.OnNavigatedTo(navigationContext);
+            Init();
+        }
 
         #region 初始化配置
         private void Init()
         {
+            UpdateLoading(true);
             InitDatabaseByConfigData();
             InitProcessesByConfigData();
             InitFTPByConfigData();
+            UpdateLoading(false);
         }
 
         /// <summary>
