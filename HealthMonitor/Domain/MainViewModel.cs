@@ -3,14 +3,14 @@ using Prism.Commands;
 using Prism.Regions;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Linq;
 using System.Reflection;
 
 namespace HealthMonitor.Domain
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly IRegionManager regionManager;
-
+        private readonly IRegionManager _regionManager;
         public ObservableCollection<DemoItem> DemoItems { get; }
         public DelegateCommand<DemoItem> NavigateCommand { get; }
 
@@ -23,8 +23,8 @@ namespace HealthMonitor.Domain
                 new DemoItem("DataCompare","DatabaseCogOutline","数据","数据比对")
             });
 
+            _regionManager = regionManager;
             NavigateCommand = new DelegateCommand<DemoItem>(Navigate);
-            this.regionManager = regionManager;
         }
 
         private void Navigate(DemoItem obj)
@@ -33,7 +33,7 @@ namespace HealthMonitor.Domain
             {
                 return;
             }
-            regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate(obj.ViewName);
+            _regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate(obj.ViewName);
         }
 
         public string ApplicationName =>

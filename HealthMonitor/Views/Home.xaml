@@ -10,11 +10,9 @@
     d:DesignWidth="300"
     mc:Ignorable="d">
     <Grid>
-        <materialDesign:Card Padding="12" UniformCornerRadius="50">
-            <ProgressBar
-                IsIndeterminate="True"
-                Style="{StaticResource MaterialDesignCircularProgressBar}"
-                Value="50" />
-        </materialDesign:Card>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Image Source="/Resource/homebg.png" />
     </Grid>
 </UserControl>

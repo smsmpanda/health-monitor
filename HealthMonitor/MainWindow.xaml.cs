@@ -1,6 +1,8 @@
 ﻿using HealthMonitor.Extensions;
+using HealthMonitor.UserControls;
 using HealthMonitor.Views;
 using Prism.Events;
+using Prism.Regions;
 using System;
 using System.Windows;
 using System.Windows.Forms;
@@ -16,11 +18,14 @@ namespace HealthMonitor
         private NotifyIcon notifyIcon;
         public const string AppName = "健康监测";
 
-        public MainWindow()
+        public MainWindow(IRegionManager regionManager)
         {
             InitializeComponent();
             ApplicationTopBtnEventBind();
             ApplicationSystemTrapMount();
+
+            //注册默认区域
+            regionManager.RegisterViewWithRegion(PrismManager.MainViewRegionName, typeof(Home));
         }
 
         protected override void OnClosed(EventArgs e)
