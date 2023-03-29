@@ -146,6 +146,8 @@ namespace HealthMonitor.Domain
 
                             CompareResult = compareResult;
                             InOutWellList = (ObservableCollection<DwInOutwellModel>)compareResult;
+
+                            IsBottomDrawOpen= false;
                         }
                         catch (System.Exception ex)
                         {
