@@ -37,13 +37,13 @@
                 emp.CNAME as EmployeeName,
                 emp.DEPARTNAME as DepartMentName,
                 emp.CLASSNAME as GroupClass,
-                inwell.LOGINTIME as DwInwellTime,
+                inwell.LOGINTIME as DwInwellTime
             FROM TB_EMP_INEXITWELL inwell
             INNER JOIN TB_EMP_EMPLOYEE emp
             ON inwell.EMPLOYEENUMBER = emp.ID
             WHERE   inwell.OFFTIME IS NULL 
-            AND inwell.LOGINTIME >= :compareStartDate 
-            AND inwell.LOGINTIME < :compareEndDate
+            AND inwell.LOGINTIME >= to_date(:compareStartDate,'yyyy-MM-dd') 
+            AND inwell.LOGINTIME < to_date(:compareEndDate,'yyyy-MM-dd') 
             ORDER BY inwell.LOGINTIME ASC";
     }
 
