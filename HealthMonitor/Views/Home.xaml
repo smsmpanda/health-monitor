@@ -10,9 +10,9 @@
     d:DesignWidth="300"
     mc:Ignorable="d">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <Image Source="/Resource/homebg.png" />
+        <Border>
+
+            <Image Source="/Resource/homebg.png" />
+        </Border>
     </Grid>
 </UserControl>

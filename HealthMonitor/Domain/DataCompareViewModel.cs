@@ -2,12 +2,14 @@
 using HealthMonitor.Extensions;
 using HealthMonitor.Services;
 using HealthMonitor.Services.imp;
+using Magicodes.ExporterAndImporter.Excel;
 using Prism.Ioc;
-using Prism.Regions;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace HealthMonitor.Domain
@@ -17,14 +19,39 @@ namespace HealthMonitor.Domain
         private bool _isBottomDrawOpen;
         private DataBaseItem _dataBaseDw;
         private DataBaseItem _dataBaseHm;
-        public DataCompareFilter _filters;
+        private DataCompareFilter _filters;
+        private CompareDataFilter _compareDataFilter;
         public ObservableCollection<DwInOutwellModel> _inOutWellList;
         public DataCompareViewModel(IContainerProvider containerProvider) : base(containerProvider)
         {
             _dataBaseDw = new DataBaseItem();
             _dataBaseHm = new DataBaseItem();
             _filters = new DataCompareFilter();
-            _inOutWellList = new ObservableCollection<DwInOutwellModel>();
+            _compareDataFilter = new CompareDataFilter();
+            _inOutWellList = new ObservableCollection<DwInOutwellModel>()
+            {
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三1",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三2",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三3",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三4",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三5",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三6",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三8",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三9",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三10",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三11",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三12",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三13",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三15",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三16",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三17",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三18",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三19",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三20",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+                new DwInOutwellModel { EmployeeID=12,EmployeeName="张三21",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" }
+            };
+
+            CompareResult = _inOutWellList;
         }
 
         public DataBaseItem DataBaseDw
@@ -42,13 +69,28 @@ namespace HealthMonitor.Domain
         public ObservableCollection<DwInOutwellModel> InOutWellList
         {
             get => _inOutWellList;
-            set => SetProperty(ref _inOutWellList, value);
+            set
+            {
+                foreach (var item in value)
+                {
+                    item.Id = value.IndexOf(item) + 1;
+                }
+                SetProperty(ref _inOutWellList, value);
+            }
         }
+        private IEnumerable<DwInOutwellModel> CompareResult;
 
         public DataCompareFilter Filters
         {
             get => _filters;
             set => SetProperty(ref _filters, value);
+        }
+
+
+        public CompareDataFilter DataFilters
+        {
+            get => _compareDataFilter;
+            set => SetProperty(ref _compareDataFilter, value);
         }
 
         public bool IsBottomDrawOpen
@@ -60,13 +102,19 @@ namespace HealthMonitor.Domain
         public List<string> DbTypeItems => new List<string> { $"{DbType.MYSQL}", $"{DbType.ORACLE}", $"{DbType.MSSQL}" };
 
         public ICommand StartNewCompareCommand =>
-            new AnotherCommandImplementation(StartNewCompare, CanExceuteStartCompare);
+            new AnotherCommandImplementation(StartNewCompareExcute, CanExceuteStartCompare);
+
+        public ICommand SearchDataCommand =>
+            new AnotherCommandImplementation(QuyerDataExecute, CanExecuteExistsData);
 
         public ICommand DataTestConnectionCommand =>
-            new AnotherCommandImplementation(DataBaseConnection, CanExecuteTestConnection);
+            new AnotherCommandImplementation(DataBaseConnectionExecute, CanExecuteTestConnection);
 
         public ICommand ExpandBottomDrawCommand =>
             new AnotherCommandImplementation(ExpandBottomDraw);
+
+        public ICommand ExportExcelCommand =>
+            new AnotherCommandImplementation(ExportExcelAsyncExecute, CanExecuteExistsData);
 
 
         public void ExpandBottomDraw(object m)
@@ -74,45 +122,75 @@ namespace HealthMonitor.Domain
             IsBottomDrawOpen = !IsBottomDrawOpen;
         }
 
-        public void StartNewCompare(object m)
+        public void StartNewCompareExcute(object m)
         {
-            DbConfig dwDbConfig = ManualMapperExtension.DbItemMapperDbConfig(DataBaseDw);
-            DbConfig hmDbConfig = ManualMapperExtension.DbItemMapperDbConfig(DataBaseHm);
+            try
+            {
+                UpdateLoading(true);
+                DbConfig dwDbConfig = ManualMapperExtension.DbItemMapperDbConfig(DataBaseDw);
+                DbConfig hmDbConfig = ManualMapperExtension.DbItemMapperDbConfig(DataBaseHm);
 
-            Task.Factory.StartNew(async () =>
-            {
-                (DataBaseDw.DbStatus, DataBaseDw.DbTestMessage) = await DbFactory.DbConnectionTestAsync(dwDbConfig);
-                (DataBaseHm.DbStatus, DataBaseHm.DbTestMessage) = await DbFactory.DbConnectionTestAsync(hmDbConfig);
-            }).ContinueWith(async (s) =>
-            {
-                if (DataBaseDw.DbStatus && DataBaseHm.DbStatus)
+                Task.Factory.StartNew(async () =>
                 {
-                    try
+                    (DataBaseDw.DbStatus, DataBaseDw.DbTestMessage) = await DbFactory.DbConnectionTestAsync(dwDbConfig);
+                    (DataBaseHm.DbStatus, DataBaseHm.DbTestMessage) = await DbFactory.DbConnectionTestAsync(hmDbConfig);
+                }).ContinueWith(async (s) =>
+                {
+                    if (DataBaseDw.DbStatus && DataBaseHm.DbStatus)
                     {
-                        IInOutwellDataCompareService service = new InOutwellDataCompareService(dwDbConfig, hmDbConfig, Filters);
-                        InOutWellList = (ObservableCollection<DwInOutwellModel>)await service.StartCompareAsync();
+                        try
+                        {
+                            IInOutwellDataCompareService service = new InOutwellDataCompareService(dwDbConfig, hmDbConfig, Filters);
+                            var compareResult = await service.StartCompareAsync();
+
+                            CompareResult = compareResult;
+                            InOutWellList = (ObservableCollection<DwInOutwellModel>)compareResult;
+                        }
+                        catch (System.Exception ex)
+                        {
+                            DataBaseDw.DbStatus = false;
+                            DataBaseDw.DbTestMessage = ex.Message;
+                        }
                     }
-                    catch (System.Exception ex)
-                    {
-                        DataBaseDw.DbStatus = false;
-                        DataBaseDw.DbTestMessage = ex.Message;
-                    }
-                }
-            });
+                    UpdateLoading(false);
+                });
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+        public bool CanExceuteStartCompare(object _)
+        {
+            bool _f = CanExecuteTestConnection(_);
+            return DataBaseHm.DbStatus && DataBaseDw.DbStatus && _f;
         }
 
-        public void DataBaseConnection(object m)
+        public void DataBaseConnectionExecute(object m)
         {
+            UpdateLoading(true);
             Task.Factory.StartNew(async () =>
             {
-                foreach (var dbItem in new DataBaseItem[] { DataBaseDw, DataBaseHm })
+                try
                 {
-                    DbConfig config = ManualMapperExtension.DbItemMapperDbConfig(dbItem);
-                    (dbItem.DbStatus, dbItem.DbTestMessage) = await DbFactory.DbConnectionTestAsync(config);
+                    foreach (var dbItem in new DataBaseItem[] { DataBaseDw, DataBaseHm })
+                    {
+
+                        DbConfig config = ManualMapperExtension.DbItemMapperDbConfig(dbItem);
+                        (dbItem.DbStatus, dbItem.DbTestMessage) = await DbFactory.DbConnectionTestAsync(config);
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally
+                {
+                    UpdateLoading(false);
                 }
             });
-        }
 
+        }
         public bool CanExecuteTestConnection(object m)
         {
             if (string.IsNullOrWhiteSpace(this.DataBaseDw.DbHost)
@@ -131,15 +209,68 @@ namespace HealthMonitor.Domain
             return true;
         }
 
-        public bool CanExceuteStartCompare(object _)
+
+        public void QuyerDataExecute(object m)
         {
-            bool _f = CanExecuteTestConnection(_);
-            return DataBaseHm.DbStatus && DataBaseDw.DbStatus && _f;
+            try
+            {
+                UpdateLoading(true);
+
+                InOutWellList = new ObservableCollection<DwInOutwellModel>(CompareResult);
+
+                if (!string.IsNullOrWhiteSpace(DataFilters.EmployeeName))
+                {
+                    this.InOutWellList = new ObservableCollection<DwInOutwellModel>(
+                    InOutWellList.Where(dw => dw.EmployeeName.Contains(DataFilters.EmployeeName)));
+                }
+                if (!string.IsNullOrWhiteSpace(DataFilters.Tagmac))
+                {
+                    this.InOutWellList = new ObservableCollection<DwInOutwellModel>(
+                    InOutWellList.Where(dw => dw.TagMac.Contains(DataFilters.Tagmac)));
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                UpdateLoading(false);
+            }
+        }
+        public bool CanExecuteExistsData(object m)
+        {
+            return CompareResult.Any();
         }
 
-        public override void OnNavigatedTo(NavigationContext navigationContext)
+
+        public void ExportExcelAsyncExecute(object m)
         {
-            base.OnNavigatedTo(navigationContext);
+            string fileName = $"定位虹膜出井比对{DateTime.Now:yyMMdd}.xlsx";
+
+            var exporter = new ExcelExporter();
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Excel文件|*.xlsx|所有文件|*.*";
+            saveFileDialog.FileName = fileName;
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                UpdateLoading(true);
+                Task.Factory.StartNew(async () =>
+                {
+                    await exporter.Export(saveFileDialog.FileName, InOutWellList);
+                    UpdateLoading(false);
+                });
+            }
         }
+    }
+    public class Question
+    {
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public string Options { get; set; }
+        public string Answer { get; set; }
     }
 }

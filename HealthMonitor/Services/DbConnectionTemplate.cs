@@ -5,9 +5,9 @@
     /// </summary>
     public class DbConnectionTemplate
     {
-        public const string MYSQL = "Data Source={0};Port={1};Initial Catalog={2};User Id={3};Password={4};Trusted_Connection=True;";
+        public const string MYSQL = "Data Source={0};Port={1};Initial Catalog={2};User Id={3};Password={4};";
 
-        public const string MSSQL = "Server={0};Port={1};Database={2};charset=utf8;uid={3};pwd={4};";
+        public const string MSSQL = "Server={0},{1};Database={2};uid={3};pwd={4};";
 
         public const string ORACLE = "Data Source={0}:{1}/{2};Persist Security Info=True;User ID={3};Password={4};Connection Timeout=3;";
 

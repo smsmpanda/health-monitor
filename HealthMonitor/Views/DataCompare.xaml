@@ -8,8 +8,11 @@
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
     mc:Ignorable="d">
-    <Grid>
-        <materialDesign:DialogHost DialogTheme="Inherit" Identifier="DbcRootDialog">
+    <Grid Margin="10,0">
+        <materialDesign:DialogHost
+            Name="DataCompareDialog"
+            DialogTheme="Inherit"
+            Identifier="DbcRootDialog">
             <materialDesign:DrawerHost IsBottomDrawerOpen="{Binding IsBottomDrawOpen}">
                 <materialDesign:DrawerHost.BottomDrawerContent>
                     <Grid
@@ -65,7 +68,6 @@
                         <TextBox
                             Grid.Row="3"
                             Grid.Column="0"
-                            Margin="0,8,0,0"
                             materialDesign:TextFieldAssist.HasClearButton="True"
                             wpf:HintAssist.Hint="端口"
                             FontSize="15"
@@ -82,7 +84,6 @@
                         <TextBox
                             Grid.Row="5"
                             Grid.Column="0"
-                            Margin="0,8,0,0"
                             materialDesign:TextFieldAssist.HasClearButton="True"
                             wpf:HintAssist.Hint="数据库"
                             FontSize="15"
@@ -99,7 +100,6 @@
                         <PasswordBox
                             Grid.Row="7"
                             Grid.Column="0"
-                            Margin="0,5"
                             materialDesign:HintAssist.Hint="密码"
                             materialDesign:PasswordBoxAssist.Password="{Binding DataBaseDw.DbPwd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:TextFieldAssist.HasClearButton="True"
@@ -111,7 +111,6 @@
                         <Label
                             Grid.Row="1"
                             Grid.Column="2"
-                            Margin="0,5"
                             FontSize="15"
                             Foreground="#FF002983">
                             <Label.Content>
@@ -136,7 +135,6 @@
                         <TextBox
                             Grid.Row="3"
                             Grid.Column="2"
-                            Margin="0,8,0,0"
                             materialDesign:TextFieldAssist.HasClearButton="True"
                             wpf:HintAssist.Hint="端口"
                             FontSize="15"
@@ -169,7 +167,6 @@
                         <PasswordBox
                             Grid.Row="7"
                             Grid.Column="2"
-                            Margin="0,5"
                             materialDesign:HintAssist.Hint="密码"
                             materialDesign:PasswordBoxAssist.Password="{Binding DataBaseHm.DbPwd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:TextFieldAssist.HasClearButton="True"
@@ -235,7 +232,6 @@
                         <Label
                             Grid.Row="1"
                             Grid.Column="4"
-                            Margin="0,5"
                             FontSize="15"
                             Foreground="#FF002983">
                             <Label.Content>
@@ -250,20 +246,21 @@
                             </Label.Content>
                         </Label>
 
-                        <DatePicker
-                            Grid.Row="2"
-                            Grid.Column="4"
-                            Margin="0,0,0,-20"
-                            wpf:HintAssist.Hint="比对日期"
-                            SelectedDate="{Binding Filters.CompareDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=yyyy-MM-dd}" />
                         <TextBox
-                            Grid.Row="3"
+                            Grid.Row="2"
                             Grid.Column="4"
                             materialDesign:TextFieldAssist.HasClearButton="True"
                             wpf:HintAssist.Hint="时间间隔（分钟）"
                             FontSize="15"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                             Text="{Binding Filters.Interval, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <DatePicker
+                            Grid.Row="3"
+                            Grid.Column="4"
+                            Height="40"
+                            wpf:HintAssist.Hint="比对日期"
+                            SelectedDate="{Binding Filters.CompareDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=yyyy-MM-dd}" />
 
                     </Grid>
                 </materialDesign:DrawerHost.BottomDrawerContent>
@@ -272,32 +269,42 @@
                         <RowDefinition Height="50" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <DockPanel>
+                    <DockPanel Background="#fff">
                         <Grid DockPanel.Dock="Left">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="150" />
                                 <ColumnDefinition Width="150" />
-                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
                             <TextBox
-                                Grid.Column="0"
-                                Margin="5,0,5,0"
+                                Margin="0,0,0,5"
+                                VerticalAlignment="Bottom"
                                 materialDesign:HintAssist.Hint="姓名"
                                 materialDesign:HintAssist.IsFloating="True"
-                                Text="{Binding ConditionEmployeeName}" />
+                                materialDesign:TextFieldAssist.HasClearButton="True"
+                                FontSize="15"
+                                Text="{Binding DataFilters.EmployeeName, UpdateSourceTrigger=PropertyChanged}" />
+
                             <TextBox
                                 Grid.Column="1"
-                                Margin="5,0,5,0"
+                                Margin="5,0,0,5"
+                                VerticalAlignment="Bottom"
                                 materialDesign:HintAssist.Hint="标识卡号"
                                 materialDesign:HintAssist.IsFloating="True"
-                                Text="{Binding ConditionEmployeeName}" />
-                            <TextBox
+                                materialDesign:TextFieldAssist.HasClearButton="True"
+                                FontSize="15"
+                                Text="{Binding DataFilters.Tagmac, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <Button
                                 Grid.Column="2"
-                                Margin="5,0,5,0"
-                                materialDesign:HintAssist.Hint="定位入井时间"
-                                materialDesign:HintAssist.IsFloating="True"
-                                Text="{Binding ConditionEmployeeName}" />
+                                Margin="5,0,0,0"
+                                Command="{Binding SearchDataCommand}"
+                                Style="{StaticResource MaterialDesignFlatDarkBgButton}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon VerticalAlignment="Center" Kind="Search" />
+                                </StackPanel>
+                            </Button>
                         </Grid>
                         <StackPanel
                             HorizontalAlignment="Right"
@@ -309,7 +316,7 @@
                                     <TextBlock Margin="5,0" VerticalAlignment="Center">比对</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="5,0,5,0" Command="{Binding RunDialogCommand}">
+                            <Button Margin="5,0,5,0" Command="{Binding ExportExcelCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon VerticalAlignment="Center" Kind="Export" />
                                     <TextBlock Margin="5,0" VerticalAlignment="Center">导出</TextBlock>
@@ -321,9 +328,12 @@
                         Grid.Row="1"
                         AutoGenerateColumns="False"
                         CanUserAddRows="False"
+                        CellStyle="{DynamicResource DataGridCellStyle1}"
+                        ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
                         ItemsSource="{Binding InOutWellList}"
+                        RowStyle="{DynamicResource DataGridRowStyle1}"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                        ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                        Style="{DynamicResource DataGridStyle1}">
                         <DataGrid.Columns>
                             <DataGridTextColumn
                                 Width="auto"
@@ -361,24 +371,42 @@
 
                             <DataGridTextColumn
                                 Width="*"
-                                Binding="{Binding DwInwellTime}"
+                                MinWidth="165"
+                                Binding="{Binding DwInwellTime, StringFormat='yyyy-MM-dd HH:mm:ss'}"
                                 Header="定位入井时间"
                                 IsReadOnly="True" />
                             <DataGridTextColumn
                                 Width="*"
-                                Binding="{Binding HmInwellTime}"
+                                MinWidth="165"
+                                Binding="{Binding HmInwellTime, StringFormat='yyyy-MM-dd HH:mm:ss'}"
                                 Header="虹膜入井时间"
                                 IsReadOnly="True" />
                             <DataGridTextColumn
                                 Width="*"
-                                Binding="{Binding HmOutwellTime}"
+                                MinWidth="165"
+                                Binding="{Binding HmOutwellTime, StringFormat='yyyy-MM-dd HH:mm:ss'}"
                                 Header="虹膜出井时间"
                                 IsReadOnly="True" />
-                            <DataGridTextColumn
+                            <DataGridTemplateColumn
                                 Width="*"
-                                Binding="{Binding HmResult}"
+                                MinWidth="80"
                                 Header="虹膜结果"
-                                IsReadOnly="True" />
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border
+                                            Padding="5"
+                                            HorizontalAlignment="Left"
+                                            Background="Gold"
+                                            CornerRadius="2">
+                                            <TextBlock
+                                                FontSize="12"
+                                                Foreground="#fff"
+                                                Text="{Binding HmResult}" />
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

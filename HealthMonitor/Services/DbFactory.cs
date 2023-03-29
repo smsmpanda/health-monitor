@@ -14,9 +14,9 @@ namespace HealthMonitor.Services
                 case HealthMonitorDbType.ORACLE:
                     return new OracleDb(connectionString);
                 case HealthMonitorDbType.MSSQL:
-                    return new MySqlDb(connectionString);
-                case HealthMonitorDbType.MYSQL:
                     return new SQLServerDb(connectionString);
+                case HealthMonitorDbType.MYSQL:
+                    return new MySqlDb(connectionString);
                 default:
                     return null;
             }

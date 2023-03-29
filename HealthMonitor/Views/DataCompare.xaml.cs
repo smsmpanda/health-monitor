@@ -11,13 +11,17 @@ namespace HealthMonitor.Views
     {
         public DataCompare(IEventAggregator eventAggregator)
         {
-            eventAggregator.Register(arg =>
+            eventAggregator.Subscribe(arg =>
             {
-                //DataCompareDialog.IsOpen = arg.IsOpen;
-                //if (DataCompareDialog.IsOpen)
-                //{
-                //    DataCompareDialog.DialogContent = new ProgressBarView();
-                //}
+                DataCompareDialog.IsOpen = arg.IsOpen;
+                if (DataCompareDialog.IsOpen)
+                {
+                    DataCompareDialog.DialogContent = new ProgressBarView();
+                }
+                else
+                {
+                    DataCompareDialog.DialogContent = null;
+                }
             });
             InitializeComponent();
         }

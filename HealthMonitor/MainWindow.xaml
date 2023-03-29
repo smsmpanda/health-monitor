@@ -23,10 +23,10 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-    <Border BorderBrush="{StaticResource MaterialDesignShadowBrush}" BorderThickness="0.9">
+    <Border BorderBrush="{StaticResource AttentionToActionBrush}" BorderThickness="0,1,1,1">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="55" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -131,10 +131,7 @@
                         Name="GlobalDialog"
                         DialogTheme="Inherit"
                         Identifier="RootDialog1">
-                        <ContentControl
-                            Margin="0,0,1,0"
-                            prism:RegionManager.RegionName="{x:Static ext:PrismManager.MainViewRegionName}"
-                            DockPanel.Dock="Bottom" />
+                        <ContentControl prism:RegionManager.RegionName="{x:Static ext:PrismManager.MainViewRegionName}" DockPanel.Dock="Bottom" />
                     </materialDesign:DialogHost>
                 </Border>
             </Grid>

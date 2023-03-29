@@ -3,7 +3,6 @@ using Prism.Commands;
 using Prism.Regions;
 using System.Collections.ObjectModel;
 using System.Configuration;
-using System.Linq;
 using System.Reflection;
 
 namespace HealthMonitor.Domain

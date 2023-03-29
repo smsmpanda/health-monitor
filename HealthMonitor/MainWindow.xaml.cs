@@ -1,7 +1,5 @@
 ﻿using HealthMonitor.Extensions;
 using HealthMonitor.UserControls;
-using HealthMonitor.Views;
-using Prism.Events;
 using Prism.Regions;
 using System;
 using System.Windows;

@@ -20,4 +20,23 @@ namespace HealthMonitor.Domain
             set => SetProperty(ref _interval, value);
         }
     }
+
+    public class CompareDataFilter : ViewModelBase
+    {
+        private string _tagMac;
+        public string Tagmac
+        {
+            get => _tagMac;
+            set => SetProperty(ref _tagMac, value);
+        }
+
+        private string _employeeName;
+        public string EmployeeName
+        {
+            get => _employeeName;
+            set => SetProperty(ref _employeeName, value);
+        }
+
+
+    }
 }

@@ -1,9 +1,6 @@
-﻿using CefSharp;
-using CefSharp.Wpf;
-using HealthMonitor.Extensions;
+﻿using HealthMonitor.Extensions;
 using HealthMonitor.Views;
 using Prism.Events;
-using System.Threading.Tasks;
 
 namespace HealthMonitor.UserControls
 {
@@ -14,12 +11,16 @@ namespace HealthMonitor.UserControls
     {
         public Monitors(IEventAggregator eventAggregator)
         {
-            eventAggregator.Register(arg =>
+            eventAggregator.Subscribe(arg =>
             {
                 MonitorsDialogHost.IsOpen = arg.IsOpen;
                 if (MonitorsDialogHost.IsOpen)
                 {
                     MonitorsDialogHost.DialogContent = new ProgressBarView();
+                }
+                else
+                {
+                    MonitorsDialogHost.DialogContent = null;
                 }
             });
             InitializeComponent();

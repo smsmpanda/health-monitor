@@ -1,12 +1,10 @@
 ﻿using CefSharp;
 using HealthMonitor.Domain;
-using HealthMonitor.Extensions;
 using HealthMonitor.UserControls;
 using HealthMonitor.ViewModel;
 using HealthMonitor.Views;
 using Prism.DryIoc;
 using Prism.Ioc;
-using Prism.Modularity;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;

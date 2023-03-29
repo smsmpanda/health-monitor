@@ -84,10 +84,10 @@ namespace HealthMonitor.Services.imp
                 {
                     var matchHmData = hmInOutwellDataList.FirstOrDefault(hm => dw.DwInwellTime - hm.OnTime <= TimeSpan.FromMinutes(_filters.Interval));
 
-                    if (matchHmData != null) 
+                    if (matchHmData != null)
                     {
                         dw.HmInwellTime = matchHmData.OnTime;
-                        dw.HmOutwellTime= matchHmData.OffTime;
+                        dw.HmOutwellTime = matchHmData.OffTime;
                         result.Add(dw);
                     }
                 }

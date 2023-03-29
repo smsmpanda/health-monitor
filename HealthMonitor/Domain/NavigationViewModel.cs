@@ -3,7 +3,6 @@ using HealthMonitor.Extensions;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Regions;
-using System;
 
 namespace HealthMonitor.Domain
 {

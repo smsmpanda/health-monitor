@@ -11,9 +11,9 @@ namespace HealthMonitor.Extensions
             aggregator.GetEvent<UpdateLoadingEvent>().Publish(model);
         }
 
-        public static void Register(this IEventAggregator aggregator, Action<UpdateModel> action)
+        public static void Subscribe(this IEventAggregator aggregator, Action<UpdateModel> action)
         {
-            aggregator.GetEvent<UpdateLoadingEvent>().Subscribe(action);
+            aggregator.GetEvent<UpdateLoadingEvent>().Subscribe(action, ThreadOption.UIThread);
         }
     }
 }

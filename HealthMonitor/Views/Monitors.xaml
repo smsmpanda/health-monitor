@@ -19,7 +19,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
     </UserControl.Resources>
-    <Grid>
+    <Grid Margin="10,0">
         <materialDesign:DialogHost Name="MonitorsDialogHost" DialogTheme="Inherit">
             <TabControl>
                 <TabItem>
@@ -89,6 +89,7 @@
                                                 CornerRadius="2">
                                                 <Border.Style>
                                                     <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="#17b978" />
                                                         <Style.Triggers>
                                                             <MultiDataTrigger>
                                                                 <MultiDataTrigger.Conditions>
@@ -102,7 +103,7 @@
                                                                     <Condition Binding="{Binding IsCheck}" Value="true" />
                                                                     <Condition Binding="{Binding Status}" Value="false" />
                                                                 </MultiDataTrigger.Conditions>
-                                                                <Setter Property="Background" Value="#ffd615" />
+                                                                <Setter Property="Background" Value="Gold" />
                                                             </MultiDataTrigger>
                                                             <MultiDataTrigger>
                                                                 <MultiDataTrigger.Conditions>
