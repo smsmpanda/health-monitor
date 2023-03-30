@@ -28,32 +28,31 @@ namespace HealthMonitor.Domain
             _dataBaseHm = new DataBaseItem().SettingDefault("1433", "sa", "kaoqin", Enum.GetName(typeof(DbType), DbType.MSSQL));
             _filters = new DataCompareFilter();
             _compareDataFilter = new CompareDataFilter();
-            _inOutWellList = new ObservableCollection<DwInOutwellModel>()
-            {
-                new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三1",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三2",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三3",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三4",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三5",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三6",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三8",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三9",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三10",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三11",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三12",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三13",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三15",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三16",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三17",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三18",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三19",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三20",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
-                new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三21",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" }
-            };
-            //_inOutWellList= new ObservableCollection<DwInOutwellModel>();
-
-            CompareResult = _inOutWellList;
-            //CompareResult = new List<DwInOutwellModel>();
+            //_inOutWellList = new ObservableCollection<DwInOutwellModel>()
+            //{
+            //    new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三1",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三2",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三3",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三4",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三5",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三6",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三8",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三9",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三10",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三11",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三12",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三13",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三15",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三16",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三17",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三18",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三19",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="未匹配",EmployeeID=12,EmployeeName="张三20",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" },
+            //    new DwInOutwellModel { HmResult="已出井",EmployeeID=12,EmployeeName="张三21",DwInwellTime=DateTime.Now,DepartMentName="信息科",GroupClass="班组1",HmInwellTime=DateTime.Now,HmOutwellTime=DateTime.Now,TagMac="12313" }
+            //};
+            //CompareResult = _inOutWellList;
+            _inOutWellList = new ObservableCollection<DwInOutwellModel>();
+            CompareResult = new List<DwInOutwellModel>();
         }
 
         public DataBaseItem DataBaseDw

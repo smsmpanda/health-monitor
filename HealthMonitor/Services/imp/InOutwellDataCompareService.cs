@@ -2,6 +2,7 @@
 using HealthMonitor.Extensions;
 using HealthMonitor.Repository;
 using HealthMonitor.Repository.imp;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,7 +60,6 @@ namespace HealthMonitor.Services.imp
                 _outwellDateTime = DateTimeExtension.MergeDateTime(_filters.OutwellDate, _filters.OutwellTime);
 
 
-                //取数据
                 Task<IEnumerable<DwInOutwellModel>> dwInOutwellDataList = GetDwInOutwellListAsync();
                 Task<IEnumerable<HongmoKaoqinModel>> hmInOutwellDataList = GetHmInOutwellListAsync();
 

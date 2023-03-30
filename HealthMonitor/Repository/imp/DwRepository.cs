@@ -23,7 +23,7 @@ namespace HealthMonitor.Repository.imp
             {
                 using (IDbConnection conn = DbConnection)
                 {
-                    return await conn.QueryAsync<DwInOutwellModel>(CompareDwSql.QueryInOutwell, new { inwellDatetime = inwellDatetime, outwellDatetime = outwellDatetime });
+                    return await conn.QueryAsync<DwInOutwellModel>(string.Format(CompareDwSql.QueryInOutwell,inwellDatetime,outwellDatetime));
                 }
             }
             catch (Exception)

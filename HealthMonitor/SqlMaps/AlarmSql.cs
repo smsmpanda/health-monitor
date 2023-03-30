@@ -49,10 +49,10 @@
             INNER JOIN TB_EMP_EMPLOYEE emp
             ON inwell.EMPLOYEENUMBER = emp.ID
             WHERE 
-            (inwell.LOGINTIME >= to_date(:inwellDatetime,'yyyy-MM-dd HH24:mi:ss') AND inwell.LOGINTIME <= to_date(:outwellDatetime,'yyyy-MM-dd HH24:mi:ss')
+            (inwell.LOGINTIME >= to_date('{0}','yyyy-MM-dd HH24:mi:ss') AND inwell.LOGINTIME <= to_date('{1}','yyyy-MM-dd HH24:mi:ss')
             AND 
-            inwell.OFFTIME >= to_date(:inwellDatetime,'yyyy-MM-dd HH24:mi:ss') AND inwell.OFFTIME <= to_date(:outwellDatetime,'yyyy-MM-dd HH24:mi:ss'))
-            AND inwell.OFFTIME IS NULL
+            inwell.OFFTIME >= to_date('{0}','yyyy-MM-dd HH24:mi:ss') AND inwell.OFFTIME <= to_date('{1}','yyyy-MM-dd HH24:mi:ss'))
+            OR inwell.OFFTIME IS NULL
             ORDER BY inwell.LOGINTIME";
     }
 
@@ -67,7 +67,7 @@
             WHERE  
             OffTime is not null
             AND OnTime>='{0}' AND OnTime <= '{1}' 
-            AND OffTime >= '{0} AND OffTime <= '{1}'
+            AND OffTime >= '{0}' AND OffTime <= '{1}'
             order by OnTime";
     }
 }
