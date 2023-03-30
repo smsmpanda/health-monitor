@@ -37,14 +37,23 @@
                 emp.CNAME as EmployeeName,
                 emp.DEPARTNAME as DepartMentName,
                 emp.CLASSNAME as GroupClass,
-                inwell.LOGINTIME as DwInwellTime
+                inwell.LOGINTIME as DwInwellTime,
+                inwell.OFFTIME as DwOutwellTime,
+                CASE 
+	            WHEN inwell.OFFTIME is null THEN
+		            0
+	            ELSE
+		            1
+                END AS IsOutwell
             FROM TB_EMP_INEXITWELL inwell
             INNER JOIN TB_EMP_EMPLOYEE emp
             ON inwell.EMPLOYEENUMBER = emp.ID
-            WHERE   inwell.OFFTIME IS NULL 
-            AND inwell.LOGINTIME >= to_date(:compareStartDate,'yyyy-MM-dd') 
-            AND inwell.LOGINTIME < to_date(:compareEndDate,'yyyy-MM-dd') 
-            ORDER BY inwell.LOGINTIME ASC";
+            WHERE 
+            (inwell.LOGINTIME >= to_date(:inwellDatetime,'yyyy-MM-dd HH24:mi:ss') AND inwell.LOGINTIME <= to_date(:outwellDatetime,'yyyy-MM-dd HH24:mi:ss')
+            AND 
+            inwell.OFFTIME >= to_date(:inwellDatetime,'yyyy-MM-dd HH24:mi:ss') AND inwell.OFFTIME <= to_date(:outwellDatetime,'yyyy-MM-dd HH24:mi:ss'))
+            AND inwell.OFFTIME IS NULL
+            ORDER BY inwell.LOGINTIME";
     }
 
     public struct CompareHmSql
@@ -54,6 +63,11 @@
                 EmployeeID,
                 OnTime,
                 OffTime 
-            FROM [kaoqin].[dbo].[kaoqin] where  OnTime>='{0}' and OnTime < '{1}' and OffTime is not null  order by OnTime";
+            FROM [kaoqin].[dbo].[kaoqin] 
+            WHERE  
+            OffTime is not null
+            AND OnTime>='{0}' AND OnTime <= '{1}' 
+            AND OffTime >= '{0} AND OffTime <= '{1}'
+            order by OnTime";
     }
 }

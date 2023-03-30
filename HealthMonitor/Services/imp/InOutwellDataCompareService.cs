@@ -1,4 +1,5 @@
 ﻿using HealthMonitor.Domain;
+using HealthMonitor.Extensions;
 using HealthMonitor.Repository;
 using HealthMonitor.Repository.imp;
 using System;
@@ -14,6 +15,9 @@ namespace HealthMonitor.Services.imp
         private DbConfig _dbHmConfig;
         private readonly DataCompareFilter _filters;
 
+        private DateTime _inwellDateTime;
+        private DateTime _outwellDateTime;
+
         public InOutwellDataCompareService(DbConfig dbDwConfig, DbConfig dbHmConfig, DataCompareFilter Filters)
         {
             _dbDwConfig = dbDwConfig;
@@ -26,7 +30,7 @@ namespace HealthMonitor.Services.imp
             try
             {
                 IDwRepository repository = new DwRepository(await DbFactory.GetDbConnection(_dbDwConfig));
-                return await repository.GetInOutwellListByCompareDateAsync(_filters.CompareDate);
+                return await repository.GetInOutwellListByCompareDateAsync(_inwellDateTime, _outwellDateTime);
             }
             catch (Exception)
             {
@@ -39,7 +43,7 @@ namespace HealthMonitor.Services.imp
             try
             {
                 IHmRepository repository = new HmRepository(await DbFactory.GetDbConnection(_dbHmConfig));
-                return await repository.GetHongMoKaoqinListByCompareDateAsync(_filters.CompareDate);
+                return await repository.GetHongMoKaoqinListByCompareDateAsync(_inwellDateTime, _outwellDateTime);
             }
             catch (Exception)
             {
@@ -51,6 +55,10 @@ namespace HealthMonitor.Services.imp
         {
             try
             {
+                _inwellDateTime = DateTimeExtension.MergeDateTime(_filters.InwellDate,_filters.InwellTime);
+                _outwellDateTime = DateTimeExtension.MergeDateTime(_filters.OutwellDate, _filters.OutwellTime);
+
+
                 //取数据
                 Task<IEnumerable<DwInOutwellModel>> dwInOutwellDataList = GetDwInOutwellListAsync();
                 Task<IEnumerable<HongmoKaoqinModel>> hmInOutwellDataList = GetHmInOutwellListAsync();
@@ -82,13 +90,28 @@ namespace HealthMonitor.Services.imp
                 List<DwInOutwellModel> result = new List<DwInOutwellModel>();
                 foreach (var dw in dwInOutwellDataList)
                 {
-                    var matchHmData = hmInOutwellDataList.FirstOrDefault(hm => dw.DwInwellTime - hm.OnTime <= TimeSpan.FromMinutes(_filters.Interval));
-
-                    if (matchHmData != null)
+                    HongmoKaoqinModel matchHongmoData = null;
+                    //定位未出井
+                    if (dw.IsOutwell == 0)
                     {
-                        dw.HmInwellTime = matchHmData.OnTime;
-                        dw.HmOutwellTime = matchHmData.OffTime;
-                        result.Add(dw);
+                        matchHongmoData = hmInOutwellDataList.FirstOrDefault(hm => hm.EmployeeID == dw.EmployeeID && (dw.DwInwellTime - hm.OnTime <= TimeSpan.FromMinutes(_filters.InwellInterval) || hm.OnTime - dw.DwInwellTime <= TimeSpan.FromMinutes(_filters.InwellInterval)));
+                        
+                        if (matchHongmoData != null)
+                        {
+                            dw.HmInwellTime = matchHongmoData.OnTime;
+                            dw.HmOutwellTime = matchHongmoData.OffTime;
+                            dw.HmResult = "已出井";
+                            result.Add(dw);
+                        }
+                    }
+                    else if (dw.IsOutwell == 1)
+                    {
+                        matchHongmoData = hmInOutwellDataList.FirstOrDefault(hm => hm.EmployeeID == dw.EmployeeID && (dw.DwInwellTime - hm.OnTime <= TimeSpan.FromMinutes(_filters.InwellInterval) || hm.OnTime - dw.DwInwellTime <= TimeSpan.FromMinutes(_filters.InwellInterval)) && (dw.DwOutwellTime - hm.OffTime <= TimeSpan.FromMinutes(_filters.OutwellInterval) || hm.OffTime - dw.DwOutwellTime <= TimeSpan.FromMinutes(_filters.OutwellInterval)));
+                        if (matchHongmoData == null)
+                        {
+                            dw.HmResult = "未匹配";
+                            result.Add(dw);
+                        }
                     }
                 }
 

@@ -8,7 +8,7 @@
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
     mc:Ignorable="d">
-    <Grid Margin="10,0">
+    <Grid>
         <materialDesign:DialogHost
             Name="DataCompareDialog"
             DialogTheme="Inherit"
@@ -246,28 +246,84 @@
                             </Label.Content>
                         </Label>
 
-                        <TextBox
-                            Grid.Row="2"
-                            Grid.Column="4"
-                            materialDesign:TextFieldAssist.HasClearButton="True"
-                            wpf:HintAssist.Hint="时间间隔（分钟）"
-                            FontSize="15"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding Filters.Interval, UpdateSourceTrigger=PropertyChanged}" />
+                        <StackPanel Grid.Row="2" Grid.Column="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBox
+                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                    wpf:HintAssist.Hint="入井间隔（分钟）"
+                                    FontSize="15"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                    Text="{Binding Filters.InwellInterval, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox
+                                    Grid.Column="1"
+                                    Margin="5,0,0,0"
+                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                    wpf:HintAssist.Hint="出井间隔（分钟）"
+                                    FontSize="15"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                    Text="{Binding Filters.OutwellInterval, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                        </StackPanel>
 
-                        <DatePicker
-                            Grid.Row="3"
-                            Grid.Column="4"
-                            Height="40"
-                            wpf:HintAssist.Hint="比对日期"
-                            SelectedDate="{Binding Filters.CompareDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=yyyy-MM-dd}" />
+                        <StackPanel Grid.Row="3" Grid.Column="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <DatePicker
+                                    Height="40"
+                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                    wpf:HintAssist.Hint="入井时间"
+                                    SelectedDate="{Binding Filters.InwellDate, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat=yyyy-MM-dd HH:mm:ss}" />
+
+                                <materialDesign:TimePicker
+                                    Grid.Column="1"
+                                    Height="40"
+                                    Margin="5,0,0,0"
+                                    Is24Hours="True"
+                                    SelectedTime="{Binding Filters.InwellTime, StringFormat=HH:mm:ss, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                    WithSeconds="True" />
+                            </Grid>
+
+
+
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="4" Grid.Column="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <DatePicker
+                                    Height="40"
+                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                    wpf:HintAssist.Hint="出井时间"
+                                    SelectedDate="{Binding Filters.OutwellDate, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat=yyyy-MM-dd HH:mm:ss}" />
+
+                                <materialDesign:TimePicker
+                                    Grid.Column="1"
+                                    Height="40"
+                                    Margin="5,0,0,0"
+                                    Is24Hours="True"
+                                    SelectedTime="{Binding Filters.OutwellTime, StringFormat=HH:mm:ss, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                    WithSeconds="True" />
+                            </Grid>
+                        </StackPanel>
+
 
                     </Grid>
                 </materialDesign:DrawerHost.BottomDrawerContent>
-                <Grid Margin="0,5,0,0">
+                <Grid Margin="5,5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50" />
                         <RowDefinition />
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
                     <DockPanel Background="#fff">
                         <Grid DockPanel.Dock="Left">
@@ -326,23 +382,25 @@
                     </DockPanel>
                     <DataGrid
                         Grid.Row="1"
+                        Height="auto"
                         AutoGenerateColumns="False"
                         CanUserAddRows="False"
                         CellStyle="{DynamicResource DataGridCellStyle1}"
                         ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                        FontSize="14"
                         ItemsSource="{Binding InOutWellList}"
                         RowStyle="{DynamicResource DataGridRowStyle1}"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                         Style="{DynamicResource DataGridStyle1}">
                         <DataGrid.Columns>
                             <DataGridTextColumn
-                                Width="auto"
+                                Width="65"
                                 Binding="{Binding Id}"
                                 CanUserResize="False"
                                 Header="#"
                                 IsReadOnly="True" />
                             <DataGridTextColumn
-                                Width="*"
+                                Width="90"
                                 Binding="{Binding EmployeeID}"
                                 Header="职工标识"
                                 IsReadOnly="True" />
@@ -375,6 +433,49 @@
                                 Binding="{Binding DwInwellTime, StringFormat='yyyy-MM-dd HH:mm:ss'}"
                                 Header="定位入井时间"
                                 IsReadOnly="True" />
+
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="165"
+                                Binding="{Binding DwOutwellTime, StringFormat='yyyy-MM-dd HH:mm:ss'}"
+                                Header="定位出井时间"
+                                IsReadOnly="True" />
+
+                            <DataGridTemplateColumn
+                                Width="*"
+                                MinWidth="80"
+                                Header="定位出入井"
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border
+                                            Padding="5"
+                                            HorizontalAlignment="Left"
+                                            CornerRadius="5">
+                                            <TextBlock>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Padding" Value="5" />
+                                                        <Setter Property="Foreground" Value="#fff" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsOutwell}" Value="0">
+                                                                <Setter Property="Background" Value="gold" />
+                                                                <Setter Property="Text" Value="未出井" />
+
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DwResult}" Value="1">
+                                                                <Setter Property="Text" Value="已出井" />
+                                                                <Setter Property="Background" Value="Green" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
                             <DataGridTextColumn
                                 Width="*"
                                 MinWidth="165"
@@ -389,26 +490,58 @@
                                 IsReadOnly="True" />
                             <DataGridTemplateColumn
                                 Width="*"
-                                MinWidth="80"
-                                Header="虹膜结果"
+                                MinWidth="120"
+                                Header="虹膜比对结果"
                                 IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Border
                                             Padding="5"
                                             HorizontalAlignment="Left"
-                                            Background="Gold"
                                             CornerRadius="2">
-                                            <TextBlock
-                                                FontSize="12"
-                                                Foreground="#fff"
-                                                Text="{Binding HmResult}" />
+                                            <TextBlock>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Padding" Value="5" />
+                                                        <Setter Property="Foreground" Value="#fff" />
+                                                        <Setter Property="Text" Value="{Binding HmResult}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding HmResult}" Value="未匹配">
+                                                                <Setter Property="Background" Value="red" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding HmResult}" Value="已出井">
+                                                                <Setter Property="Background" Value="Green" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
                                         </Border>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <StackPanel Grid.Row="2">
+                        <TextBlock
+                            Padding="10,5"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource OptionMark.Pressed.Border}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{Binding TotalCount, StringFormat=共找到{0}数据}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding TotalCount}" Value="0">
+                                            <Setter Property="Text" Value="未找到数据！" />
+                                            <Setter Property="Foreground" Value="Gold" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
                 </Grid>
             </materialDesign:DrawerHost>
         </materialDesign:DialogHost>
