@@ -429,21 +429,21 @@
 
                             <DataGridTextColumn
                                 Width="*"
-                                MinWidth="165"
+                                MinWidth="175"
                                 Binding="{Binding DwInwellTime, StringFormat='yyyy-MM-dd HH:mm:ss'}"
                                 Header="定位入井时间"
                                 IsReadOnly="True" />
 
                             <DataGridTextColumn
                                 Width="*"
-                                MinWidth="165"
+                                MinWidth="175"
                                 Binding="{Binding DwOutwellTime, StringFormat='yyyy-MM-dd HH:mm:ss'}"
                                 Header="定位出井时间"
                                 IsReadOnly="True" />
 
                             <DataGridTemplateColumn
                                 Width="*"
-                                MinWidth="80"
+                                MinWidth="100"
                                 Header="定位出入井"
                                 IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -463,7 +463,7 @@
                                                                 <Setter Property="Text" Value="未出井" />
 
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding DwResult}" Value="1">
+                                                            <DataTrigger Binding="{Binding IsOutwell}" Value="1">
                                                                 <Setter Property="Text" Value="已出井" />
                                                                 <Setter Property="Background" Value="Green" />
                                                             </DataTrigger>
@@ -478,13 +478,13 @@
 
                             <DataGridTextColumn
                                 Width="*"
-                                MinWidth="165"
+                                MinWidth="175"
                                 Binding="{Binding HmInwellTime, StringFormat='yyyy-MM-dd HH:mm:ss'}"
                                 Header="虹膜入井时间"
                                 IsReadOnly="True" />
                             <DataGridTextColumn
                                 Width="*"
-                                MinWidth="165"
+                                MinWidth="175"
                                 Binding="{Binding HmOutwellTime, StringFormat='yyyy-MM-dd HH:mm:ss'}"
                                 Header="虹膜出井时间"
                                 IsReadOnly="True" />

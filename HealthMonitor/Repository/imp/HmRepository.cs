@@ -23,7 +23,7 @@ namespace HealthMonitor.Repository.imp
             {
                 using (IDbConnection conn = DbConnection)
                 {
-                    return await conn.QueryAsync<HongmoKaoqinModel>(string.Format(CompareHmSql.QueryKaoqin, inwellDatetime, inwellDatetime));
+                    return await conn.QueryAsync<HongmoKaoqinModel>(string.Format(CompareHmSql.QueryKaoqin, inwellDatetime, outwellDatetime));
                 }
             }
             catch (Exception)

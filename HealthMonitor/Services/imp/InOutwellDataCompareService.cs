@@ -94,8 +94,8 @@ namespace HealthMonitor.Services.imp
                     //定位未出井
                     if (dw.IsOutwell == 0)
                     {
-                        matchHongmoData = hmInOutwellDataList.FirstOrDefault(hm => hm.EmployeeID == dw.EmployeeID && (dw.DwInwellTime - hm.OnTime <= TimeSpan.FromMinutes(_filters.InwellInterval) || hm.OnTime - dw.DwInwellTime <= TimeSpan.FromMinutes(_filters.InwellInterval)));
-                        
+                        matchHongmoData = hmInOutwellDataList.FirstOrDefault(hm => hm.EmployeeID == dw.EmployeeID && TimeIntervalAbs(dw.DwInwellTime, hm.OnTime) <= _filters.InwellInterval);
+
                         if (matchHongmoData != null)
                         {
                             dw.HmInwellTime = matchHongmoData.OnTime;
@@ -106,7 +106,11 @@ namespace HealthMonitor.Services.imp
                     }
                     else if (dw.IsOutwell == 1)
                     {
-                        matchHongmoData = hmInOutwellDataList.FirstOrDefault(hm => hm.EmployeeID == dw.EmployeeID && (dw.DwInwellTime - hm.OnTime <= TimeSpan.FromMinutes(_filters.InwellInterval) || hm.OnTime - dw.DwInwellTime <= TimeSpan.FromMinutes(_filters.InwellInterval)) && (dw.DwOutwellTime - hm.OffTime <= TimeSpan.FromMinutes(_filters.OutwellInterval) || hm.OffTime - dw.DwOutwellTime <= TimeSpan.FromMinutes(_filters.OutwellInterval)));
+                        matchHongmoData = hmInOutwellDataList.FirstOrDefault(hm => hm.EmployeeID == dw.EmployeeID 
+                        && 
+                        (TimeIntervalAbs(dw.DwInwellTime,hm.OnTime)<=_filters.InwellInterval) && 
+                        (TimeIntervalAbs(dw.DwOutwellTime, hm.OffTime) <= _filters.OutwellInterval));
+
                         if (matchHongmoData == null)
                         {
                             dw.HmResult = "未匹配";
@@ -121,6 +125,12 @@ namespace HealthMonitor.Services.imp
             {
                 throw;
             }
+        }
+
+        private double TimeIntervalAbs(DateTime start,DateTime end) 
+        {
+            TimeSpan ts = start - end;
+            return Math.Abs(ts.TotalMinutes);
         }
     }
 }

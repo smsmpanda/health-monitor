@@ -47,13 +47,13 @@
                 END AS IsOutwell
             FROM TB_EMP_INEXITWELL inwell
             INNER JOIN TB_EMP_EMPLOYEE emp
-            ON inwell.EMPLOYEENUMBER = emp.ID
+            ON inwell.EMPLOYEENUMBER = emp.ID AND emp.ISEMPLOYEE = 1
             WHERE 
             (inwell.LOGINTIME >= to_date('{0}','yyyy-MM-dd HH24:mi:ss') AND inwell.LOGINTIME <= to_date('{1}','yyyy-MM-dd HH24:mi:ss')
             AND 
             inwell.OFFTIME >= to_date('{0}','yyyy-MM-dd HH24:mi:ss') AND inwell.OFFTIME <= to_date('{1}','yyyy-MM-dd HH24:mi:ss'))
             OR inwell.OFFTIME IS NULL
-            ORDER BY inwell.LOGINTIME";
+            ORDER BY inwell.LOGINTIME DESC";
     }
 
     public struct CompareHmSql
@@ -68,6 +68,6 @@
             OffTime is not null
             AND OnTime>='{0}' AND OnTime <= '{1}' 
             AND OffTime >= '{0}' AND OffTime <= '{1}'
-            order by OnTime";
+            order by OnTime DESC";
     }
 }

@@ -37,10 +37,10 @@ namespace HealthMonitor.Domain
 
 
         [ExporterHeader(DisplayName = "虹膜入井", Format = "yyyy-MM-DD HH:mm:ss", IsAutoFit = true)]
-        public DateTime HmInwellTime { get; set; }
+        public DateTime? HmInwellTime { get; set; }
 
         [ExporterHeader(DisplayName = "虹膜出井", Format = "yyyy-MM-DD HH:mm:ss", IsAutoFit = true)]
-        public DateTime HmOutwellTime { get; set; }
+        public DateTime? HmOutwellTime { get; set; }
 
         [ExporterHeader(DisplayName = "虹膜出井结果", IsAutoFit = true)]
         public string HmResult { get; set; }
