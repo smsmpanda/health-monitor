@@ -1,8 +1,8 @@
 ﻿using HealthMonitor.Domain;
+using HealthMonitor.Enums;
 using HealthMonitor.Extensions;
 using HealthMonitor.Repository;
 using HealthMonitor.Repository.imp;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +31,7 @@ namespace HealthMonitor.Services.imp
             try
             {
                 IDwRepository repository = new DwRepository(await DbFactory.GetDbConnection(_dbDwConfig));
-                return await repository.GetInOutwellListByCompareDateAsync(_inwellDateTime, _outwellDateTime);
+                return await repository.GetInOutwellListByCompareDateAsync(_inwellDateTime, _outwellDateTime, _filters.IsHongmo);
             }
             catch (Exception)
             {
@@ -56,7 +56,7 @@ namespace HealthMonitor.Services.imp
         {
             try
             {
-                _inwellDateTime = DateTimeExtension.MergeDateTime(_filters.InwellDate,_filters.InwellTime);
+                _inwellDateTime = DateTimeExtension.MergeDateTime(_filters.InwellDate, _filters.InwellTime);
                 _outwellDateTime = DateTimeExtension.MergeDateTime(_filters.OutwellDate, _filters.OutwellTime);
 
 
@@ -100,21 +100,29 @@ namespace HealthMonitor.Services.imp
                         {
                             dw.HmInwellTime = matchHongmoData.OnTime;
                             dw.HmOutwellTime = matchHongmoData.OffTime;
-                            dw.HmResult = "已出井";
+                            dw.HmResult = ResultType.OutWell;
                             result.Add(dw);
                         }
                     }
                     else if (dw.IsOutwell == 1)
                     {
-                        matchHongmoData = hmInOutwellDataList.FirstOrDefault(hm => hm.EmployeeID == dw.EmployeeID 
-                        && 
-                        (TimeIntervalAbs(dw.DwInwellTime,hm.OnTime)<=_filters.InwellInterval) && 
-                        (TimeIntervalAbs(dw.DwOutwellTime, hm.OffTime) <= _filters.OutwellInterval));
+                        var  _inwellIsMatch  = hmInOutwellDataList.Any(hm => hm.EmployeeID == dw.EmployeeID 
+                                    && TimeIntervalAbs(dw.DwInwellTime, hm.OnTime) <= _filters.InwellInterval);
 
-                        if (matchHongmoData == null)
-                        {
-                            dw.HmResult = "未匹配";
+                        if (!_inwellIsMatch) {
+                            dw.HmResult = ResultType.InwellFailure;
                             result.Add(dw);
+                            continue;
+                        }
+
+                        var _outwellIsMatch = hmInOutwellDataList.Any(hm => hm.EmployeeID == dw.EmployeeID 
+                                    && TimeIntervalAbs(dw.DwOutwellTime, hm.OffTime) <= _filters.OutwellInterval);
+
+                        if (!_outwellIsMatch)
+                        {
+                            dw.HmResult = ResultType.OutwellFailure;
+                            result.Add(dw);
+                            continue;
                         }
                     }
                 }
@@ -127,7 +135,42 @@ namespace HealthMonitor.Services.imp
             }
         }
 
-        private double TimeIntervalAbs(DateTime start,DateTime end) 
+        private bool AnalyseCompare(HongmoKaoqinModel hm, DwInOutwellModel dw)
+        {
+            bool _in = InwellTimeCompare(hm, dw);
+            if (!_in)
+            {
+                dw.HmResult = ResultType.InwellFailure;
+                return false;
+            }
+
+            bool _out = OutwellTimeCompare(hm,dw);
+            if (!_out) {
+                dw.HmResult = ResultType.OutwellFailure;
+                return false;
+            }
+
+            dw.HmResult = ResultType.Success;
+            return true;
+        }
+        private bool InwellTimeCompare(HongmoKaoqinModel hm, DwInOutwellModel dw)
+        {
+            if (TimeIntervalAbs(dw.DwInwellTime, hm.OnTime) <= _filters.InwellInterval)
+            {
+                return true;
+            }
+            return false;
+        }
+        private bool OutwellTimeCompare(HongmoKaoqinModel hm, DwInOutwellModel dw)
+        {
+            if (TimeIntervalAbs(dw.DwOutwellTime, hm.OffTime) <= _filters.OutwellInterval)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private double TimeIntervalAbs(DateTime start, DateTime end)
         {
             TimeSpan ts = start - end;
             return Math.Abs(ts.TotalMinutes);

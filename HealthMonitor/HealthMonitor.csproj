@@ -356,6 +356,7 @@
     <Compile Include="Domain\ViewModelBase.cs" />
     <Compile Include="Enums\AlarmType.cs" />
     <Compile Include="Enums\DbType.cs" />
+    <Compile Include="Enums\ResultType.cs" />
     <Compile Include="Events\UpdateModel.cs" />
     <Compile Include="Extensions\DateTimeExtension.cs" />
     <Compile Include="Extensions\DialogExtension.cs" />

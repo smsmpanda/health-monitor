@@ -1,17 +1,22 @@
 ﻿using Magicodes.ExporterAndImporter.Core;
 using Magicodes.ExporterAndImporter.Excel;
 using System;
-using System.ComponentModel;
 
 namespace HealthMonitor.Domain
 {
     [ExcelExporter(Name = "定位虹膜出入井比对结果", AutoCenter = true, TableStyle = OfficeOpenXml.Table.TableStyles.Custom)]
     public class DwInOutwellModel
     {
-        [ExporterHeader(DisplayName = "序号", IsAutoFit = true)]
+        [ExporterHeader(DisplayName = "#", IsAutoFit = true)]
         public int Id { get; set; }
 
-        [ExporterHeader(DisplayName = "职工标识", IsAutoFit = true)]
+        [ExporterHeader(DisplayName = "#", IsAutoFit = true)]
+        public string ManCode { get; set; }
+
+        [ExporterHeader(DisplayName = "出入井表-ID", IsAutoFit = true)]
+        public int InexitWellID { get; set; }
+
+        [ExporterHeader(DisplayName = "职工ID", IsAutoFit = true)]
         public int EmployeeID { get; set; }
 
         [ExporterHeader(DisplayName = "部门", IsAutoFit = true)]
@@ -32,7 +37,7 @@ namespace HealthMonitor.Domain
         [ExporterHeader(DisplayName = "定位出井", Format = "yyyy-MM-DD HH:mm:ss", IsAutoFit = true)]
         public DateTime DwOutwellTime { get; set; }
 
-        [ExporterHeader(DisplayName = "定位出井结果", IsAutoFit = true)]
+        [ExporterHeader(DisplayName = "定位出井（已出井：1，未出井：0）", IsAutoFit = true)]
         public int IsOutwell { get; set; }
 
 
@@ -42,7 +47,7 @@ namespace HealthMonitor.Domain
         [ExporterHeader(DisplayName = "虹膜出井", Format = "yyyy-MM-DD HH:mm:ss", IsAutoFit = true)]
         public DateTime? HmOutwellTime { get; set; }
 
-        [ExporterHeader(DisplayName = "虹膜出井结果", IsAutoFit = true)]
+        [ExporterHeader(DisplayName = "比对结果", IsAutoFit = true)]
         public string HmResult { get; set; }
     }
 }

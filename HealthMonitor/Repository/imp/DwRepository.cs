@@ -17,13 +17,19 @@ namespace HealthMonitor.Repository.imp
             DbConnection = dbConnection;
         }
 
-        public async Task<IEnumerable<DwInOutwellModel>> GetInOutwellListByCompareDateAsync(DateTime inwellDatetime, DateTime outwellDatetime)
+        public async Task<IEnumerable<DwInOutwellModel>> GetInOutwellListByCompareDateAsync(DateTime inwellDatetime, DateTime outwellDatetime, bool isHongMo)
         {
             try
             {
+                string hongMoWhere = "emp.CHECKIRIS != -1 ";
+                if (isHongMo)
+                {
+                    hongMoWhere = " emp.CHECKIRIS = 1 ";
+                }
+
                 using (IDbConnection conn = DbConnection)
                 {
-                    return await conn.QueryAsync<DwInOutwellModel>(string.Format(CompareDwSql.QueryInOutwell,inwellDatetime,outwellDatetime));
+                    return await conn.QueryAsync<DwInOutwellModel>(string.Format(CompareDwSql.QueryInOutwell, inwellDatetime, outwellDatetime, hongMoWhere));
                 }
             }
             catch (Exception)

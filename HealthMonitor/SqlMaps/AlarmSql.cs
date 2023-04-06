@@ -31,12 +31,14 @@
     public struct CompareDwSql
     {
         public const string QueryInOutwell = @"
-            SELECT 
+            SELECT             
                 emp.ID as EmployeeID,
                 emp.TAGNUMBER as TagMac,
                 emp.CNAME as EmployeeName,
                 emp.DEPARTNAME as DepartMentName,
                 emp.CLASSNAME as GroupClass,
+                emp.MANCODE as ManCode,
+                inwell.ID as InexitWellID,
                 inwell.LOGINTIME as DwInwellTime,
                 inwell.OFFTIME as DwOutwellTime,
                 CASE 
@@ -49,9 +51,8 @@
             INNER JOIN TB_EMP_EMPLOYEE emp
             ON inwell.EMPLOYEENUMBER = emp.ID AND emp.ISEMPLOYEE = 1
             WHERE 
-            (inwell.LOGINTIME >= to_date('{0}','yyyy-MM-dd HH24:mi:ss') AND inwell.LOGINTIME <= to_date('{1}','yyyy-MM-dd HH24:mi:ss')
-            AND 
-            inwell.OFFTIME >= to_date('{0}','yyyy-MM-dd HH24:mi:ss') AND inwell.OFFTIME <= to_date('{1}','yyyy-MM-dd HH24:mi:ss'))
+             {2} AND
+            inwell.LOGINTIME >= to_date('{0}','yyyy-MM-dd HH24:mi:ss') AND inwell.OFFTIME <= to_date('{1}','yyyy-MM-dd HH24:mi:ss')
             OR inwell.OFFTIME IS NULL
             ORDER BY inwell.LOGINTIME DESC";
     }
@@ -66,8 +67,7 @@
             FROM [kaoqin].[dbo].[kaoqin] 
             WHERE  
             OffTime is not null
-            AND OnTime>='{0}' AND OnTime <= '{1}' 
-            AND OffTime >= '{0}' AND OffTime <= '{1}'
+            AND OnTime>='{0}' AND OffTime <= '{1}'
             order by OnTime DESC";
     }
 }

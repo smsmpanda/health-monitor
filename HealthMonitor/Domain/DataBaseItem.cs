@@ -63,11 +63,11 @@
             set => SetProperty(ref _dbTestMessage, value);
         }
 
-        public DataBaseItem SettingDefault(string dbPort,string dbUser,string dbCatalog,string dbType)
+        public DataBaseItem SettingDefault(string dbPort, string dbUser, string dbCatalog, string dbType)
         {
-            this.DbPort= dbPort;
-            this.DbUser= dbUser;
-            this.DbCatalog= dbCatalog;
+            this.DbPort = dbPort;
+            this.DbUser = dbUser;
+            this.DbCatalog = dbCatalog;
             this.DbType = dbType;
             return this;
         }

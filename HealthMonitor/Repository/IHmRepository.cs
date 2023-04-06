@@ -1,5 +1,4 @@
-﻿using FluentFTP.Helpers;
-using HealthMonitor.Domain;
+﻿using HealthMonitor.Domain;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

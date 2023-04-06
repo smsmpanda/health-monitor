@@ -13,6 +13,6 @@ namespace HealthMonitor.Repository
         /// <param name="inwellDatetime">入井时间</param>
         /// <param name="outwellDatetime">出井时间</param>
         /// <returns></returns>
-        Task<IEnumerable<DwInOutwellModel>> GetInOutwellListByCompareDateAsync(DateTime inwellDatetime,DateTime outwellDatetime);
+        Task<IEnumerable<DwInOutwellModel>> GetInOutwellListByCompareDateAsync(DateTime inwellDatetime, DateTime outwellDatetime, bool isHongMo);
     }
 }

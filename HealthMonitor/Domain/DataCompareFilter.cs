@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 
 namespace HealthMonitor.Domain
 {
@@ -48,6 +49,13 @@ namespace HealthMonitor.Domain
             set => SetProperty(ref _outwellTime, value);
         }
 
+        private bool _isHongmo;
+        public bool IsHongmo
+        {
+            get => _isHongmo;
+            set => SetProperty(ref _isHongmo, value);
+        }
+
     }
 
     public class CompareDataFilter : ViewModelBase
@@ -66,6 +74,11 @@ namespace HealthMonitor.Domain
             set => SetProperty(ref _employeeName, value);
         }
 
-
+        private ObservableCollection<string> _departMents;
+        public ObservableCollection<string> DepartMents
+        {
+            get => _departMents;
+            set => SetProperty(ref _departMents, value);
+        }
     }
 }
