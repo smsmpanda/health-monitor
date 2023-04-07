@@ -433,7 +433,7 @@
                         Style="{DynamicResource DataGridStyle1}">
                         <DataGrid.Columns>
                             <DataGridTextColumn
-                                Width="65"
+                                MinWidth="50"
                                 Binding="{Binding Id}"
                                 CanUserResize="False"
                                 Header="#"
@@ -444,12 +444,12 @@
                                 Header="EmployeeID"
                                 IsReadOnly="True" />-->
                             <DataGridTextColumn
-                                Width="90"
-                                Binding="{Binding InExitWellID}"
+                                Width="100"
+                                Binding="{Binding InexitWellID}"
                                 Header="出入井ID"
                                 IsReadOnly="True" />
                             <DataGridTextColumn
-                                Width="*"
+                                Width="70"
                                 Binding="{Binding EmployeeName}"
                                 Header="姓名"
                                 IsReadOnly="True" />
@@ -534,35 +534,36 @@
                                 IsReadOnly="True" />
                             <DataGridTemplateColumn
                                 Width="*"
-                                MinWidth="120"
+                                MinWidth="150"
                                 Header="比对结果"
                                 IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Border
                                             Padding="5"
+                                            Width="110"
                                             HorizontalAlignment="Left"
                                             CornerRadius="2">
                                             <TextBlock>
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Setter Property="Padding" Value="5" />
-                                                        <Setter Property="Foreground" Value="#fff" />
+                                                        <Setter Property="Foreground" Value="#FFFFFF" />
                                                         <Setter Property="Text" Value="{Binding HmResult}" />
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultType.OutWell}">
+                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultContentItem.OutWell}">
                                                                 <Setter Property="Background" Value="#FF409EFF" />
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultType.Success}">
+                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultContentItem.Success}">
                                                                 <Setter Property="Background" Value="#FF67C23A" />
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultType.InwellFailure}">
+                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultContentItem.InwellFailure}">
                                                                 <Setter Property="Background" Value="#FFE6A23C" />
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultType.OutwellFailure}">
+                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultContentItem.OutwellFailure}">
                                                                 <Setter Property="Background" Value="#FFF56C6C" />
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultType.Failure}">
+                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultContentItem.Failure}">
                                                                 <Setter Property="Background" Value="#FF909399" />
                                                             </DataTrigger>
                                                         </Style.Triggers>

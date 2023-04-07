@@ -160,7 +160,7 @@ namespace HealthMonitor.Domain
                             CompareResult = await service.StartCompareAsync();
 
                             //部门
-                            DataFilters.DepartMents = new ObservableCollection<string>(CompareResult.Select(x => x.DepartMentName));
+                            DataFilters.DepartMents = new ObservableCollection<string>(CompareResult.Select(x => x.DepartMentName).Distinct().OrderBy(x=>x));
 
                             InOutWellList = new ObservableCollection<DwInOutwellModel>(CompareResult);
 
@@ -257,16 +257,26 @@ namespace HealthMonitor.Domain
                     this.InOutWellList = new ObservableCollection<DwInOutwellModel>(
                     InOutWellList.Where(dw => dw.TagMac.Contains(DataFilters.Tagmac)));
                 }
-                if (!string.IsNullOrWhiteSpace(DataFilters.DepartMent)) 
+                if (!string.IsNullOrWhiteSpace(DataFilters.DepartMent))
                 {
                     this.InOutWellList = new ObservableCollection<DwInOutwellModel>(
                    InOutWellList.Where(dw => dw.DepartMentName.Equals(DataFilters.DepartMent)));
                 }
-                UpdateLoading(false);
+
+                if (DataFilters.ResultType != null)
+                {
+                    this.InOutWellList = new ObservableCollection<DwInOutwellModel>(
+                   InOutWellList.Where(dw => dw.HmResult.Equals(DataFilters.ResultType?.Description)));
+                }
+
             }
             catch (Exception)
             {
-                throw;
+                //throw;
+            }
+            finally 
+            {
+                UpdateLoading(false);
             }
         }
         public bool CanExecuteExistsData(object m)

@@ -114,7 +114,10 @@ namespace HealthMonitor.Services.imp
                     #endregion
 
                     #region 定位已出井
-                    bool _allMatch = _hongmoListByEmployeeID.Any(hm => DateTimeWithInRangeCompare(dw.DwInwellTime, hm.OnTime, _filters.InwellInterval) && DateTimeWithInRangeCompare(dw.DwOutwellTime.Value, hm.OffTime, _filters.OutwellInterval));
+                    bool _allMatch = _hongmoListByEmployeeID.Any(
+                        hm => DateTimeWithInRangeCompare(dw.DwInwellTime, hm.OnTime, _filters.InwellInterval) &&
+                        DateTimeWithInRangeCompare(dw.DwOutwellTime.Value, hm.OffTime, _filters.OutwellInterval));
+                    
                     if (_allMatch)
                     {
                         continue;
@@ -128,10 +131,14 @@ namespace HealthMonitor.Services.imp
                     bool _outwellMatch = _hongmoListByEmployeeID
                         .Any(hm => DateTimeWithInRangeCompare(dw.DwOutwellTime.Value, hm.OffTime, _filters.OutwellInterval));
 
+                    
                     //出入井全部未匹配
                     if (!_inwellMatch && !_outwellMatch)
                     {
                         matchDataItem = _hongmoListByEmployeeID.OrderBy(hm => TimeIntervalAbs(hm.OnTime, dw.DwInwellTime)).FirstOrDefault();
+                        if (matchDataItem != null) {
+                            matchDataItem = _hongmoListByEmployeeID.OrderBy(hm => TimeIntervalAbs(hm.OffTime, dw.DwOutwellTime.Value)).FirstOrDefault();
+                        }
                         dw.HmResult = ResultType.Failure.Description;
                     }
                     //入井未匹配成功
@@ -143,7 +150,7 @@ namespace HealthMonitor.Services.imp
                     //升井未匹配成功
                     else if (!_outwellMatch)
                     {
-                        matchDataItem = hmInOutwellDataList.OrderBy(hm => TimeIntervalAbs(hm.OffTime, dw.DwOutwellTime.Value)).FirstOrDefault();
+                        matchDataItem = _hongmoListByEmployeeID.OrderBy(hm => TimeIntervalAbs(hm.OffTime, dw.DwOutwellTime.Value)).FirstOrDefault();
                         dw.HmResult = ResultType.OutwellFailure.Description;
                     }
 
@@ -169,7 +176,7 @@ namespace HealthMonitor.Services.imp
 
         private bool DateTimeWithInRangeCompare(DateTime rangeTime, DateTime compareTime, float interval)
         {
-            return compareTime >= rangeTime.AddHours(-interval) && compareTime <= rangeTime.AddMinutes(interval);
+           return  compareTime >= rangeTime.AddMinutes(-interval) && compareTime <= rangeTime.AddMinutes(interval);
         }
     }
 }

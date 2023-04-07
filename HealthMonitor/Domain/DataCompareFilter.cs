@@ -105,8 +105,8 @@ namespace HealthMonitor.Domain
             set => SetProperty(ref _resultTypes, value);
         }
 
-        private string _resultType;
-        public string ResultType
+        private ResultItem? _resultType;
+        public ResultItem? ResultType
         {
             get => _resultType;
             set => SetProperty(ref _resultType, value);

@@ -14,7 +14,7 @@ namespace HealthMonitor.Domain
         public string ManCode { get; set; }
 
         [ExporterHeader(DisplayName = "出入井表-ID", IsAutoFit = true)]
-        public int InexitWellID { get; set; }
+        public long InexitWellID { get; set; }
 
         [ExporterHeader(DisplayName = "职工ID", IsAutoFit = true)]
         public int EmployeeID { get; set; }
