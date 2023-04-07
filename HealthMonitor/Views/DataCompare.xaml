@@ -326,62 +326,79 @@
                         </CheckBox>
                     </Grid>
                 </materialDesign:DrawerHost.BottomDrawerContent>
-                <materialDesign:DrawerHost.LeftDrawerContent>
-                    <Grid MinWidth="300" Margin="10,10,10,10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="55" />
-                            <RowDefinition Height="50" />
-                        </Grid.RowDefinitions>
-                        <ComboBox
-                            materialDesign:HintAssist.Hint="部门"
-                            materialDesign:HintAssist.IsFloating="True"
-                            materialDesign:TextFieldAssist.HasClearButton="True"
-                            ItemsSource="{Binding DataFilters.DepartMents}" />
-
-                        <TextBox
-                            Grid.Row="1"
-                            materialDesign:HintAssist.Hint="姓名"
-                            materialDesign:HintAssist.IsFloating="True"
-                            materialDesign:TextFieldAssist.HasClearButton="True"
-                            FontSize="15"
-                            Text="{Binding DataFilters.EmployeeName, UpdateSourceTrigger=PropertyChanged}" />
-
-                        <TextBox
-                            Grid.Row="2"
-                            materialDesign:HintAssist.Hint="标识卡号"
-                            materialDesign:HintAssist.IsFloating="True"
-                            materialDesign:TextFieldAssist.HasClearButton="True"
-                            FontSize="15"
-                            Text="{Binding DataFilters.Tagmac, UpdateSourceTrigger=PropertyChanged}" />
-
-                        <Button
-                            Grid.Row="3"
-                            Command="{Binding SearchDataCommand}"
-                            Style="{StaticResource MaterialDesignFlatDarkBgButton}">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon VerticalAlignment="Center" Kind="Search" />
-                                <TextBlock Text="搜索" />
-                            </StackPanel>
-                        </Button>
-                    </Grid>
-                </materialDesign:DrawerHost.LeftDrawerContent>
                 <Grid Margin="5,5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
                         <RowDefinition />
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
-                    <DockPanel Height="40" Background="#fff">
-                        <StackPanel VerticalAlignment="Center" DockPanel.Dock="Right">
-                            <Button Margin="5,0,5,0" Command="{Binding ExpandLeftDrawCommand}">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon VerticalAlignment="Center" Kind="FilterMultiple" />
-                                    <TextBlock Margin="0,0" VerticalAlignment="Center">筛选</TextBlock>
-                                </StackPanel>
-                            </Button>
+                    <DockPanel Height="50" Background="#fff">
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="180" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="180" />
+                                    <ColumnDefinition Width="45" />
+                                </Grid.ColumnDefinitions>
+                                <ComboBox
+                                    Margin="0,0,10,0"
+                                    materialDesign:HintAssist.Hint="部门"
+                                    materialDesign:HintAssist.IsFloating="True"
+                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                    ItemsSource="{Binding DataFilters.DepartMents}"
+                                    SelectedItem="{Binding DataFilters.DepartMent}" />
+
+                                <TextBox
+                                    Grid.Column="1"
+                                    Margin="0,0,10,6"
+                                    materialDesign:HintAssist.Hint="姓名"
+                                    materialDesign:HintAssist.IsFloating="True"
+                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                    FontSize="15"
+                                    Text="{Binding DataFilters.EmployeeName, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <TextBox
+                                    Grid.Column="2"
+                                    Margin="0,0,10,6"
+                                    materialDesign:HintAssist.Hint="标识卡号"
+                                    materialDesign:HintAssist.IsFloating="True"
+                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                    FontSize="15"
+                                    Text="{Binding DataFilters.Tagmac, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <ComboBox
+                                    Grid.Column="3"
+                                    Margin="0,0,10,0"
+                                    materialDesign:HintAssist.Hint="结果"
+                                    materialDesign:HintAssist.IsFloating="True"
+                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                    ItemsSource="{Binding DataFilters.ResultTypes}"
+                                    SelectedItem="{Binding DataFilters.ResultType}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Rectangle
+                                                    Width="16"
+                                                    Height="16"
+                                                    Margin="0,2,5,2"
+                                                    Fill="{Binding Color}" />
+                                                <TextBlock Text="{Binding Description}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+
+                                <Button
+                                    Grid.Column="4"
+                                    Command="{Binding SearchDataCommand}"
+                                    Style="{StaticResource MaterialDesignFlatDarkBgButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon VerticalAlignment="Center" Kind="Search" />
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
                         </StackPanel>
                         <StackPanel
                             HorizontalAlignment="Left"
@@ -400,7 +417,6 @@
                                 </StackPanel>
                             </Button>
                         </StackPanel>
-
                     </DockPanel>
 
                     <DataGrid
@@ -535,19 +551,19 @@
                                                         <Setter Property="Text" Value="{Binding HmResult}" />
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultType.OutWell}">
-                                                                <Setter Property="Background" Value="Green" />
+                                                                <Setter Property="Background" Value="#FF409EFF" />
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultType.Success}">
-                                                                <Setter Property="Background" Value="Green" />
+                                                                <Setter Property="Background" Value="#FF67C23A" />
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultType.InwellSuccess}">
-                                                                <Setter Property="Background" Value="red" />
+                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultType.InwellFailure}">
+                                                                <Setter Property="Background" Value="#FFE6A23C" />
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultType.OutwellSuccess}">
-                                                                <Setter Property="Background" Value="Green" />
+                                                            <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultType.OutwellFailure}">
+                                                                <Setter Property="Background" Value="#FFF56C6C" />
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding HmResult}" Value="{x:Static htme:ResultType.Failure}">
-                                                                <Setter Property="Background" Value="Green" />
+                                                                <Setter Property="Background" Value="#FF909399" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>

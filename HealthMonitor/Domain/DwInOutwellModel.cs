@@ -35,7 +35,7 @@ namespace HealthMonitor.Domain
         public DateTime DwInwellTime { get; set; }
 
         [ExporterHeader(DisplayName = "定位出井", Format = "yyyy-MM-DD HH:mm:ss", IsAutoFit = true)]
-        public DateTime DwOutwellTime { get; set; }
+        public DateTime? DwOutwellTime { get; set; }
 
         [ExporterHeader(DisplayName = "定位出井（已出井：1，未出井：0）", IsAutoFit = true)]
         public int IsOutwell { get; set; }

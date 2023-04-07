@@ -54,7 +54,7 @@
              {2} AND
             inwell.LOGINTIME >= to_date('{0}','yyyy-MM-dd HH24:mi:ss') AND inwell.OFFTIME <= to_date('{1}','yyyy-MM-dd HH24:mi:ss')
             OR inwell.OFFTIME IS NULL
-            ORDER BY inwell.LOGINTIME DESC";
+            ORDER BY emp.ID,inwell.LOGINTIME";
     }
 
     public struct CompareHmSql
@@ -68,6 +68,6 @@
             WHERE  
             OffTime is not null
             AND OnTime>='{0}' AND OffTime <= '{1}'
-            order by OnTime DESC";
+            order by EmployeeID, OnTime";
     }
 }

@@ -3,6 +3,7 @@ using HealthMonitor.Enums;
 using HealthMonitor.Extensions;
 using HealthMonitor.Repository;
 using HealthMonitor.Repository.imp;
+using Magicodes.ExporterAndImporter.Core.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,45 +87,70 @@ namespace HealthMonitor.Services.imp
                     throw new ArgumentNullException(nameof(hmInOutwellDataList));
                 }
 
-                //比对
                 List<DwInOutwellModel> result = new List<DwInOutwellModel>();
+                HongmoKaoqinModel matchDataItem;
+
                 foreach (var dw in dwInOutwellDataList)
                 {
-                    HongmoKaoqinModel matchHongmoData = null;
-                    //定位未出井
+                    matchDataItem = null;
+
+                    //过滤出当前职工的虹膜记录
+                    IEnumerable<HongmoKaoqinModel> _hongmoListByEmployeeID = hmInOutwellDataList.Where(hm => hm.EmployeeID == dw.EmployeeID);
+
+                    #region 定位未出井
                     if (dw.IsOutwell == 0)
                     {
-                        matchHongmoData = hmInOutwellDataList.FirstOrDefault(hm => hm.EmployeeID == dw.EmployeeID && TimeIntervalAbs(dw.DwInwellTime, hm.OnTime) <= _filters.InwellInterval);
+                        matchDataItem = _hongmoListByEmployeeID.FirstOrDefault(hm => TimeIntervalAbs(dw.DwInwellTime, hm.OnTime) <= _filters.InwellInterval);
 
-                        if (matchHongmoData != null)
+                        if (matchDataItem != null)
                         {
-                            dw.HmInwellTime = matchHongmoData.OnTime;
-                            dw.HmOutwellTime = matchHongmoData.OffTime;
-                            dw.HmResult = ResultType.OutWell;
+                            dw.HmInwellTime = matchDataItem.OnTime;
+                            dw.HmOutwellTime = matchDataItem.OffTime;
+                            dw.HmResult = ResultType.OutWell.Description;
                             result.Add(dw);
                         }
+                        continue;
                     }
-                    else if (dw.IsOutwell == 1)
+                    #endregion
+
+                    #region 定位已出井
+                    bool _allMatch = _hongmoListByEmployeeID.Any(hm => DateTimeWithInRangeCompare(dw.DwInwellTime, hm.OnTime, _filters.InwellInterval) && DateTimeWithInRangeCompare(dw.DwOutwellTime.Value, hm.OffTime, _filters.OutwellInterval));
+                    if (_allMatch)
                     {
-                        var  _inwellIsMatch  = hmInOutwellDataList.Any(hm => hm.EmployeeID == dw.EmployeeID 
-                                    && TimeIntervalAbs(dw.DwInwellTime, hm.OnTime) <= _filters.InwellInterval);
-
-                        if (!_inwellIsMatch) {
-                            dw.HmResult = ResultType.InwellFailure;
-                            result.Add(dw);
-                            continue;
-                        }
-
-                        var _outwellIsMatch = hmInOutwellDataList.Any(hm => hm.EmployeeID == dw.EmployeeID 
-                                    && TimeIntervalAbs(dw.DwOutwellTime, hm.OffTime) <= _filters.OutwellInterval);
-
-                        if (!_outwellIsMatch)
-                        {
-                            dw.HmResult = ResultType.OutwellFailure;
-                            result.Add(dw);
-                            continue;
-                        }
+                        continue;
                     }
+
+                    //入井
+                    bool _inwellMatch = _hongmoListByEmployeeID
+                        .Any(hm => DateTimeWithInRangeCompare(dw.DwInwellTime, hm.OnTime, _filters.InwellInterval));
+
+                    //出井
+                    bool _outwellMatch = _hongmoListByEmployeeID
+                        .Any(hm => DateTimeWithInRangeCompare(dw.DwOutwellTime.Value, hm.OffTime, _filters.OutwellInterval));
+
+                    //出入井全部未匹配
+                    if (!_inwellMatch && !_outwellMatch)
+                    {
+                        matchDataItem = _hongmoListByEmployeeID.OrderBy(hm => TimeIntervalAbs(hm.OnTime, dw.DwInwellTime)).FirstOrDefault();
+                        dw.HmResult = ResultType.Failure.Description;
+                    }
+                    //入井未匹配成功
+                    else if (!_inwellMatch)
+                    {
+                        matchDataItem = _hongmoListByEmployeeID.OrderBy(hm => TimeIntervalAbs(hm.OnTime, dw.DwInwellTime)).FirstOrDefault();
+                        dw.HmResult = ResultType.InwellFailure.Description;
+                    }
+                    //升井未匹配成功
+                    else if (!_outwellMatch)
+                    {
+                        matchDataItem = hmInOutwellDataList.OrderBy(hm => TimeIntervalAbs(hm.OffTime, dw.DwOutwellTime.Value)).FirstOrDefault();
+                        dw.HmResult = ResultType.OutwellFailure.Description;
+                    }
+
+                    dw.HmInwellTime = matchDataItem?.OnTime;
+                    dw.HmOutwellTime = matchDataItem?.OffTime;
+                    result.Add(dw);
+                    #endregion
                 }
 
                 return await Task.FromResult(result);
@@ -135,45 +161,15 @@ namespace HealthMonitor.Services.imp
             }
         }
 
-        private bool AnalyseCompare(HongmoKaoqinModel hm, DwInOutwellModel dw)
-        {
-            bool _in = InwellTimeCompare(hm, dw);
-            if (!_in)
-            {
-                dw.HmResult = ResultType.InwellFailure;
-                return false;
-            }
-
-            bool _out = OutwellTimeCompare(hm,dw);
-            if (!_out) {
-                dw.HmResult = ResultType.OutwellFailure;
-                return false;
-            }
-
-            dw.HmResult = ResultType.Success;
-            return true;
-        }
-        private bool InwellTimeCompare(HongmoKaoqinModel hm, DwInOutwellModel dw)
-        {
-            if (TimeIntervalAbs(dw.DwInwellTime, hm.OnTime) <= _filters.InwellInterval)
-            {
-                return true;
-            }
-            return false;
-        }
-        private bool OutwellTimeCompare(HongmoKaoqinModel hm, DwInOutwellModel dw)
-        {
-            if (TimeIntervalAbs(dw.DwOutwellTime, hm.OffTime) <= _filters.OutwellInterval)
-            {
-                return true;
-            }
-            return false;
-        }
-
         private double TimeIntervalAbs(DateTime start, DateTime end)
         {
             TimeSpan ts = start - end;
             return Math.Abs(ts.TotalMinutes);
+        }
+
+        private bool DateTimeWithInRangeCompare(DateTime rangeTime, DateTime compareTime, float interval)
+        {
+            return compareTime >= rangeTime.AddHours(-interval) && compareTime <= rangeTime.AddMinutes(interval);
         }
     }
 }

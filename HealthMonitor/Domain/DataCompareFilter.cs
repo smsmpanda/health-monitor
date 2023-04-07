@@ -1,5 +1,7 @@
-﻿using System;
+﻿using HealthMonitor.Enums;
+using System;
 using System.Collections.ObjectModel;
+using System.Windows.Documents;
 
 namespace HealthMonitor.Domain
 {
@@ -74,11 +76,40 @@ namespace HealthMonitor.Domain
             set => SetProperty(ref _employeeName, value);
         }
 
-        private ObservableCollection<string> _departMents;
+        private ObservableCollection<string> _departMents = new ObservableCollection<string>();
         public ObservableCollection<string> DepartMents
         {
             get => _departMents;
             set => SetProperty(ref _departMents, value);
+        }
+
+        private string _departMent;
+        public string DepartMent
+        {
+            get => _departMent;
+            set => SetProperty(ref _departMent, value);
+        }
+
+
+        private ObservableCollection<ResultItem> _resultTypes= new ObservableCollection<ResultItem> 
+        {
+            Enums.ResultType.Success,
+            Enums.ResultType.Failure,
+            Enums.ResultType.OutWell,
+            Enums.ResultType.OutwellFailure,
+            Enums.ResultType.InwellFailure,
+        };
+        public ObservableCollection<ResultItem> ResultTypes
+        {
+            get => _resultTypes;
+            set => SetProperty(ref _resultTypes, value);
+        }
+
+        private string _resultType;
+        public string ResultType
+        {
+            get => _resultType;
+            set => SetProperty(ref _resultType, value);
         }
     }
 }
