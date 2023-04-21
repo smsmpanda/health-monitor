@@ -131,9 +131,34 @@ namespace HealthMonitor.Services.imp
                     bool _outwellMatch = _hongmoListByEmployeeID
                         .Any(hm => DateTimeWithInRangeCompare(dw.DwOutwellTime.Value, hm.OffTime, _filters.OutwellInterval));
 
-                    
+                    //找到了分别满足出入井时间间隔的虹膜数据，取距离当前定位出入井时间最接近的虹膜数据
+                    if (_inwellMatch && _outwellMatch) {
+                        matchDataItem = _hongmoListByEmployeeID.OrderBy(hm => TimeIntervalAbs(hm.OnTime, dw.DwInwellTime)).FirstOrDefault();
+                        if (matchDataItem == null)
+                        {
+                            matchDataItem = _hongmoListByEmployeeID.OrderBy(hm => TimeIntervalAbs(hm.OffTime, dw.DwOutwellTime.Value)).FirstOrDefault();
+                        }
+                        if (matchDataItem != null)
+                        {
+                            if (!DateTimeWithInRangeCompare(dw.DwInwellTime, matchDataItem.OnTime, _filters.InwellInterval))
+                            {
+                                dw.HmResult = ResultType.InwellFailure.Description;
+                            }
+                            else if (!DateTimeWithInRangeCompare(dw.DwOutwellTime.Value, matchDataItem.OffTime, _filters.OutwellInterval))
+                            {
+                                dw.HmResult = ResultType.OutwellFailure.Description;
+                            }
+                            else
+                            {
+                                dw.HmResult = ResultType.Failure.Description;
+                            }
+                        }
+                        else {
+                            dw.HmResult = ResultType.Failure.Description;
+                        }
+                    }
                     //出入井全部未匹配
-                    if (!_inwellMatch && !_outwellMatch)
+                    else if (!_inwellMatch && !_outwellMatch)
                     {
                         matchDataItem = _hongmoListByEmployeeID.OrderBy(hm => TimeIntervalAbs(hm.OnTime, dw.DwInwellTime)).FirstOrDefault();
                         if (matchDataItem != null) {
