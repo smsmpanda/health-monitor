@@ -4,25 +4,23 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:ext="clr-namespace:HealthMonitor.Extensions"
+    xmlns:local="clr-namespace:HealthMonitor"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
-    Title="健康监测"
     Width="1366"
     Height="768"
-    Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="微软雅黑"
     ResizeMode="NoResize"
-    TextElement.FontSize="13"
-    TextElement.FontWeight="Regular"
-    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-    TextOptions.TextFormattingMode="Ideal"
-    TextOptions.TextRenderingMode="Auto"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+            CaptionHeight="0"
+            CornerRadius="0"
+            GlassFrameThickness="0" />
+    </WindowChrome.WindowChrome>
     <Border BorderBrush="{StaticResource AttentionToActionBrush}" BorderThickness="0,1,1,1">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -83,8 +81,9 @@
                 </Grid.RowDefinitions>
 
                 <materialDesign:ColorZone
-                    Height="50"
+                    Height="40"
                     VerticalAlignment="Center"
+                    Background="#FFF5F5F5"
                     Mode="Custom"
                     MouseDown="Border_MouseDown"
                     MouseLeftButtonDown="Border_LeftButtonDown">
@@ -123,15 +122,14 @@
                 </materialDesign:ColorZone>
                 <Border
                     Grid.Row="1"
-                    Background="#FFF9F9F9"
+                    Background="#FFF5F5F5"
                     BorderBrush="#FFE5E5E5"
-                    BorderThickness="2,1,0,0"
-                    CornerRadius="5 0 0 0">
+                    BorderThickness="2,1,0,0">
                     <materialDesign:DialogHost
                         Name="GlobalDialog"
                         DialogTheme="Inherit"
                         Identifier="RootDialog1">
-                        <ContentControl prism:RegionManager.RegionName="{x:Static ext:PrismManager.MainViewRegionName}" DockPanel.Dock="Bottom" />
+                        <ContentControl prism:RegionManager.RegionName="{x:Static local:PrismManager.MainViewRegionName}" DockPanel.Dock="Bottom" />
                     </materialDesign:DialogHost>
                 </Border>
             </Grid>

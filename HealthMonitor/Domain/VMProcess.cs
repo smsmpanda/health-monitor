@@ -54,6 +54,29 @@ namespace HealthMonitor.ViewModel
             }
         }
 
+        /// <summary>
+        /// CPU占用率
+        /// </summary>
+        private decimal _cpuUse;
+
+        public decimal CpuUse
+        {
+            get { return _cpuUse; }
+            set { _cpuUse = value; }
+        }
+
+        /// <summary>
+        /// 内存使用率
+        /// </summary>
+        private decimal _memoryUse;
+
+        public decimal MemoryUse
+        {
+            get { return _memoryUse; }
+            set { _memoryUse = value; }
+        }
+
+
 
         /// <summary>
         /// 开始监测进程状态

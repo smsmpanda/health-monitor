@@ -44,21 +44,18 @@ namespace HealthMonitor
                 this.DragMove();
             }
         }
-        bool IsMaximized = false;
+
         private void Border_LeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
             {
-                if (IsMaximized)
+                if (this.WindowState == WindowState.Maximized)
                 {
                     WindowState = WindowState.Normal;
-                    IsMaximized = false;
                 }
                 else
                 {
-                    this.MaxHeight = SystemParameters.WorkArea.Height;
                     WindowState = WindowState.Maximized;
-                    IsMaximized = true;
                 }
             }
         }

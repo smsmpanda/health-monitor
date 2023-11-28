@@ -1,4 +1,4 @@
-﻿namespace HealthMonitor.Extensions
+﻿namespace HealthMonitor
 {
     public class PrismManager
     {
