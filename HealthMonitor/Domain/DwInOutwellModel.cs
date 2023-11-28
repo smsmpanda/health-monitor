@@ -10,7 +10,7 @@ namespace HealthMonitor.Domain
         [ExporterHeader(DisplayName = "#", IsAutoFit = true)]
         public int Id { get; set; }
 
-        [ExporterHeader(DisplayName = "#", IsAutoFit = true)]
+        [ExporterHeader(DisplayName = "工号", IsAutoFit = true)]
         public string ManCode { get; set; }
 
         [ExporterHeader(DisplayName = "出入井表-ID", IsAutoFit = true)]
