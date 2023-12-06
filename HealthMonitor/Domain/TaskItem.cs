@@ -31,7 +31,7 @@ namespace HealthMonitor.Domain
                     {
                         this.TaskTokenSource = new CancellationTokenSource();
                     }
-                    this.TaskExecute.HandlerAsync(this.TaskTokenSource.Token);
+                    this.TaskExecute.ExecutorStartPolling(this.TaskTokenSource.Token);
                 }
                 else
                 {
@@ -48,6 +48,6 @@ namespace HealthMonitor.Domain
         /// <summary>
         /// 任务执行器
         /// </summary>
-        public ITaskPanelExecuteService TaskExecute { get; set; }
+        public IPollingTaskService TaskExecute { get; set; }
     }
 }

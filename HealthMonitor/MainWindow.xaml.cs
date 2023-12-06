@@ -1,4 +1,5 @@
 ﻿using HealthMonitor.UserControls;
+using HealthMonitor.Utility;
 using Prism.Regions;
 using System;
 using System.Windows;
@@ -18,6 +19,8 @@ namespace HealthMonitor
         public MainWindow(IRegionManager regionManager)
         {
             InitializeComponent();
+            WindowsFullScreenHelper.SetWindowFullScrreng(this);
+
             ApplicationTopBtnEventBind();
             ApplicationSystemTrapMount();
 

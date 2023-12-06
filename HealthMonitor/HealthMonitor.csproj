@@ -175,6 +175,9 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.5.2.7\lib\net46\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
       <HintPath>..\packages\Oracle.ManagedDataAccess.19.11.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
@@ -234,6 +237,7 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Linq.Dynamic.Core, Version=1.2.6.0, Culture=neutral, PublicKeyToken=0f07ec44de6ac832, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Linq.Dynamic.Core.1.2.6\lib\net46\System.Linq.Dynamic.Core.dll</HintPath>
     </Reference>
@@ -373,15 +377,22 @@
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Model\Common\DbConfig.cs" />
     <Compile Include="Repository\SCDbContext.cs" />
+    <Compile Include="Services\PollingService\DefultPollingTaskService.cs" />
     <Compile Include="Services\IAlarmMonitService.cs" />
+    <Compile Include="Services\imp\DefaultAlarmMonitorService.cs" />
+    <Compile Include="Services\imp\DefaultUniqueComparisonAlerts.cs" />
+    <Compile Include="Services\imp\SuncunAlarmMonitorService.cs" />
+    <Compile Include="Services\imp\ZhaoGuanAlarmMonitorService.cs" />
     <Compile Include="Utility\DbConnectionTemplate.cs" />
     <Compile Include="Utility\DbFactory.cs" />
     <Compile Include="Services\IInOutwellDataCompareService.cs" />
     <Compile Include="Services\imp\InOutwellDataCompareService.cs" />
-    <Compile Include="Services\ITaskPanelExecuteService.cs" />
+    <Compile Include="Services\PollingService\IPollingTaskService.cs" />
     <Compile Include="Services\imp\SuncunUniqueComparisonAlerts.cs" />
     <Compile Include="Services\imp\ZhaoguanUniqueComparisonAlerts.cs" />
     <Compile Include="SqlMaps\AlarmSql.cs" />
+    <Compile Include="Utility\Logger.cs" />
+    <Compile Include="Utility\WindowsFullScreenHelper.cs" />
     <Compile Include="Views\DataCompare.xaml.cs">
       <DependentUpon>DataCompare.xaml</DependentUpon>
     </Compile>
@@ -473,6 +484,9 @@
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="crash_reporter.cfg" />
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

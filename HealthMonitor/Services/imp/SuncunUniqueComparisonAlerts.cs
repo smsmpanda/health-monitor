@@ -18,27 +18,9 @@ namespace HealthMonitor.Services.imp
     {
         private static ulong ROLLID = ulong.MinValue;
 
-        public override async Task HandlerAsync(CancellationToken cancellationToken = default)
+        public override async Task ExecuteHandleAsync(CancellationToken cancellationToken = default)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                try
-                {
-                    await ExecuteAsync();
-                }
-                catch (System.Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                }
-                finally 
-                {
-                    await Task.Delay(5000);
-                }
-            }
-        }
-
-        private async Task ExecuteAsync()
-        {
+            
             ulong rollID = await RYDWDbContext.GetMaxIDFromInexitWellData();
             
             //1.1.监测数据无改变

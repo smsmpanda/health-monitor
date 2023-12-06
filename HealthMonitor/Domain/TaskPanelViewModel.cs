@@ -12,13 +12,23 @@ namespace HealthMonitor.Domain
             {
                 new TaskItem
                 {
-                    TaskName = "孙村唯一性比对异常报警",
+                    TaskName = "孙村-唯一性比对异常报警",
                     TaskExecute = new SuncunUniqueComparisonAlerts()
                 },
                 new TaskItem
                 {
-                    TaskName = "赵官唯一性比对异常报警",
+                    TaskName = "赵官-唯一性比对异常报警",
                     TaskExecute = new ZhaoguanUniqueComparisonAlerts()
+                },
+                new TaskItem
+                {
+                    TaskName = "赵官-唯一性比对异常报警",
+                    TaskExecute = new ZhaoGuanAlarmMonitorService()
+                },
+                new TaskItem
+                {
+                    TaskName = "孙村-唯一性比对异常报警",
+                    TaskExecute = new SuncunAlarmMonitorService()
                 }
             };
         }

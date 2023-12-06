@@ -151,7 +151,7 @@ namespace HealthMonitor.SqlMaps
         /// <summary>
         /// 检索所有的唯一性比对失败报警记录(重新去比对)
         /// </summary>
-        public const string GetUniqueAlarmData = @"select ID,ALARMMANID,ALARMMANNAE,STARTDATE from TB_EMP_REALTIME_ALARM WHERE ALARMTYPE = '{0}' ";
+        public const string GetUniqueAlarmData = @"select ID,ALARMMANID,ALARMMANNAME,STARTDATE from TB_EMP_REALTIME_ALARM WHERE ALARMTYPE = '{0}' ";
 
 
         /// <summary>

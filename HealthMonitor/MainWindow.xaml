@@ -10,8 +10,6 @@
     xmlns:prism="http://prismlibrary.com/"
     Width="1366"
     Height="768"
-    MaxWidth="{StaticResource {x:Static SystemParameters.MaximizedPrimaryScreenWidthKey}}"
-    MaxHeight="{StaticResource {x:Static SystemParameters.MaximizedPrimaryScreenHeightKey}}"
     Style="{DynamicResource WindowGenerateStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
