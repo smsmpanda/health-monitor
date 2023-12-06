@@ -26,16 +26,17 @@ namespace HealthMonitor
             CefRuntime.SubscribeAnyCpuAssemblyResolver();
         }
 
-        [DllImport("user32.dll", EntryPoint = "SetForegroundWindow", SetLastError = true)]
-        public static extern void SetForegroundWindow(IntPtr hwnd);
-
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<MainWindow, MainViewModel>();
             containerRegistry.RegisterForNavigation<Home, HomeViewModel>();
             containerRegistry.RegisterForNavigation<DataCompare, DataCompareViewModel>();
             containerRegistry.RegisterForNavigation<Monitors, MonitorViewModel>();
+            containerRegistry.RegisterForNavigation<TaskPanel, TaskPanelViewModel>();
         }
+
+        [DllImport("user32.dll", EntryPoint = "SetForegroundWindow", SetLastError = true)]
+        public static extern void SetForegroundWindow(IntPtr hwnd);
 
         protected override Window CreateShell()
         {

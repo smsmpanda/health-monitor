@@ -1,7 +1,9 @@
 ﻿using HealthMonitor.Enums;
 using HealthMonitor.Extensions;
+using HealthMonitor.Model.Common;
 using HealthMonitor.Services;
 using HealthMonitor.Services.imp;
+using HealthMonitor.Utility;
 using Magicodes.ExporterAndImporter.Excel;
 using Prism.Ioc;
 using System;
@@ -160,7 +162,7 @@ namespace HealthMonitor.Domain
                             CompareResult = await service.StartCompareAsync();
 
                             //部门
-                            DataFilters.DepartMents = new ObservableCollection<string>(CompareResult.Select(x => x.DepartMentName).Distinct().OrderBy(x=>x));
+                            DataFilters.DepartMents = new ObservableCollection<string>(CompareResult.Select(x => x.DepartMentName).Distinct().OrderBy(x => x));
 
                             InOutWellList = new ObservableCollection<DwInOutwellModel>(CompareResult);
 
@@ -274,7 +276,7 @@ namespace HealthMonitor.Domain
             {
                 //throw;
             }
-            finally 
+            finally
             {
                 UpdateLoading(false);
             }

@@ -1,5 +1,4 @@
-﻿using HealthMonitor.Extensions;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Regions;
 using System.Collections.ObjectModel;
 using System.Configuration;
@@ -19,7 +18,8 @@ namespace HealthMonitor.Domain
             {
                 new DemoItem("Home","HomeAnalytics","首页","首页"),
                 new DemoItem("Monitors","AlarmLight","监控","报警监控"),
-                new DemoItem("DataCompare","DatabaseCogOutline","数据","数据比对")
+                new DemoItem("DataCompare","DatabaseCogOutline","数据","数据比对"),
+                new DemoItem("TaskPanel","CheckboxMarkedCircleAutoOutline","任务","任务监控")
             });
 
             _regionManager = regionManager;

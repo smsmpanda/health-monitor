@@ -1,9 +1,9 @@
-﻿using HealthMonitor.Utility;
+﻿using HealthMonitor.Model.Common;
 using System.Data;
 using System.Threading.Tasks;
 using HealthMonitorDbType = HealthMonitor.Enums.DbType;
 
-namespace HealthMonitor.Services
+namespace HealthMonitor.Utility
 {
     internal class DbFactory
     {
@@ -22,7 +22,7 @@ namespace HealthMonitor.Services
             }
         }
 
-        public static async Task<IDbConnection> GetDbConnection(DbConfig config)
+        public static async Task<IDbConnection> GetDbConnectionAsync(DbConfig config)
         {
             string connectionStr = CreateConnectionString(config);
             return await GetDbInstance(connectionStr, config.DbType).CreateConnectionAsync();

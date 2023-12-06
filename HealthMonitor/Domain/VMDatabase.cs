@@ -1,7 +1,7 @@
 ﻿using HealthMonitor.Domain;
 using HealthMonitor.Enums;
-using HealthMonitor.Model;
-using HealthMonitor.Services;
+using HealthMonitor.Model.Entity;
+using HealthMonitor.Repository;
 using HealthMonitor.Utility;
 using System;
 using System.Threading.Tasks;
@@ -73,7 +73,7 @@ namespace HealthMonitor.ViewModel
                                 .HealthCheckAsync();
 
                     //异常时将报警信息入库
-                    AlarmRecord alarmRecord = AlarmRecord.GenerateAlarm($"{AlarmType.ATP_DATABASE_ERROR}", $"数据库异常", this.DbName, DateTime.Now);
+                    AlarmRecordEntity alarmRecord = AlarmRecordEntity.GenerateAlarm($"{AlarmType.ATP_DATABASE_ERROR}", $"数据库异常", this.DbName, DateTime.Now);
                     if (this.Status)
                     {
                         await RYDWDbContext.TransferAlarmRecordAsync(alarmRecord);
@@ -87,7 +87,7 @@ namespace HealthMonitor.ViewModel
                 }
 
                 //停止监听删除相应的实时报警记录
-                await RYDWDbContext.DeleteAlarmRecord(AlarmRecord.GenerateAlarm($"{AlarmType.ATP_DATABASE_ERROR}", string.Empty, this.DbName, DateTime.Now));
+                await RYDWDbContext.DeleteAlarmRecord(AlarmRecordEntity.GenerateAlarm($"{AlarmType.ATP_DATABASE_ERROR}", string.Empty, this.DbName, DateTime.Now));
                 this.Status = false;
             });
         }

@@ -353,6 +353,8 @@
     <Compile Include="Domain\MainViewModel.cs" />
     <Compile Include="Domain\NavigationViewModel.cs" />
     <Compile Include="Domain\NotEmptyValidationRule.cs" />
+    <Compile Include="Domain\TaskItem.cs" />
+    <Compile Include="Domain\TaskPanelViewModel.cs" />
     <Compile Include="Domain\ViewModelBase.cs" />
     <Compile Include="Enums\AlarmType.cs" />
     <Compile Include="Enums\DbType.cs" />
@@ -361,19 +363,24 @@
     <Compile Include="Extensions\DateTimeExtension.cs" />
     <Compile Include="Extensions\DialogExtension.cs" />
     <Compile Include="Extensions\ManualMapperExtension.cs" />
-    <Compile Include="Extensions\HealthMonitorModule.cs" />
     <Compile Include="Extensions\PrismManager.cs" />
-    <Compile Include="Model\AlarmRecord.cs" />
+    <Compile Include="Model\Entity\AlarmRecordEntity.cs" />
+    <Compile Include="Model\Entity\UniqueInexitWellEntity.cs" />
     <Compile Include="Repository\IDwRepository.cs" />
     <Compile Include="Repository\IHmRepository.cs" />
     <Compile Include="Repository\imp\DwRepository.cs" />
     <Compile Include="Repository\imp\HmRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
-    <Compile Include="Services\DbConfig.cs" />
-    <Compile Include="Services\DbConnectionTemplate.cs" />
-    <Compile Include="Services\DbFactory.cs" />
+    <Compile Include="Model\Common\DbConfig.cs" />
+    <Compile Include="Repository\SCDbContext.cs" />
+    <Compile Include="Services\IAlarmMonitService.cs" />
+    <Compile Include="Utility\DbConnectionTemplate.cs" />
+    <Compile Include="Utility\DbFactory.cs" />
     <Compile Include="Services\IInOutwellDataCompareService.cs" />
     <Compile Include="Services\imp\InOutwellDataCompareService.cs" />
+    <Compile Include="Services\ITaskPanelExecuteService.cs" />
+    <Compile Include="Services\imp\SuncunUniqueComparisonAlerts.cs" />
+    <Compile Include="Services\imp\ZhaoguanUniqueComparisonAlerts.cs" />
     <Compile Include="SqlMaps\AlarmSql.cs" />
     <Compile Include="Views\DataCompare.xaml.cs">
       <DependentUpon>DataCompare.xaml</DependentUpon>
@@ -388,8 +395,8 @@
       <DependentUpon>Monitors.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utility\FTPHelper.cs" />
-    <Compile Include="Utility\RYDWDbContext.cs" />
-    <Compile Include="Utility\IDb.cs" />
+    <Compile Include="Repository\RYDWDbContext.cs" />
+    <Compile Include="Utility\BaseDb.cs" />
     <Compile Include="Utility\ProcessHelper.cs" />
     <Compile Include="Domain\MonitorViewModel.cs" />
     <Compile Include="Domain\VMDatabase.cs" />
@@ -402,6 +409,9 @@
     <Compile Include="Views\ProgressBarView.xaml.cs">
       <DependentUpon>ProgressBarView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\TaskPanel.xaml.cs">
+      <DependentUpon>TaskPanel.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -411,6 +421,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Themes\ThemeStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\WindowStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -431,6 +445,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProgressBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TaskPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

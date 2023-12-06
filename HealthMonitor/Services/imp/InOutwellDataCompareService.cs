@@ -1,9 +1,10 @@
 ﻿using HealthMonitor.Domain;
 using HealthMonitor.Enums;
 using HealthMonitor.Extensions;
+using HealthMonitor.Model.Common;
 using HealthMonitor.Repository;
 using HealthMonitor.Repository.imp;
-using Magicodes.ExporterAndImporter.Core.Filters;
+using HealthMonitor.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace HealthMonitor.Services.imp
         {
             try
             {
-                IDwRepository repository = new DwRepository(await DbFactory.GetDbConnection(_dbDwConfig));
+                IDwRepository repository = new DwRepository(await DbFactory.GetDbConnectionAsync(_dbDwConfig));
                 return await repository.GetInOutwellListByCompareDateAsync(_inwellDateTime, _outwellDateTime, _filters.IsHongmo);
             }
             catch (Exception)
@@ -44,7 +45,7 @@ namespace HealthMonitor.Services.imp
         {
             try
             {
-                IHmRepository repository = new HmRepository(await DbFactory.GetDbConnection(_dbHmConfig));
+                IHmRepository repository = new HmRepository(await DbFactory.GetDbConnectionAsync(_dbHmConfig));
                 return await repository.GetHongMoKaoqinListByCompareDateAsync(_inwellDateTime, _outwellDateTime);
             }
             catch (Exception)
@@ -117,7 +118,7 @@ namespace HealthMonitor.Services.imp
                     bool _allMatch = _hongmoListByEmployeeID.Any(
                         hm => DateTimeWithInRangeCompare(dw.DwInwellTime, hm.OnTime, _filters.InwellInterval) &&
                         DateTimeWithInRangeCompare(dw.DwOutwellTime.Value, hm.OffTime, _filters.OutwellInterval));
-                    
+
                     if (_allMatch)
                     {
                         continue;
@@ -132,7 +133,8 @@ namespace HealthMonitor.Services.imp
                         .Any(hm => DateTimeWithInRangeCompare(dw.DwOutwellTime.Value, hm.OffTime, _filters.OutwellInterval));
 
                     //找到了分别满足出入井时间间隔的虹膜数据，取距离当前定位出入井时间最接近的虹膜数据
-                    if (_inwellMatch && _outwellMatch) {
+                    if (_inwellMatch && _outwellMatch)
+                    {
                         matchDataItem = _hongmoListByEmployeeID.OrderBy(hm => TimeIntervalAbs(hm.OnTime, dw.DwInwellTime)).FirstOrDefault();
                         if (matchDataItem == null)
                         {
@@ -153,7 +155,8 @@ namespace HealthMonitor.Services.imp
                                 dw.HmResult = ResultType.Failure.Description;
                             }
                         }
-                        else {
+                        else
+                        {
                             dw.HmResult = ResultType.Failure.Description;
                         }
                     }
@@ -161,7 +164,8 @@ namespace HealthMonitor.Services.imp
                     else if (!_inwellMatch && !_outwellMatch)
                     {
                         matchDataItem = _hongmoListByEmployeeID.OrderBy(hm => TimeIntervalAbs(hm.OnTime, dw.DwInwellTime)).FirstOrDefault();
-                        if (matchDataItem != null) {
+                        if (matchDataItem != null)
+                        {
                             matchDataItem = _hongmoListByEmployeeID.OrderBy(hm => TimeIntervalAbs(hm.OffTime, dw.DwOutwellTime.Value)).FirstOrDefault();
                         }
                         dw.HmResult = ResultType.Failure.Description;
@@ -201,7 +205,7 @@ namespace HealthMonitor.Services.imp
 
         private bool DateTimeWithInRangeCompare(DateTime rangeTime, DateTime compareTime, float interval)
         {
-           return  compareTime >= rangeTime.AddMinutes(-interval) && compareTime <= rangeTime.AddMinutes(interval);
+            return compareTime >= rangeTime.AddMinutes(-interval) && compareTime <= rangeTime.AddMinutes(interval);
         }
     }
 }

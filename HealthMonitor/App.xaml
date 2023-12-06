@@ -13,6 +13,7 @@
                     SecondaryColor="Green" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="/HealthMonitor;component/Themes/ThemeStyle.xaml" />
+                <ResourceDictionary Source="/HealthMonitor;component/Themes/WindowStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

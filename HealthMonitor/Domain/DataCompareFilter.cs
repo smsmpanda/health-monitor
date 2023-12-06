@@ -1,7 +1,6 @@
 ﻿using HealthMonitor.Enums;
 using System;
 using System.Collections.ObjectModel;
-using System.Windows.Documents;
 
 namespace HealthMonitor.Domain
 {
@@ -91,7 +90,7 @@ namespace HealthMonitor.Domain
         }
 
 
-        private ObservableCollection<ResultItem> _resultTypes= new ObservableCollection<ResultItem> 
+        private ObservableCollection<ResultItem> _resultTypes = new ObservableCollection<ResultItem>
         {
             Enums.ResultType.Success,
             Enums.ResultType.Failure,

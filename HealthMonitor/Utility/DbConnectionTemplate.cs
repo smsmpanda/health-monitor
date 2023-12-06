@@ -1,4 +1,6 @@
-﻿namespace HealthMonitor.Services
+﻿using HealthMonitor.Model.Common;
+
+namespace HealthMonitor.Utility
 {
     /// <summary>
     /// 数据库连接模板

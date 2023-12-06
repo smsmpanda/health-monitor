@@ -37,7 +37,6 @@ namespace HealthMonitor.Utility
             }
         }
     }
-
     public class OracleDb : BaseDb
     {
         public OracleDb(string connectionString) : base(connectionString)

@@ -1,6 +1,6 @@
 ﻿using HealthMonitor.Enums;
 
-namespace HealthMonitor.Services
+namespace HealthMonitor.Model.Common
 {
     public class DbConfig
     {

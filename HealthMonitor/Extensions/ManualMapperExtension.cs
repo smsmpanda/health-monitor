@@ -1,6 +1,6 @@
 ﻿using HealthMonitor.Domain;
 using HealthMonitor.Enums;
-using HealthMonitor.Services;
+using HealthMonitor.Model.Common;
 using System;
 
 namespace HealthMonitor.Extensions

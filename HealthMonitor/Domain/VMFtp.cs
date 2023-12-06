@@ -1,6 +1,7 @@
 ﻿using HealthMonitor.Domain;
 using HealthMonitor.Enums;
-using HealthMonitor.Model;
+using HealthMonitor.Model.Entity;
+using HealthMonitor.Repository;
 using HealthMonitor.Utility;
 using System;
 using System.Threading.Tasks;
@@ -79,7 +80,7 @@ namespace HealthMonitor.ViewModel
                     this.Status = await FTPHelper.TryConnectFTPAsync(this.FTPServerHost, this.FTPUser, this.FTPPassword, this.FTPServerPort);
 
                     //异常时将报警信息入库
-                    AlarmRecord alarmRecord = AlarmRecord.GenerateAlarm($"{AlarmType.ATP_FTP_ERROR}", $"FTP连接异常", this.FTPName, DateTime.Now);
+                    AlarmRecordEntity alarmRecord = AlarmRecordEntity.GenerateAlarm($"{AlarmType.ATP_FTP_ERROR}", $"FTP连接异常", this.FTPName, DateTime.Now);
                     if (this.Status)
                     {
                         await RYDWDbContext.TransferAlarmRecordAsync(alarmRecord);
@@ -93,7 +94,7 @@ namespace HealthMonitor.ViewModel
                 }
 
                 //停止监听删除相应的实时报警记录
-                await RYDWDbContext.DeleteAlarmRecord(AlarmRecord.GenerateAlarm($"{AlarmType.ATP_FTP_ERROR}", string.Empty, this.FTPName, DateTime.Now));
+                await RYDWDbContext.DeleteAlarmRecord(AlarmRecordEntity.GenerateAlarm($"{AlarmType.ATP_FTP_ERROR}", string.Empty, this.FTPName, DateTime.Now));
                 this.Status = false;
             });
         }

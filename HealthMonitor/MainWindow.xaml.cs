@@ -1,5 +1,4 @@
-﻿using HealthMonitor.Extensions;
-using HealthMonitor.UserControls;
+﻿using HealthMonitor.UserControls;
 using Prism.Regions;
 using System;
 using System.Windows;
@@ -28,11 +27,7 @@ namespace HealthMonitor
 
         protected override void OnClosed(EventArgs e)
         {
-            if (notifyIcon != null)
-            {
-                this.notifyIcon.Icon = null;
-                this.notifyIcon.Dispose();
-            }
+            this.notifyIcon?.Dispose();
             base.OnClosed(e);
         }
 
@@ -49,14 +44,7 @@ namespace HealthMonitor
         {
             if (e.ClickCount == 2)
             {
-                if (this.WindowState == WindowState.Maximized)
-                {
-                    WindowState = WindowState.Normal;
-                }
-                else
-                {
-                    WindowState = WindowState.Maximized;
-                }
+                this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal: WindowState.Maximized;
             }
         }
 
@@ -106,13 +94,11 @@ namespace HealthMonitor
             {
                 if (WindowState == WindowState.Maximized)
                 {
-                    WindowState = WindowState.Normal;
                     this.WindowState = WindowState.Normal;
                     btnMaxIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.WindowMaximize;
                 }
                 else
                 {
-                    this.MaxHeight = SystemParameters.WorkArea.Height;
                     WindowState = WindowState.Maximized;
                     btnMaxIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.WindowRestore;
                 }

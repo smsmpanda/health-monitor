@@ -1,6 +1,7 @@
 ﻿using HealthMonitor.Domain;
 using HealthMonitor.Enums;
-using HealthMonitor.Model;
+using HealthMonitor.Model.Entity;
+using HealthMonitor.Repository;
 using HealthMonitor.Utility;
 using System;
 using System.Threading.Tasks;
@@ -55,30 +56,6 @@ namespace HealthMonitor.ViewModel
         }
 
         /// <summary>
-        /// CPU占用率
-        /// </summary>
-        private decimal _cpuUse;
-
-        public decimal CpuUse
-        {
-            get { return _cpuUse; }
-            set { _cpuUse = value; }
-        }
-
-        /// <summary>
-        /// 内存使用率
-        /// </summary>
-        private decimal _memoryUse;
-
-        public decimal MemoryUse
-        {
-            get { return _memoryUse; }
-            set { _memoryUse = value; }
-        }
-
-
-
-        /// <summary>
         /// 开始监测进程状态
         /// </summary>
         private void StartMonitor()
@@ -90,7 +67,7 @@ namespace HealthMonitor.ViewModel
                     this.Status = ProcessHelper.GetProcessByProcessName(this.ProcessName);
 
                     //异常时将报警信息入库
-                    AlarmRecord alarmRecord = AlarmRecord.GenerateAlarm($"{AlarmType.ATP_PROCESS_EXIT}", $"{this.ProcessName}-进程退出", this.ProcessName, DateTime.Now);
+                    AlarmRecordEntity alarmRecord = AlarmRecordEntity.GenerateAlarm($"{AlarmType.ATP_PROCESS_EXIT}", $"{this.ProcessName}-进程退出", this.ProcessName, DateTime.Now);
 
                     if (this.Status)
                     {
@@ -104,7 +81,7 @@ namespace HealthMonitor.ViewModel
                 }
 
                 //停止监听删除相应的实时报警记录
-                await RYDWDbContext.DeleteAlarmRecord(AlarmRecord.GenerateAlarm($"{AlarmType.ATP_PROCESS_EXIT}", string.Empty, this.ProcessName, DateTime.Now));
+                await RYDWDbContext.DeleteAlarmRecord(AlarmRecordEntity.GenerateAlarm($"{AlarmType.ATP_PROCESS_EXIT}", string.Empty, this.ProcessName, DateTime.Now));
                 this.Status = false;
             });
         }

@@ -15,6 +15,11 @@
         /// <summary>
         /// FTP服务异常
         /// </summary>
-        ATP_FTP_ERROR
+        ATP_FTP_ERROR,
+
+        /// <summary>
+        /// 唯一性比对失败
+        /// </summary>
+        ATP_UNIQUE_FAIL,
     }
 }
