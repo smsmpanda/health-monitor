@@ -19,7 +19,6 @@ namespace HealthMonitor
         public MainWindow(IRegionManager regionManager)
         {
             InitializeComponent();
-            WindowsFullScreenHelper.SetWindowFullScrreng(this);
 
             ApplicationTopBtnEventBind();
             ApplicationSystemTrapMount();

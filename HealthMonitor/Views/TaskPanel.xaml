@@ -16,8 +16,8 @@
                     <ControlTemplate TargetType="ListBoxItem">
                         <materialDesign:Card
                             Name="card"
-                            Width="400"
-                            Height="90"
+                            Width="300"
+                            Height="auto"
                             Margin="5,10,10,0"
                             Padding="10"
                             materialDesign:ElevationAssist.Elevation="Dp1">
@@ -50,25 +50,43 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <CheckBox
+                            Grid.Row="2"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             IsChecked="{Binding IsStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialDesignFilterChipAccentOutlineCheckBox}">
                             <CheckBox.Content>
-                                <TextBlock Style="{StaticResource TextBlockForTaskStatus}" />
+                                <TextBlock Name="txt" Style="{StaticResource TextBlockForTaskStatus}" />
                             </CheckBox.Content>
                         </CheckBox>
 
-                        <TextBlock
-                            Name="Border"
-                            HorizontalAlignment="Left"
-                            FontSize="14"
-                            Foreground="#FF000000"
-                            Text="{Binding TaskName, StringFormat=任务：{0}}" />
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Width="30"
+                                Height="30"
+                                Margin="0,0,10,0"
+                                VerticalAlignment="Center"
+                                Foreground="#FF002984"
+                                Kind="AlarmMultiple" />
+                            <TextBlock
+                                Grid.Row="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="14"
+                                Foreground="#FF000000"
+                                Text="{Binding TaskName, StringFormat=任务：{0}}" />
+                        </StackPanel>
 
+                        <Rectangle
+                            Grid.Row="1"
+                            Height="1"
+                            Margin="0,8,0,0"
+                            Fill="#000"
+                            Opacity=".1" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

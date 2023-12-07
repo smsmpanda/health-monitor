@@ -16,10 +16,10 @@ namespace HealthMonitor.Domain
         {
             DemoItems = new ObservableCollection<DemoItem>(new[]
             {
-                new DemoItem("Home","HomeAnalytics","首页","首页"),
-                new DemoItem("Monitors","AlarmLight","监控","报警监控"),
-                new DemoItem("DataCompare","DatabaseCogOutline","数据","数据比对"),
-                new DemoItem("TaskPanel","CheckboxMarkedCircleAutoOutline","任务","任务监控")
+                new DemoItem("Home","HomeAnalytics","首页",name: "首页"),
+                new DemoItem("Monitors","AlarmLight","监控","监测报警"),
+                new DemoItem("DataCompare","DatabaseCogOutline","数据","出入井及虹膜比对"),
+                new DemoItem("TaskPanel","CheckboxMarkedCircleAutoOutline","任务","定时任务")
             });
 
             _regionManager = regionManager;

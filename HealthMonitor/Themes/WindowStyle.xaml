@@ -1,9 +1,27 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:HealthMonitor"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <!--  参数  -->
+    <Thickness x:Key="WindowBorderMargin">4</Thickness>
 
     <!--  自定义窗体  -->
     <Style x:Key="WindowBorder" TargetType="Border">
         <Setter Property="Margin" Value="{DynamicResource WindowBorderMargin}" />
         <Setter Property="Background" Value="White" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=WindowState}" Value="Normal">
+                <Setter Property="Margin" Value="{DynamicResource WindowBorderMargin}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=WindowState}" Value="Minimized">
+                <Setter Property="Margin" Value="{DynamicResource WindowBorderMargin}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=WindowState}" Value="Maximized">
+                <Setter Property="Margin" Value="0" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="WindowGenerateStyle" TargetType="Window">

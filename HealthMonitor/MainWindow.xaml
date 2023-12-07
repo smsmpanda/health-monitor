@@ -10,12 +10,14 @@
     xmlns:prism="http://prismlibrary.com/"
     Width="1366"
     Height="768"
+    MaxWidth="{StaticResource {x:Static SystemParameters.MaximizedPrimaryScreenWidthKey}}"
+    MaxHeight="{StaticResource {x:Static SystemParameters.MaximizedPrimaryScreenHeightKey}}"
     Style="{DynamicResource WindowGenerateStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="55" />
+            <ColumnDefinition Width="65" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
@@ -79,14 +81,7 @@
                 MouseDown="Border_MouseDown"
                 MouseLeftButtonDown="Border_LeftButtonDown">
                 <DockPanel>
-                    <TextBlock Style="{StaticResource MainTitle}">
-                        <TextBlock.Text>
-                            <MultiBinding StringFormat="{}{0}（{1}）">
-                                <Binding Path="ApplicationName" />
-                                <Binding Path="ApplicationVersion" />
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
+                    <TextBlock Style="{StaticResource MainTitle}" Text="{Binding ElementName=DemoItemsListBox, Path=SelectedItem.Name}" />
                     <StackPanel
                         Margin="0,0,10,0"
                         HorizontalAlignment="Right"
