@@ -2,12 +2,36 @@
     x:Class="HealthMonitor.UserControls.Monitors"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:ValueConverters;assembly=ValueConverters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     mc:Ignorable="d">
     <UserControl.Resources>
+        <!--  style  -->
+        <Style x:Key="MonitorListBoxStyle" TargetType="ListBox">
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Margin" Value="0,10,0,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border
+                            Padding="10"
+                            Background="white"
+                            CornerRadius="5">
+                            <ItemsPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="TabItemHeadContent" TargetType="TextBlock">
             <Setter Property="Margin" Value="8,0" />
             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -25,7 +49,7 @@
                         <materialDesign:Card
                             Name="card"
                             Width="230"
-                            Margin="5,5,20,0"
+                            Margin="10"
                             Padding="10"
                             materialDesign:ElevationAssist.Elevation="Dp4">
                             <ContentPresenter />
@@ -34,40 +58,39 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!--  converts  -->
+        <conv:ValueConverterGroup x:Key="StringStateConvertVisiblity">
+            <conv:StringIsNotNullOrEmptyConverter />
+            <conv:BoolToVisibilityConverter FalseValue="Collapsed" TrueValue="Visible" />
+        </conv:ValueConverterGroup>
+        <conv:BoolToVisibilityConverter x:Key="ConvBoolToVisibility" />
     </UserControl.Resources>
     <Grid Margin="10,0">
         <materialDesign:DialogHost Name="MonitorsDialogHost" DialogTheme="Inherit">
-            <TabControl>
-                <TabItem>
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="BellCog" Style="{StaticResource TabItemHeadPackIcon}" />
-                            <TextBlock Style="{StaticResource TabItemHeadContent}" Text="报警设置" />
-                        </StackPanel>
-                    </TabItem.Header>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Border Margin="0,5,0,0" Background="White">
 
-                    <Grid>
-                        <wpf:ChromiumWebBrowser x:Name="Browser" Address="{Binding AlarmSettingAddress}" />
-                    </Grid>
-                </TabItem>
-                <TabItem>
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="CogStopOutline" Style="{StaticResource TabItemHeadPackIcon}" />
-                            <TextBlock Style="{StaticResource TabItemHeadContent}" Text="进程监测" />
-                        </StackPanel>
-                    </TabItem.Header>
+                        <CheckBox
+                            HorizontalAlignment="Right"
+                            Command="{Binding OneClickMonitorCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                            Content="一键监测"
+                            IsChecked="False"
+                            Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" />
 
-                    <ListBox ItemContainerStyle="{StaticResource ItemContainerStyle1}" ItemsSource="{Binding ProcessHealthItems}">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
+                    </Border>
+
+                    <!--  程序是否启动监测  -->
+                    <ListBox
+                        ItemContainerStyle="{StaticResource ItemContainerStyle1}"
+                        ItemsSource="{Binding ProcessHealthItems}"
+                        Style="{StaticResource MonitorListBoxStyle}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
                                     <Grid.RowDefinitions>
+                                        <RowDefinition />
                                         <RowDefinition />
                                         <RowDefinition />
                                         <RowDefinition />
@@ -174,386 +197,307 @@
                                         <TextBlock
                                             DockPanel.Dock="Left"
                                             FontSize="12"
-                                            Text="{Binding ProcessName, StringFormat=进程：{0}}" />
-                                        <ProgressBar
-                                            Margin="0,0,10,0"
-                                            DockPanel.Dock="Right"
-                                            IsIndeterminate="{Binding IsCheck}"
-                                            Style="{StaticResource MaterialDesignCircularProgressBar}"
-                                            Value="0" />
+                                            Text="{Binding ProcessName, StringFormat={}{0}}" />
                                     </DockPanel>
+
+                                    <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                                        <Button
+                                            Height="3"
+                                            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                                            materialDesign:ButtonProgressAssist.Value="-1"
+                                            Content="Indeterminate"
+                                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            Visibility="{Binding IsCheck, Converter={StaticResource ConvBoolToVisibility}}" />
+                                    </Grid>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <!--<DataGrid
-                        x:Name="memberDataGrid"
-                        Grid.Row="5"
-                        CellStyle="{DynamicResource DataGridCellStyle1}"
-                        ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                        ItemsSource="{Binding ProcessHealthItems}"
-                        RowStyle="{DynamicResource DataGridRowStyle1}"
-                        Style="{DynamicResource DataGridStyle1}">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn
-                                Width="50"
-                                CanUserResize="False"
-                                Header="">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CheckBoxStyle1}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn
-                                Width="auto"
-                                Binding="{Binding Number}"
-                                CanUserResize="False"
-                                Header="#"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding ProcessIdentity}"
-                                Header="名称"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding ProcessName}"
-                                Header="标识"
-                                IsReadOnly="True" />
-                            <DataGridTemplateColumn
-                                Width="*"
-                                Header="健康状态"
-                                IsReadOnly="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Border
-                                                Width="50"
-                                                Height="25"
-                                                CornerRadius="2">
-                                                <Border.Style>
-                                                    <Style TargetType="Border">
-                                                        <Style.Triggers>
-                                                            <MultiDataTrigger>
-                                                                <MultiDataTrigger.Conditions>
-                                                                    <Condition Binding="{Binding IsCheck}" Value="false" />
-                                                                    <Condition Binding="{Binding Status}" Value="false" />
-                                                                </MultiDataTrigger.Conditions>
-                                                                <Setter Property="Background" Value="#CCCCCC" />
-                                                            </MultiDataTrigger>
-                                                            <MultiDataTrigger>
-                                                                <MultiDataTrigger.Conditions>
-                                                                    <Condition Binding="{Binding IsCheck}" Value="true" />
-                                                                    <Condition Binding="{Binding Status}" Value="false" />
-                                                                </MultiDataTrigger.Conditions>
-                                                                <Setter Property="Background" Value="Gold" />
-                                                            </MultiDataTrigger>
-                                                            <MultiDataTrigger>
-                                                                <MultiDataTrigger.Conditions>
-                                                                    <Condition Binding="{Binding IsCheck}" Value="true" />
-                                                                    <Condition Binding="{Binding Status}" Value="true" />
-                                                                </MultiDataTrigger.Conditions>
-                                                                <Setter Property="Background" Value="#17b978" />
-                                                            </MultiDataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
-                                                <TextBlock
-                                                    Margin="0,0,0,1"
-                                                    Padding="8"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="White">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Style.Triggers>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsCheck}" Value="false" />
-                                                                        <Condition Binding="{Binding Status}" Value="false" />
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <Setter Property="Text" Value="未知" />
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsCheck}" Value="true" />
-                                                                        <Condition Binding="{Binding Status}" Value="false" />
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <Setter Property="Text" Value="异常" />
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsCheck}" Value="true" />
-                                                                        <Condition Binding="{Binding Status}" Value="true" />
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <Setter Property="Text" Value="正常" />
-                                                                </MultiDataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
-                                            </Border>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>-->
-                </TabItem>
-                <TabItem>
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Database" Style="{StaticResource TabItemHeadPackIcon}" />
-                            <TextBlock Style="{StaticResource TabItemHeadContent}" Text="数据库监测" />
-                        </StackPanel>
-                    </TabItem.Header>
-                    <DataGrid
-                        Grid.Row="5"
-                        CellStyle="{DynamicResource DataGridCellStyle1}"
-                        ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                        ItemsSource="{Binding DbHealthItems}"
-                        RowStyle="{DynamicResource DataGridRowStyle1}"
-                        Style="{DynamicResource DataGridStyle1}">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn
-                                Width="50"
-                                CanUserResize="False"
-                                Header="">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CheckBoxStyle1}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn
-                                Width="auto"
-                                Binding="{Binding Number}"
-                                CanUserResize="False"
-                                Header="#"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding DbName}"
-                                Header="数据库"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding DbType}"
-                                Header="类型"
-                                IsReadOnly="True" />
-                            <DataGridTemplateColumn
-                                Width="*"
-                                Header="健康状态"
-                                IsReadOnly="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Border
-                                                Width="50"
-                                                Height="25"
-                                                CornerRadius="2">
-                                                <Border.Style>
-                                                    <Style TargetType="Border">
-                                                        <Style.Triggers>
-                                                            <MultiDataTrigger>
-                                                                <MultiDataTrigger.Conditions>
-                                                                    <Condition Binding="{Binding IsCheck}" Value="false" />
-                                                                    <Condition Binding="{Binding Status}" Value="false" />
-                                                                </MultiDataTrigger.Conditions>
-                                                                <Setter Property="Background" Value="#CCCCCC" />
-                                                            </MultiDataTrigger>
-                                                            <MultiDataTrigger>
-                                                                <MultiDataTrigger.Conditions>
-                                                                    <Condition Binding="{Binding IsCheck}" Value="true" />
-                                                                    <Condition Binding="{Binding Status}" Value="false" />
-                                                                </MultiDataTrigger.Conditions>
-                                                                <Setter Property="Background" Value="#ffd615" />
-                                                            </MultiDataTrigger>
-                                                            <MultiDataTrigger>
-                                                                <MultiDataTrigger.Conditions>
-                                                                    <Condition Binding="{Binding IsCheck}" Value="true" />
-                                                                    <Condition Binding="{Binding Status}" Value="true" />
-                                                                </MultiDataTrigger.Conditions>
-                                                                <Setter Property="Background" Value="#17b978" />
-                                                            </MultiDataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
-                                                <TextBlock
-                                                    Margin="0,0,0,1"
-                                                    Padding="8"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="White">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Style.Triggers>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsCheck}" Value="false" />
-                                                                        <Condition Binding="{Binding Status}" Value="false" />
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <Setter Property="Text" Value="未知" />
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsCheck}" Value="true" />
-                                                                        <Condition Binding="{Binding Status}" Value="false" />
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <Setter Property="Text" Value="异常" />
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsCheck}" Value="true" />
-                                                                        <Condition Binding="{Binding Status}" Value="true" />
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <Setter Property="Text" Value="正常" />
-                                                                </MultiDataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
-                                            </Border>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </TabItem>
-                <TabItem>
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="WebBox" Style="{StaticResource TabItemHeadPackIcon}" />
-                            <TextBlock Style="{StaticResource TabItemHeadContent}" Text="FTP监测" />
-                        </StackPanel>
-                    </TabItem.Header>
-                    <DataGrid
-                        Grid.Row="5"
-                        CellStyle="{DynamicResource DataGridCellStyle1}"
-                        ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+
+                    <!--  FTP是否启动监测  -->
+                    <ListBox
+                        ItemContainerStyle="{StaticResource ItemContainerStyle1}"
                         ItemsSource="{Binding FTPItems}"
-                        RowStyle="{DynamicResource DataGridRowStyle1}"
-                        Style="{DynamicResource DataGridStyle1}">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn
-                                Width="50"
-                                CanUserResize="False"
-                                Header="">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CheckBoxStyle1}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn
-                                Width="auto"
-                                Binding="{Binding Number}"
-                                CanUserResize="False"
-                                Header="#"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding FTPName}"
-                                Header="名称"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding FTPServerHost}"
-                                Header="主机"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding FTPServerPort}"
-                                Header="端口"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding FTPUser}"
-                                Header="账户"
-                                IsReadOnly="True" />
-                            <DataGridTemplateColumn
-                                Width="*"
-                                Header="健康状态"
-                                IsReadOnly="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Border
-                                                Width="50"
-                                                Height="25"
-                                                CornerRadius="2">
-                                                <Border.Style>
-                                                    <Style TargetType="Border">
-                                                        <Style.Triggers>
-                                                            <MultiDataTrigger>
-                                                                <MultiDataTrigger.Conditions>
-                                                                    <Condition Binding="{Binding IsCheck}" Value="false" />
-                                                                    <Condition Binding="{Binding Status}" Value="false" />
-                                                                </MultiDataTrigger.Conditions>
-                                                                <Setter Property="Background" Value="#CCCCCC" />
-                                                            </MultiDataTrigger>
-                                                            <MultiDataTrigger>
-                                                                <MultiDataTrigger.Conditions>
-                                                                    <Condition Binding="{Binding IsCheck}" Value="true" />
-                                                                    <Condition Binding="{Binding Status}" Value="false" />
-                                                                </MultiDataTrigger.Conditions>
-                                                                <Setter Property="Background" Value="#ffd615" />
-                                                            </MultiDataTrigger>
-                                                            <MultiDataTrigger>
-                                                                <MultiDataTrigger.Conditions>
-                                                                    <Condition Binding="{Binding IsCheck}" Value="true" />
-                                                                    <Condition Binding="{Binding Status}" Value="true" />
-                                                                </MultiDataTrigger.Conditions>
-                                                                <Setter Property="Background" Value="#17b978" />
-                                                            </MultiDataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
-                                                <TextBlock
-                                                    Margin="0,0,0,1"
-                                                    Padding="8"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="White">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Style.Triggers>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsCheck}" Value="false" />
-                                                                        <Condition Binding="{Binding Status}" Value="false" />
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <Setter Property="Text" Value="未知" />
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsCheck}" Value="true" />
-                                                                        <Condition Binding="{Binding Status}" Value="false" />
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <Setter Property="Text" Value="异常" />
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsCheck}" Value="true" />
-                                                                        <Condition Binding="{Binding Status}" Value="true" />
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <Setter Property="Text" Value="正常" />
-                                                                </MultiDataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
-                                            </Border>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </TabItem>
-            </TabControl>
+                        Style="{StaticResource MonitorListBoxStyle}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="50" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon
+                                            Margin="0,0,10,0"
+                                            VerticalAlignment="Center"
+                                            Foreground="#FF002984"
+                                            Kind="Connection" />
+
+                                        <TextBlock
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="14"
+                                            LineHeight="20"
+                                            Text="{Binding FTPName, StringFormat={}{0}}" />
+                                    </StackPanel>
+
+                                    <ToggleButton
+                                        Grid.Column="1"
+                                        IsChecked="{Binding IsCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Style="{StaticResource MaterialDesignSwitchToggleButton}" />
+
+                                    <Border
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        Width="50"
+                                        Height="30"
+                                        Margin="5"
+                                        CornerRadius="2">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding IsCheck}" Value="false" />
+                                                            <Condition Binding="{Binding Status}" Value="false" />
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Background" Value="#CCCCCC" />
+                                                    </MultiDataTrigger>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding IsCheck}" Value="true" />
+                                                            <Condition Binding="{Binding Status}" Value="false" />
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Background" Value="Gold" />
+                                                    </MultiDataTrigger>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding IsCheck}" Value="true" />
+                                                            <Condition Binding="{Binding Status}" Value="true" />
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Background" Value="#17b978" />
+                                                    </MultiDataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock
+                                            Margin="0,0,0,1"
+                                            Padding="8"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="White">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsCheck}" Value="false" />
+                                                                <Condition Binding="{Binding Status}" Value="false" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Text" Value="未知" />
+                                                        </MultiDataTrigger>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsCheck}" Value="true" />
+                                                                <Condition Binding="{Binding Status}" Value="false" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Text" Value="异常" />
+                                                        </MultiDataTrigger>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsCheck}" Value="true" />
+                                                                <Condition Binding="{Binding Status}" Value="true" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Text" Value="正常" />
+                                                        </MultiDataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+
+                                    <StackPanel Grid.Row="2">
+                                        <TextBlock
+                                            FontSize="12"
+                                            LineHeight="20"
+                                            Text="{Binding FTPServerHost, StringFormat=主机：{0}}" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            FontSize="12"
+                                            LineHeight="20"
+                                            Text="{Binding FTPServerPort, StringFormat=端口：{0}}" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            LineHeight="20"
+                                            Text="{Binding FTPUser, StringFormat=用户：{0}}" />
+                                    </StackPanel>
+
+                                    <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                                        <Button
+                                            Height="3"
+                                            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                                            materialDesign:ButtonProgressAssist.Value="-1"
+                                            Content="Indeterminate"
+                                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            Visibility="{Binding IsCheck, Converter={StaticResource ConvBoolToVisibility}}" />
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!--  数据库异常监测  -->
+                    <ListBox
+                        ItemContainerStyle="{StaticResource ItemContainerStyle1}"
+                        ItemsSource="{Binding DbHealthItems}"
+                        Style="{StaticResource MonitorListBoxStyle}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="50" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon
+                                            Margin="0,0,10,0"
+                                            VerticalAlignment="Center"
+                                            Foreground="#FF002984"
+                                            Kind="Database" />
+
+                                        <TextBlock
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="14"
+                                            LineHeight="20">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0}-{1}">
+                                                    <Binding Path="DbName" />
+                                                    <Binding Path="DbType" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </StackPanel>
+
+                                    <ToggleButton
+                                        Grid.Column="1"
+                                        IsChecked="{Binding IsCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Style="{StaticResource MaterialDesignSwitchToggleButton}" />
+
+                                    <Border
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        Width="50"
+                                        Height="30"
+                                        Margin="5"
+                                        CornerRadius="2">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding IsCheck}" Value="false" />
+                                                            <Condition Binding="{Binding Status}" Value="false" />
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Background" Value="#CCCCCC" />
+                                                    </MultiDataTrigger>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding IsCheck}" Value="true" />
+                                                            <Condition Binding="{Binding Status}" Value="false" />
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Background" Value="Gold" />
+                                                    </MultiDataTrigger>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding IsCheck}" Value="true" />
+                                                            <Condition Binding="{Binding Status}" Value="true" />
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Background" Value="#17b978" />
+                                                    </MultiDataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock
+                                            Margin="0,0,0,1"
+                                            Padding="8"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="White">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsCheck}" Value="false" />
+                                                                <Condition Binding="{Binding Status}" Value="false" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Text" Value="未知" />
+                                                        </MultiDataTrigger>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsCheck}" Value="true" />
+                                                                <Condition Binding="{Binding Status}" Value="false" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Text" Value="异常" />
+                                                        </MultiDataTrigger>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsCheck}" Value="true" />
+                                                                <Condition Binding="{Binding Status}" Value="true" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Text" Value="正常" />
+                                                        </MultiDataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+
+
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.ColumnSpan="2"
+                                        Foreground="Red"
+                                        Text="{Binding Message, StringFormat={}{0}}"
+                                        TextWrapping="Wrap"
+                                        Visibility="{Binding Message, Converter={StaticResource StringStateConvertVisiblity}}" />
+
+                                    <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                                        <Button
+                                            Height="3"
+                                            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                                            materialDesign:ButtonProgressAssist.Value="-1"
+                                            Content="Indeterminate"
+                                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            Visibility="{Binding IsCheck, Converter={StaticResource ConvBoolToVisibility}}" />
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </ScrollViewer>
         </materialDesign:DialogHost>
     </Grid>
 </UserControl>

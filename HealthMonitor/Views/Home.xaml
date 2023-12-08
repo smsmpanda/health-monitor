@@ -4,15 +4,904 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:HealthMonitor.UserControls"
+    xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="200"
     d:DesignWidth="300"
     mc:Ignorable="d">
-    <Grid>
-        <Border>
+    <UserControl.Resources>
+        <Style x:Key="defaultRadioStyle" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Grid>
+                            <Border
+                                x:Name="border"
+                                Margin="-5"
+                                CornerRadius="7" />
+                            <ContentPresenter
+                                x:Name="contentPresenter"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Focusable="False"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
 
-            <Image Source="/Resource/homebg.png" />
-        </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#46CBD9" />
+                            </Trigger>
+
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Background" Value="Transparent" />
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+            <RowDefinition Height="1.2*" />
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Border />
+            <Grid VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <UniformGrid Grid.Row="2" Columns="4">
+                    <Border
+                        Margin="10"
+                        Background="White"
+                        CornerRadius="5">
+                        <Border.Effect>
+                            <DropShadowEffect
+                                BlurRadius="10"
+                                Direction="270"
+                                Opacity="0.4"
+                                ShadowDepth="10"
+                                Color="#F2F2F2" />
+                        </Border.Effect>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <StackPanel
+                                Margin="15,15,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Orientation="Horizontal">
+                                <Border
+                                    Width="20"
+                                    Height="20"
+                                    VerticalAlignment="Center"
+                                    Background="#EDFAF0"
+                                    CornerRadius="5">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontFamily="/fonts/#iconfont"
+                                        Foreground="#7ADA95"
+                                        Text="&#xe673;" />
+                                </Border>
+
+                                <TextBlock
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="#7ADA95"
+                                    Text="76.9%" />
+                            </StackPanel>
+
+                            <lvc:CartesianChart Height="100" Margin="10">
+                                <lvc:CartesianChart.Series>
+                                    <lvc:LineSeries
+                                        Fill="#FFE3E0"
+                                        PointGeometrySize="0"
+                                        Stroke="#FF7261"
+                                        Values="20,50,3,20,3,70,50" />
+                                </lvc:CartesianChart.Series>
+                                <lvc:CartesianChart.AxisX>
+                                    <lvc:Axis
+                                        Name="s1x"
+                                        MinValue="0"
+                                        ShowLabels="False" />
+                                </lvc:CartesianChart.AxisX>
+                                <lvc:CartesianChart.AxisY>
+                                    <lvc:Axis
+                                        Name="s1y"
+                                        MinValue="0"
+                                        ShowLabels="False" />
+                                </lvc:CartesianChart.AxisY>
+                            </lvc:CartesianChart>
+
+                            <StackPanel
+                                Grid.Row="1"
+                                Margin="15,0,0,15"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <Border
+                                    Width="50"
+                                    Height="50"
+                                    Background="#FFF1F1"
+                                    CornerRadius="10">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontFamily="/fonts/#iconfont"
+                                        FontSize="25"
+                                        Foreground="#FF7261"
+                                        Text="&#xe712;" />
+                                </Border>
+                                <StackPanel Margin="15,0,0,0">
+                                    <TextBlock Foreground="#3F4C5D" Text="报警" />
+                                    <TextBlock
+                                        FontSize="28"
+                                        FontWeight="Bold"
+                                        Foreground="#3F4C5D"
+                                        Text="784" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+
+                    <Border
+                        Margin="10"
+                        Background="White"
+                        CornerRadius="5">
+                        <Border.Effect>
+                            <DropShadowEffect
+                                BlurRadius="10"
+                                Direction="270"
+                                Opacity="0.4"
+                                ShadowDepth="10"
+                                Color="#F2F2F2" />
+                        </Border.Effect>
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <StackPanel
+                                Margin="15,15,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Orientation="Horizontal">
+                                <Border
+                                    Width="20"
+                                    Height="20"
+                                    VerticalAlignment="Center"
+                                    Background="#FFEBE8"
+                                    CornerRadius="5">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontFamily="/fonts/#iconfont"
+                                        Foreground="Red"
+                                        Text="&#xe59a;" />
+                                </Border>
+
+                                <TextBlock
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="Red"
+                                    Text="-12.5%" />
+                            </StackPanel>
+
+                            <lvc:CartesianChart Margin="10">
+                                <lvc:CartesianChart.Series>
+                                    <lvc:LineSeries
+                                        Fill="#FFF2DE"
+                                        PointGeometrySize="0"
+                                        Stroke="#FECC71"
+                                        Values="20,50,40,50,20,90,25,50" />
+                                </lvc:CartesianChart.Series>
+                                <lvc:CartesianChart.AxisX>
+                                    <lvc:Axis
+                                        Name="s2x"
+                                        MinValue="0"
+                                        ShowLabels="False" />
+                                </lvc:CartesianChart.AxisX>
+                                <lvc:CartesianChart.AxisY>
+                                    <lvc:Axis
+                                        Name="s2y"
+                                        MinValue="0"
+                                        ShowLabels="False" />
+                                </lvc:CartesianChart.AxisY>
+                            </lvc:CartesianChart>
+
+                            <StackPanel
+                                Grid.Row="1"
+                                Margin="15,0,0,15"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <Border
+                                    Width="50"
+                                    Height="50"
+                                    Background="#FFF5E9"
+                                    CornerRadius="10">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontFamily="/fonts/#iconfont"
+                                        FontSize="25"
+                                        Foreground="#FFBC57"
+                                        Text="&#xf26c;" />
+                                </Border>
+                                <StackPanel Margin="15,0,0,0">
+                                    <TextBlock Foreground="#3F4C5D" Text="报警" />
+                                    <TextBlock
+                                        FontSize="28"
+                                        FontWeight="Bold"
+                                        Foreground="#3F4C5D"
+                                        Text="599" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+
+                    <Border
+                        Margin="10"
+                        Background="White"
+                        CornerRadius="5">
+                        <Border.Effect>
+                            <DropShadowEffect
+                                BlurRadius="10"
+                                Direction="270"
+                                Opacity="0.4"
+                                ShadowDepth="10"
+                                Color="#F2F2F2" />
+                        </Border.Effect>
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <StackPanel
+                                Margin="15,15,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Orientation="Horizontal">
+                                <Border
+                                    Width="20"
+                                    Height="20"
+                                    VerticalAlignment="Center"
+                                    Background="#EDFAF0"
+                                    CornerRadius="5">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontFamily="/fonts/#iconfont"
+                                        Foreground="#7ADA95"
+                                        Text="&#xe673;" />
+                                </Border>
+
+                                <TextBlock
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="#7ADA95"
+                                    Text="34.1%" />
+                            </StackPanel>
+
+                            <lvc:CartesianChart Margin="10">
+                                <lvc:CartesianChart.Series>
+                                    <lvc:LineSeries
+                                        Fill="#E0F6E4"
+                                        PointGeometrySize="0"
+                                        Stroke="#7ADA95"
+                                        Values="60,90,30,60,35,65,40" />
+                                </lvc:CartesianChart.Series>
+                                <lvc:CartesianChart.AxisX>
+                                    <lvc:Axis
+                                        Name="s3x"
+                                        MinValue="0"
+                                        ShowLabels="False" />
+                                </lvc:CartesianChart.AxisX>
+                                <lvc:CartesianChart.AxisY>
+                                    <lvc:Axis
+                                        Name="s3y"
+                                        MinValue="0"
+                                        ShowLabels="False" />
+                                </lvc:CartesianChart.AxisY>
+                            </lvc:CartesianChart>
+
+                            <StackPanel
+                                Grid.Row="1"
+                                Margin="15,0,0,15"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <Border
+                                    Width="50"
+                                    Height="50"
+                                    Background="#EDFAF0"
+                                    CornerRadius="10">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontFamily="/fonts/#iconfont"
+                                        FontSize="25"
+                                        Foreground="#7ADA95"
+                                        Text="&#xe65b;" />
+                                </Border>
+                                <StackPanel Margin="15,0,0,0">
+                                    <TextBlock Foreground="#3F4C5D" Text="报警" />
+                                    <TextBlock
+                                        FontSize="28"
+                                        FontWeight="Bold"
+                                        Foreground="#3F4C5D"
+                                        Text="79,456" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+
+                    <Border
+                        Margin="10"
+                        Background="White"
+                        CornerRadius="5">
+                        <Border.Effect>
+                            <DropShadowEffect
+                                BlurRadius="10"
+                                Direction="270"
+                                Opacity="0.4"
+                                ShadowDepth="10"
+                                Color="#F2F2F2" />
+                        </Border.Effect>
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <StackPanel
+                                Margin="15,15,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Orientation="Horizontal">
+                                <Border
+                                    Width="20"
+                                    Height="20"
+                                    VerticalAlignment="Center"
+                                    Background="#EDFAF0"
+                                    CornerRadius="5">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontFamily="/fonts/#iconfont"
+                                        Foreground="#7ADA95"
+                                        Text="&#xe673;" />
+                                </Border>
+
+                                <TextBlock
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="#7ADA95"
+                                    Text="85.5%" />
+                            </StackPanel>
+
+                            <lvc:CartesianChart Margin="10">
+                                <lvc:CartesianChart.Series>
+                                    <lvc:LineSeries
+                                        Fill="#DBF3F9"
+                                        PointGeometrySize="0"
+                                        Stroke="#5CD0E1"
+                                        Values="20,5,60,40,15,90,10,50" />
+                                </lvc:CartesianChart.Series>
+                                <lvc:CartesianChart.AxisX>
+                                    <lvc:Axis
+                                        Name="s4x"
+                                        MinValue="0"
+                                        ShowLabels="False" />
+                                </lvc:CartesianChart.AxisX>
+                                <lvc:CartesianChart.AxisY>
+                                    <lvc:Axis
+                                        Name="s4y"
+                                        MinValue="0"
+                                        ShowLabels="False" />
+                                </lvc:CartesianChart.AxisY>
+                            </lvc:CartesianChart>
+
+                            <StackPanel
+                                Grid.Row="1"
+                                Margin="15,0,0,15"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <Border
+                                    Width="50"
+                                    Height="50"
+                                    Background="#E1F6FD"
+                                    CornerRadius="10">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontFamily="/fonts/#iconfont"
+                                        FontSize="25"
+                                        Foreground="#44C6EE"
+                                        Text="&#xe609;" />
+                                </Border>
+                                <StackPanel Margin="15,0,0,0">
+                                    <TextBlock Foreground="#3F4C5D" Text="报警" />
+                                    <TextBlock
+                                        FontSize="28"
+                                        FontWeight="Bold"
+                                        Foreground="#3F4C5D"
+                                        Text="90%" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                </UniformGrid>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid Margin="10,0,10,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="15"
+                    FontWeight="Bold"
+                    Foreground="#3F4C5D"
+                    Text="服务" />
+
+                <Border
+                    Grid.Row="1"
+                    Background="White"
+                    CornerRadius="10">
+                    <Border.Effect>
+                        <DropShadowEffect
+                            BlurRadius="10"
+                            Direction="270"
+                            Opacity="0.4"
+                            ShadowDepth="10"
+                            Color="#F2F2F2" />
+                    </Border.Effect>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid HorizontalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="15"
+                                    Foreground="#3F4C5D"
+                                    Text="服务" />
+                                <TextBlock
+                                    FontSize="20"
+                                    FontWeight="Bold"
+                                    Foreground="#3F4C5D"
+                                    Text="+120%" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                                <StackPanel
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Orientation="Horizontal">
+                                    <Border
+                                        Width="20"
+                                        Height="20"
+                                        VerticalAlignment="Center"
+                                        Background="#EDFAF0"
+                                        CornerRadius="5">
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontFamily="/fonts/#iconfont"
+                                            Foreground="#7ADA95"
+                                            Text="&#xe673;" />
+                                    </Border>
+
+                                    <TextBlock
+                                        Margin="15,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Foreground="#7ADA95"
+                                        Text="76.9%" />
+                                </StackPanel>
+
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#3F4C5D"
+                                    Text="服务" />
+                            </StackPanel>
+                        </Grid>
+
+                        <lvc:CartesianChart Grid.Column="1" Margin="10">
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries
+                                    Fill="#E1F2F6"
+                                    LineSmoothness="0"
+                                    PointGeometrySize="0"
+                                    Stroke="#3BC8D7"
+                                    Values="20,50,40,50,20,90,25,50" />
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis MinValue="0" ShowLabels="True" />
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis MinValue="0" ShowLabels="True" />
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+                    </Grid>
+
+                </Border>
+            </Grid>
+
+            <Grid Grid.Column="1" Margin="10,0,60,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="15"
+                    FontWeight="Bold"
+                    Foreground="#3F4C5D"
+                    Text="服务" />
+
+                <Border
+                    Grid.Row="1"
+                    Background="#12BDCF"
+                    CornerRadius="10">
+                    <Border.Effect>
+                        <DropShadowEffect
+                            BlurRadius="10"
+                            Direction="270"
+                            Opacity="0.4"
+                            ShadowDepth="10"
+                            Color="#F2F2F2" />
+                    </Border.Effect>
+
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock
+                            Margin="10,0,0,0"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="服务监测" />
+                        <TextBlock
+                            Width="auto"
+                            Margin="10"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Foreground="#B3E9F1"
+                            Text="故障监测（数据库、应用程序，FTP，定时任务，数据比对）"
+                            TextWrapping="Wrap" />
+
+                    </StackPanel>
+                </Border>
+                <Image
+                    Grid.Row="1"
+                    Margin="30"
+                    HorizontalAlignment="Right"
+                    Source="microsoft.png" />
+            </Grid>
+
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="10,0,10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                VerticalAlignment="Center"
+                FontSize="15"
+                FontWeight="Bold"
+                Foreground="#3F4C5D"
+                Text="服务" />
+            <TextBlock
+                Margin="0,0,5,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                FontWeight="Bold"
+                Foreground="#5CD0E1"
+                Text="View More" />
+
+            <Border
+                Grid.Row="1"
+                Margin="5"
+                Background="White"
+                CornerRadius="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="3.5*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        Grid.Column="1"
+                        Margin="0,10,0,10"
+                        BorderBrush="#B8C0C9"
+                        BorderThickness="1,0,1,0" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="故障" />
+
+                    <lvc:PieChart
+                        Name="pie1"
+                        Grid.Column="1"
+                        Margin="5"
+                        InnerRadius="12"
+                        LegendLocation="Right"
+                        Series="{Binding SeriesCollection1}">
+                        <lvc:PieChart.ChartLegend>
+                            <lvc:DefaultLegend BulletSize="10" />
+                        </lvc:PieChart.ChartLegend>
+                        <lvc:PieChart.DataTooltip>
+                            <lvc:DefaultTooltip BulletSize="10" />
+                        </lvc:PieChart.DataTooltip>
+                    </lvc:PieChart>
+
+                    <UniformGrid
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        Columns="5">
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel>
+                                <TextBlock Text="正常" />
+                                <TextBlock Text="8,945" />
+                            </StackPanel>
+                            <StackPanel Margin="5,0,0,0">
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="↑" />
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="52%" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel>
+                                <TextBlock Text="正常" />
+                                <TextBlock Text="8,945" />
+                            </StackPanel>
+                            <StackPanel Margin="5,0,0,0">
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="↑" />
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="52%" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel>
+                                <TextBlock Text="故障" />
+                                <TextBlock Text="8,945" />
+                            </StackPanel>
+                            <StackPanel Margin="5,0,0,0">
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="Red"
+                                    Text="↓" />
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="Red"
+                                    Text="52%" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel>
+                                <TextBlock Text="故障" />
+                                <TextBlock Text="8,945" />
+                            </StackPanel>
+                            <StackPanel Margin="5,0,0,0">
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="↑" />
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="52%" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel>
+                                <TextBlock Text="异常" />
+                                <TextBlock Text="8,945" />
+                            </StackPanel>
+                            <StackPanel Margin="5,0,0,0">
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="↑" />
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="52%" />
+                            </StackPanel>
+                        </StackPanel>
+                    </UniformGrid>
+                </Grid>
+            </Border>
+
+            <Border
+                Grid.Row="2"
+                Margin="5"
+                Background="White"
+                CornerRadius="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="3.5*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        Grid.Column="1"
+                        Margin="0,10,0,10"
+                        BorderBrush="#B8C0C9"
+                        BorderThickness="1,0,1,0" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="故障" />
+
+                    <lvc:PieChart
+                        Name="pie2"
+                        Grid.Column="1"
+                        Margin="5"
+                        InnerRadius="12"
+                        LegendLocation="Right"
+                        Series="{Binding SeriesCollection}">
+                        <lvc:PieChart.ChartLegend>
+                            <lvc:DefaultLegend BulletSize="10" />
+                        </lvc:PieChart.ChartLegend>
+                        <lvc:PieChart.DataTooltip>
+                            <lvc:DefaultTooltip BulletSize="10" />
+                        </lvc:PieChart.DataTooltip>
+                    </lvc:PieChart>
+
+                    <UniformGrid
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        Columns="5">
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel>
+                                <TextBlock Text="正常" />
+                                <TextBlock Text="8,945" />
+                            </StackPanel>
+                            <StackPanel Margin="5,0,0,0">
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="↑" />
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="52%" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel>
+                                <TextBlock Text="异常" />
+                                <TextBlock Text="8,945" />
+                            </StackPanel>
+                            <StackPanel Margin="5,0,0,0">
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="↑" />
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="52%" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel>
+                                <TextBlock Text="故障" />
+                                <TextBlock Text="8,945" />
+                            </StackPanel>
+                            <StackPanel Margin="5,0,0,0">
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="Red"
+                                    Text="↓" />
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="Red"
+                                    Text="52%" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel>
+                                <TextBlock Text="异常" />
+                                <TextBlock Text="8,945" />
+                            </StackPanel>
+                            <StackPanel Margin="5,0,0,0">
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="↑" />
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="52%" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel>
+                                <TextBlock Text="故障" />
+                                <TextBlock Text="8,945" />
+                            </StackPanel>
+                            <StackPanel Margin="5,0,0,0">
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="↑" />
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Foreground="#7ADA95"
+                                    Text="52%" />
+                            </StackPanel>
+                        </StackPanel>
+                    </UniformGrid>
+                </Grid>
+            </Border>
+        </Grid>
+
     </Grid>
 </UserControl>

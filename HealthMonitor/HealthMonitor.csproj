@@ -108,6 +108,12 @@
     <Reference Include="FluentFTP, Version=44.0.1.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentFTP.44.0.1\lib\net472\FluentFTP.dll</HintPath>
     </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Magicodes.IE.Core, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Magicodes.IE.Core.2.7.0\lib\netstandard2.0\Magicodes.IE.Core.dll</HintPath>
     </Reference>
@@ -333,6 +339,12 @@
     <Reference Include="System.Xml.XPath.XmlDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Xml.XPath.XmlDocument.4.3.0\lib\net46\System.Xml.XPath.XmlDocument.dll</HintPath>
     </Reference>
+    <Reference Include="ValueConverters, Version=3.0.26.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ValueConverters.3.0.26\lib\net48\ValueConverters.dll</HintPath>
+    </Reference>
+    <Reference Include="ValueConverters.Annotations, Version=3.0.26.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ValueConverters.Annotations.3.0.26\lib\net48\ValueConverters.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -354,6 +366,7 @@
     <Compile Include="Domain\HongmoKaoqinModel.cs" />
     <Compile Include="Domain\HomeViewModel.cs" />
     <Compile Include="Domain\DataCompareViewModel.cs" />
+    <Compile Include="Domain\LinkAlarmViewModel.cs" />
     <Compile Include="Domain\MainViewModel.cs" />
     <Compile Include="Domain\NavigationViewModel.cs" />
     <Compile Include="Domain\NotEmptyValidationRule.cs" />
@@ -402,6 +415,9 @@
     <Compile Include="Views\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LinkAlarm.xaml.cs">
+      <DependentUpon>LinkAlarm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Monitors.xaml.cs">
       <DependentUpon>Monitors.xaml</DependentUpon>
     </Compile>
@@ -431,6 +447,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Themes\ScrollViewerStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\ThemeStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -448,6 +468,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Home.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LinkAlarm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -484,6 +508,7 @@
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="crash_reporter.cfg" />
+    <Resource Include="Fonts\iconfont.ttf" />
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -494,7 +519,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -532,6 +559,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExternalDll\MySql.Data.dll" />
+    <Resource Include="Resource\home.png" />
     <Resource Include="Resource\homebg.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

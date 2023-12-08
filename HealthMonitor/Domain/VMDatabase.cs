@@ -62,13 +62,26 @@ namespace HealthMonitor.ViewModel
             }
         }
 
+        /// <summary>
+        /// 数据库异常信息
+        /// </summary>
+        private string _message;
+        public string Message
+        {
+            get { return _message; }
+            set
+            {
+                SetProperty(ref _message, value);
+            }
+        }
+
         private void StartMonitor()
         {
             Task.Run(async () =>
             {
                 while (this._isCheck)
                 {
-                    (this.Status, _) = await DbFactory
+                    (this.Status, this.Message) = await DbFactory
                                 .GetDbInstance(this.ConnectionString, (DbType)Enum.Parse(typeof(DbType), this.DbType, true))
                                 .HealthCheckAsync();
 
@@ -89,6 +102,7 @@ namespace HealthMonitor.ViewModel
                 //停止监听删除相应的实时报警记录
                 await RYDWDbContext.DeleteAlarmRecord(AlarmRecordEntity.GenerateAlarm($"{AlarmType.ATP_DATABASE_ERROR}", string.Empty, this.DbName, DateTime.Now));
                 this.Status = false;
+                this.Message = string.Empty;
             });
         }
     }

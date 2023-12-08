@@ -1,8 +1,10 @@
 ﻿using HealthMonitor.Domain;
+using Prism.Commands;
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Threading.Tasks;
 
 namespace HealthMonitor.ViewModel
 {
@@ -11,10 +13,10 @@ namespace HealthMonitor.ViewModel
     /// </summary>
     public class MonitorViewModel : ViewModelBase
     {
-        public MonitorViewModel()
-        {
-            Init();
-        }
+        /// <summary>
+        /// 一键监测
+        /// </summary>
+        public DelegateCommand<bool?> OneClickMonitorCommand { get; }
 
         /// <summary>
         /// 监测数据库
@@ -31,8 +33,11 @@ namespace HealthMonitor.ViewModel
         /// </summary>
         public ObservableCollection<VMFtp> FTPItems { get; private set; }
 
-        public string AlarmSettingAddress =>
-            ConfigurationManager.AppSettings["AlarmSettingAddress"];
+        public MonitorViewModel()
+        {
+            Init();
+            OneClickMonitorCommand = new DelegateCommand<bool?>(OneClickMoniting);
+        }
 
         #region 初始化配置
         private void Init()
@@ -40,6 +45,15 @@ namespace HealthMonitor.ViewModel
             InitDatabaseByConfigData();
             InitProcessesByConfigData();
             InitFTPByConfigData();
+        }
+
+        private void OneClickMoniting(bool? flag)
+        {
+            Parallel.ForEach(this.DbHealthItems, db => db.IsCheck = flag.Value);
+
+            Parallel.ForEach(this.FTPItems, db => db.IsCheck = flag.Value);
+
+            Parallel.ForEach(this.ProcessHealthItems, db => db.IsCheck = flag.Value);
         }
 
         /// <summary>
