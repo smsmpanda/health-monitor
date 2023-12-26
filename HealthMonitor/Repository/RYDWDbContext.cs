@@ -79,6 +79,9 @@ namespace HealthMonitor.Repository
 
         public static async Task DeleteUniqueAlarmAsync(params long[] empIds) 
         {
+            if (!empIds.Any())
+                return;
+
             using (IDbConnection conn = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
             {
                 await conn.ExecuteAsync(string.Format(UniqueComparsionSql.DeleteUniqueAlarm,AlarmType.ATP_UNIQUE_FAIL,string.Join(",", empIds.Select(x => $"'{x}'"))));
@@ -182,6 +185,9 @@ namespace HealthMonitor.Repository
         /// <returns></returns>
         public static async Task<IEnumerable<UniqueRecordEntity>> GetUniqueReocrdByEmpIDAsync(params long[] empIds) 
         {
+            if (!empIds.Any()) 
+                return Enumerable.Empty<UniqueRecordEntity>();
+
             using (IDbConnection connection = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
             {
                 return await connection.QueryAsync<UniqueRecordEntity>(UniqueComparsionSql.GetUniqueReocrdByEmpID, string.Join(",", empIds.Select(x => $"'{x}'")));

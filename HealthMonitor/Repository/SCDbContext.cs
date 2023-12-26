@@ -36,6 +36,11 @@ namespace HealthMonitor.Repository
 
         public static async Task<IEnumerable<SuncunUniqueRecordEntity>> GetUniqueRecordByEmployeeNameAsync(params string[]employeeNames)
         {
+            if(!employeeNames.Any())
+            {
+                return Enumerable.Empty<SuncunUniqueRecordEntity>();
+            }
+
             try
             {
                 using (IDbConnection conn = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.MYSQL).CreateConnectionAsync())
