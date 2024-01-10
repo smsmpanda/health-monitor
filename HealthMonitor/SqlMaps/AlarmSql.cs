@@ -127,7 +127,7 @@ namespace HealthMonitor.SqlMaps
         /// <summary>
         /// 删除指定职工的报警记录
         /// </summary>
-        public const string DeleteUniqueAlarm = @"DELETE FROM TB_EMP_REALTIME_ALARM WHERE ALARMTYPE = {0} AND ALARMMANID IN ({1})";
+        public const string DeleteUniqueAlarm = @"DELETE FROM TB_EMP_REALTIME_ALARM WHERE ALARMTYPE = '{0}' AND ALARMMANID IN ({1})";
 
         /// <summary>
         /// 孙村唯一性记录

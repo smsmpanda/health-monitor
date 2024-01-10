@@ -65,7 +65,7 @@ namespace HealthMonitor.Repository
 
                     alarms.ForEach(a =>
                     {
-                        sqlAppender.Append($" INTO TB_EMP_REALTIME_ALARM(ALARMTYPE,ALARMMANID,ALARMMANNAME, TAGMAC, DEPARTMENT,DESCRIPTION,STARTDATE) VALUES('{a.ALARMTYPE}',{a.ALARMMANID},'{a.ALARMMANNAME}','{a.TAGMAC}',{a.DEPARTMENT},'{a.DESCRIPTION}',to_date('{a.STARTDATE}', 'yyyy-MM-dd HH24:mi:ss'))");
+                        sqlAppender.Append($" INTO TB_EMP_REALTIME_ALARM(ALARMTYPE,ALARMMANID,ALARMMANNAME, TAGMAC, DEPARTMENT,DESCRIPTION,STARTDATE) VALUES('{a.ALARMTYPE}',{a.ALARMMANID},'{a.ALARMMANNAME}','{a.TAGMAC}','{a.DEPARTMENT}','{a.DESCRIPTION}',to_date('{a.STARTDATE}', 'yyyy-MM-dd HH24:mi:ss'))");
                     });
 
                     await conn.ExecuteAsync(string.Format(AlarmSql.InsertAlarmBlukSql, sqlAppender.ToString()));
