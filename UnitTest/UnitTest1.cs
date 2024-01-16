@@ -39,9 +39,9 @@ namespace UnitTest
                     TAGMAC = "A111100",
                 }
             };
-            //await RYDWDbContext.InsertAlarmBlukAsync(alarms.ToArray());
+            await RYDWDbContext.InsertAlarmBlukAsync(alarms.ToArray());
 
-            await RYDWDbContext.DeleteUniqueAlarmAsync(alarms.Select(x => x.ALARMMANID).ToArray());
+            //await RYDWDbContext.DeleteUniqueAlarmAsync(alarms.Select(x => x.ALARMMANID).ToArray());
         }
     }
 }

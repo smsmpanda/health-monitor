@@ -17,7 +17,7 @@ namespace HealthMonitor.Services.imp
         public override async Task ExecuteHandleAsync(CancellationToken cancellationToken = default)
         {
             //1.获取将要开始比对的数据编号
-            ulong rollID = await RYDWDbContext.GetMaxIDFromInexitWellData();
+            ulong rollID = await RYDWDbContext.GetInexitWellMaxID();
 
             //1.1.监测数据无改变
             if (ROLLID == rollID)

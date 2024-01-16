@@ -82,7 +82,7 @@ namespace HealthMonitor.SqlMaps
     {
         //比对起始ID
         public const string GetInExitWellStartID = @"
-            SELECT MAX( ID ) AS MAXID FROM TB_EMP_INEXITWELL WHERE Logintime >= SYSDATE - 1 / 24 / 2 ";
+            SELECT MAX( ID ) AS MAXID FROM TB_EMP_INEXITWELL ";
 
         //滚动比对数据(出入井数据)
         public const string GetInExitWellDataByStartID = @"

@@ -1,5 +1,6 @@
 ﻿using HealthMonitor.Model.Entity;
 using HealthMonitor.Repository;
+using HealthMonitor.Utility;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using System.Collections.Generic;
@@ -16,24 +17,33 @@ namespace HealthMonitor.Services.imp
     /// </summary>
     public class SuncunUniqueComparisonAlerts : DefaultUniqueComparisonAlerts
     {
-        private static ulong ROLLID = ulong.MinValue;
+        private static ulong ROLLINGID = ulong.MinValue;
 
         public override async Task ExecuteHandleAsync(CancellationToken cancellationToken = default)
         {
-            
-            ulong rollID = await RYDWDbContext.GetMaxIDFromInexitWellData();
-            
+
+            ulong rollingID = await RYDWDbContext.GetInexitWellMaxID();
+
             //1.1.监测数据无改变
-            if (ROLLID == rollID)
+            if (ROLLINGID == rollingID)
             {
                 return;
             }
 
+            if (ROLLINGID == 0) 
+            {
+                ROLLINGID = rollingID;
+            }
+            
             //2.主数据(定位入井数据)
-            var inexitwellList = await RYDWDbContext.GetUniqueComparsionInexitWellData(rollID);
+            var inexitwellList = await RYDWDbContext.GetUniqueComparsionInexitWellData(ROLLINGID);
             if (inexitwellList is null || !inexitwellList.Any())
             {
                 return;
+            }
+            else
+            {
+                ROLLINGID = (ulong)inexitwellList.First().MaxID;
             }
 
             //3.唯一性比对数据
@@ -54,6 +64,11 @@ namespace HealthMonitor.Services.imp
                     //4.2写入报警
                     alarms.Add(inexitWellItem.ToMapAlarmRecord());
                 }
+            }
+
+            if (!alarms.Any())
+            {
+                return;
             }
 
             //5.写入报警记录

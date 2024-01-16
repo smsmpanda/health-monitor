@@ -68,7 +68,10 @@ namespace HealthMonitor.Repository
                         sqlAppender.Append($" INTO TB_EMP_REALTIME_ALARM(ALARMTYPE,ALARMMANID,ALARMMANNAME, TAGMAC, DEPARTMENT,DESCRIPTION,STARTDATE) VALUES('{a.ALARMTYPE}',{a.ALARMMANID},'{a.ALARMMANNAME}','{a.TAGMAC}','{a.DEPARTMENT}','{a.DESCRIPTION}',to_date('{a.STARTDATE}', 'yyyy-MM-dd HH24:mi:ss'))");
                     });
 
-                    await conn.ExecuteAsync(string.Format(AlarmSql.InsertAlarmBlukSql, sqlAppender.ToString()));
+                    string blukSql = string.Format(AlarmSql.InsertAlarmBlukSql, sqlAppender.ToString());
+                    Logger.Error($"批量SQL校验：{blukSql}");
+
+                    await conn.ExecuteAsync(blukSql);
                 }
             }
             catch (Exception ex)
@@ -158,7 +161,7 @@ namespace HealthMonitor.Repository
         /// 获取定位条件范围内的出入井数据Max ID
         /// </summary>
         /// <returns></returns>
-        public static async Task<ulong> GetMaxIDFromInexitWellData()
+        public static async Task<ulong> GetInexitWellMaxID()
         {
             using (IDbConnection connection = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
             {
