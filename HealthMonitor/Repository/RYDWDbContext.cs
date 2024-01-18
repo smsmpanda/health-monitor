@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -219,6 +220,7 @@ namespace HealthMonitor.Repository
                 catch (Exception)
                 {
                     transaction.Rollback();
+                    throw;
                 }
             }
         }

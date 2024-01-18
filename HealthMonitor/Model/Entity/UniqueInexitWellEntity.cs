@@ -1,10 +1,10 @@
-﻿using System;
+﻿using HealthMonitor.Enums;
+using System;
 
 namespace HealthMonitor.Model.Entity
 {
     public class UniqueInexitWellEntity
     {
-        public const string ATP_COMPARSION_UNIQUE = nameof(ATP_COMPARSION_UNIQUE);
         public long MaxID { get; set; }
         public long EmpID { get; set; }
         public string Name { get; set; }
@@ -14,7 +14,7 @@ namespace HealthMonitor.Model.Entity
 
         public AlarmRecordEntity ToMapAlarmRecord()
         {
-            return AlarmRecordEntity.GenerateAlarm(ATP_COMPARSION_UNIQUE, "唯一性验证失败", Name, LoginTime, EmpID, TagMac, Department);
+            return AlarmRecordEntity.GenerateAlarm(AlarmType.ATP_UNIQUE_FAIL.ToString(), "唯一性验证失败", Name, LoginTime, EmpID, TagMac, Department);
         }
     }
 
