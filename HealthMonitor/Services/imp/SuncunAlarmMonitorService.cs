@@ -13,7 +13,7 @@ namespace HealthMonitor.Services.imp
         public override async Task MonitorExecuteAsync()
         {
             var uniqueAlarmList = await this.GetUnqiueAlarmRecordAsync();
-            if (uniqueAlarmList is null || uniqueAlarmList.Any())
+            if (uniqueAlarmList is null || !uniqueAlarmList.Any())
             {
                 return;
             }
