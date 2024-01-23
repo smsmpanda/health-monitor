@@ -638,13 +638,7 @@
                 FontWeight="Bold"
                 Foreground="#3F4C5D"
                 Text="服务" />
-            <TextBlock
-                Margin="0,0,5,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                FontWeight="Bold"
-                Foreground="#5CD0E1"
-                Text="View More" />
+
 
             <Border
                 Grid.Row="1"

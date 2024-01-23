@@ -363,6 +363,8 @@
     <Compile Include="Domain\DataBaseItem.cs" />
     <Compile Include="Domain\DemoItem.cs" />
     <Compile Include="Domain\DwInOutwellModel.cs" />
+    <Compile Include="Domain\PassengerLimitScreenViewModel.cs" />
+    <Compile Include="Domain\GateMonitorViewModel.cs" />
     <Compile Include="Domain\HongmoKaoqinModel.cs" />
     <Compile Include="Domain\HomeViewModel.cs" />
     <Compile Include="Domain\DataCompareViewModel.cs" />
@@ -412,6 +414,9 @@
     <Compile Include="Views\DataCompareDialog.xaml.cs">
       <DependentUpon>DataCompareDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GateMonitor.xaml.cs">
+      <DependentUpon>GateMonitor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
     </Compile>
@@ -433,6 +438,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Views\PassengerLimitSceen.xaml.cs">
+      <DependentUpon>PassengerLimitSceen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProgressBarView.xaml.cs">
       <DependentUpon>ProgressBarView.xaml</DependentUpon>
     </Compile>
@@ -467,6 +475,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\GateMonitor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Home.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -476,6 +488,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Monitors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PassengerLimitSceen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -541,7 +557,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resource\sub-logo.png" />
   </ItemGroup>

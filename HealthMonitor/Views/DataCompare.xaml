@@ -540,8 +540,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Border
-                                            Padding="5"
                                             Width="110"
+                                            Padding="5"
                                             HorizontalAlignment="Left"
                                             CornerRadius="2">
                                             <TextBlock>

@@ -34,6 +34,8 @@ namespace HealthMonitor
             containerRegistry.RegisterForNavigation<Monitors, MonitorViewModel>();
             containerRegistry.RegisterForNavigation<TaskPanel, TaskPanelViewModel>();
             containerRegistry.RegisterForNavigation<LinkAlarm, LinkAlarmViewModel>();
+            containerRegistry.RegisterForNavigation<PassengerLimitSceen, PassengerLimitScreenViewModel>();
+            containerRegistry.RegisterForNavigation<GateMonitor, GateMonitorViewModel>();
         }
 
         [DllImport("user32.dll", EntryPoint = "SetForegroundWindow", SetLastError = true)]
