@@ -190,7 +190,7 @@ namespace HealthMonitor.SqlMaps
                 area.AREANAME 
             FROM TB_BUSINESS_SCREEN screen
             INNER JOIN TB_EMP_AREA area
-            ON screen.AREAID = area.ID";
+            ON screen.AREAID = area.ID ORDER BY ID DESC";
 
         public const string Update = @"
             UPDATE TB_BUSINESS_SCREEN SET 

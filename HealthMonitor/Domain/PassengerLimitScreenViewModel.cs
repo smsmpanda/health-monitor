@@ -2,6 +2,7 @@
 using HealthMonitor.Repository;
 using HealthMonitor.Utility;
 using HealthMonitor.ViewModel;
+using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,11 +23,13 @@ namespace HealthMonitor.Domain
         private bool _isBottomDrawOpen;
         private ScreenModel _currentScreen;
         private ObservableCollection<ScreenModel> _screens;
+        private ScreenModel _selectScreen;
 
         public PassengerLimitScreenViewModel()
         {
             _screens = new ObservableCollection<ScreenModel>();
-           
+            OneClickMonitorCommand = new DelegateCommand<bool?>(OneClickMoniting);
+
             GetScreensAsync();
             GetAreasAsync();
         }
@@ -52,6 +55,13 @@ namespace HealthMonitor.Domain
             set => SetProperty(ref _screens, value);
         }
 
+
+        public ScreenModel SelectScreen
+        {
+            get => _selectScreen;
+            set => SetProperty(ref _selectScreen, value);
+        }
+
         /// <summary>
         /// 区域数据
         /// </summary>
@@ -72,10 +82,17 @@ namespace HealthMonitor.Domain
         public ICommand ExpandBottomDrawCommand =>
            new AnotherCommandImplementation(ExpandBottomDraw);
 
+        public DelegateCommand<bool?> OneClickMonitorCommand { get; }
+
         public void ExpandBottomDraw(object m)
         {
             this.CurrentScreen = new ScreenModel();
             IsBottomDrawOpen = !IsBottomDrawOpen;
+        }
+
+        private void OneClickMoniting(bool? flag)
+        {
+            Parallel.ForEach(this.Screens, db => db.STARTUP = flag.Value);
         }
 
         /// <summary>
@@ -142,6 +159,7 @@ namespace HealthMonitor.Domain
             if (screens != null && screens.Any())
             {
                 this.Screens = new ObservableCollection<ScreenModel>(screens.Select(s => s.ToMapViewModel()));
+                this.SelectScreen = this.SelectScreen ?? this.Screens[0];
             }
             after?.Invoke();
         }

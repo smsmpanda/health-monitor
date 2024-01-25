@@ -1,5 +1,6 @@
 ﻿using HealthMonitor.Repository;
 using HealthMonitor.Utility;
+using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +20,7 @@ namespace HealthMonitor.Domain
         public GateMonitorViewModel()
         {
             _gates = new ObservableCollection<GateMonitorModel>();
-
+            OneClickMonitorCommand = new DelegateCommand<bool?>(OneClickMoniting);
             GetGatesAsync();
             GetAreasAsync();
         }
@@ -65,10 +66,17 @@ namespace HealthMonitor.Domain
         public ICommand ExpandBottomDrawCommand =>
            new AnotherCommandImplementation(ExpandBottomDraw);
 
+        public DelegateCommand<bool?> OneClickMonitorCommand { get; }
+
         public void ExpandBottomDraw(object m)
         {
             this.CurrentGate = new GateMonitorModel();
             IsBottomDrawOpen = !IsBottomDrawOpen;
+        }
+
+        private void OneClickMoniting(bool? flag)
+        {
+            Parallel.ForEach(this.Gates, db => db.STARTUP = flag.Value);
         }
 
         /// <summary>

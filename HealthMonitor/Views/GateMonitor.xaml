@@ -3,6 +3,7 @@
     x:Class="HealthMonitor.Views.GateMonitor"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:ValueConverters;assembly=ValueConverters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:HealthMonitor.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -27,7 +28,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <Border Padding="10" CornerRadius="5">
+                            <Border CornerRadius="5">
                                 <ItemsPresenter />
                             </Border>
                         </ControlTemplate>
@@ -41,9 +42,9 @@
                             <materialDesign:Card
                                 Name="card"
                                 MinWidth="250"
-                                Margin="10"
+                                Margin="5"
                                 Padding="10"
-                                materialDesign:ElevationAssist.Elevation="Dp4">
+                                materialDesign:ElevationAssist.Elevation="Dp3">
                                 <ContentPresenter />
                             </materialDesign:Card>
                         </ControlTemplate>
@@ -54,6 +55,7 @@
                 <Setter Property="FontSize" Value="12" />
                 <Setter Property="LineHeight" Value="25" />
             </Style>
+            <conv:BoolToVisibilityConverter x:Key="ConvBoolToVisibility" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -118,13 +120,21 @@
                 </materialDesign:DrawerHost.BottomDrawerContent>
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Border Margin="0,5,0,0" Background="White">
+                        <CheckBox
+                            HorizontalAlignment="Right"
+                            Command="{Binding OneClickMonitorCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                            Content="一键监测"
+                            IsChecked="False"
+                            Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" />
+                    </Border>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                         <ListBox
                             Name="Gates"
-                            Grid.Column="0"
                             ItemContainerStyle="{StaticResource GateListBoxItemContainerStyle}"
                             ItemsSource="{Binding Gates}"
                             Style="{StaticResource GateListBox}">
@@ -138,6 +148,7 @@
                                             <RowDefinition />
                                             <RowDefinition />
                                             <RowDefinition />
+                                            <RowDefinition Height="3" />
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
@@ -180,38 +191,50 @@
                                             Grid.ColumnSpan="2"
                                             Style="{StaticResource GateInfoTextBlockStyle}"
                                             Text="{Binding AREA.NAME, StringFormat=区     域：{0}}" />
-                                        <StackPanel
+                                        <materialDesign:PopupBox
                                             Grid.Row="5"
                                             Grid.ColumnSpan="2"
-                                            HorizontalAlignment="Right"
-                                            Orientation="Horizontal">
-                                            <Button
-                                                Command="{Binding DataContext.UpdateGateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
-                                                CommandParameter="{Binding}"
-                                                Style="{StaticResource MaterialDesignFlatButton}">
-                                                <materialDesign:PackIcon
-                                                    Width="20"
-                                                    Height="20"
-                                                    Kind="SquareEditOutline" />
-                                            </Button>
-                                            <Button
-                                                Command="{Binding DataContext.DeleteGateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
-                                                CommandParameter="{Binding}"
-                                                Style="{StaticResource MaterialDesignFlatButton}">
-                                                <materialDesign:PackIcon
-                                                    Width="20"
-                                                    Height="20"
-                                                    Kind="Delete" />
-                                            </Button>
-                                        </StackPanel>
+                                            HorizontalAlignment="Right">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button
+                                                    Command="{Binding DataContext.UpdateGateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource MaterialDesignFlatButton}">
+                                                    <materialDesign:PackIcon
+                                                        Width="20"
+                                                        Height="20"
+                                                        Kind="SquareEditOutline" />
+                                                </Button>
+                                                <Button
+                                                    Command="{Binding DataContext.DeleteGateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource MaterialDesignFlatButton}">
+                                                    <materialDesign:PackIcon
+                                                        Width="20"
+                                                        Height="20"
+                                                        Kind="Delete" />
+                                                </Button>
+                                            </StackPanel>
+                                        </materialDesign:PopupBox>
+                                        <Button
+                                            Grid.Row="6"
+                                            Grid.ColumnSpan="2"
+                                            Height="3"
+                                            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                                            materialDesign:ButtonProgressAssist.Value="-1"
+                                            Content="Indeterminate"
+                                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            Visibility="{Binding STARTUP, Converter={StaticResource ConvBoolToVisibility}}" />
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </ScrollViewer>
                     <Button
-                        Grid.Row="0"
-                        Margin="0,0,28,20"
+                        Grid.Row="1"
+                        Margin="0,0,40,40"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
                         Command="{Binding ExpandBottomDrawCommand}"
