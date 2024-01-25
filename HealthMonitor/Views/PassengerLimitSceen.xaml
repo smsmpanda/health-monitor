@@ -1,13 +1,256 @@
-﻿<!--限员屏显示管理-->
-<UserControl x:Class="HealthMonitor.Views.PassengerLimitSceen"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:HealthMonitor.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<!--  限员屏显示管理  -->
+<UserControl
+    x:Class="HealthMonitor.Views.PassengerLimitSceen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:HealthMonitor.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+    Name="LimitScreen"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="ScreenListBox" TargetType="ListBox">
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Border Padding="10" CornerRadius="5">
+                                <ItemsPresenter />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="ScreenListBoxItemContainerStyle" TargetType="ListBoxItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <materialDesign:Card
+                                Name="card"
+                                MinWidth="250"
+                                Margin="10"
+                                Padding="10"
+                                materialDesign:ElevationAssist.Elevation="Dp4">
+                                <ContentPresenter />
+                            </materialDesign:Card>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="ScreenInfoTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="LineHeight" Value="25" />
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
-            
+        <materialDesign:DialogHost DialogTheme="Dark">
+            <materialDesign:DrawerHost IsBottomDrawerOpen="{Binding IsBottomDrawOpen}">
+                <materialDesign:DrawerHost.BottomDrawerContent>
+                    <Grid Width="300" Margin="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="新增限员屏" />
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            wpf:HintAssist.Hint="IP地址"
+                            FontSize="15"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding CurrentScreen.IP, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            wpf:HintAssist.Hint="端口"
+                            FontSize="15"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding CurrentScreen.PORT, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            wpf:HintAssist.Hint="名称"
+                            FontSize="15"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding CurrentScreen.NAME, UpdateSourceTrigger=PropertyChanged}" />
+                        <ComboBox
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            materialDesign:HintAssist.IsFloating="true"
+                            wpf:HintAssist.Hint="区域"
+                            DisplayMemberPath="NAME"
+                            FontSize="15"
+                            ItemsSource="{Binding AreaItems}"
+                            SelectedItem="{Binding CurrentScreen.AREA}" />
+                        <TextBox
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            wpf:HintAssist.Hint="推送间隔"
+                            FontSize="15"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding CurrentScreen.PUSHINTERVAL, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox
+                            Grid.Row="6"
+                            Grid.Column="0"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            wpf:HintAssist.Hint="工作面名称"
+                            FontSize="15"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding CurrentScreen.WORKFACENAME, UpdateSourceTrigger=PropertyChanged}" />
+                        <StackPanel
+                            Grid.Row="7"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                            <Button
+                                Margin="0,8,8,0"
+                                Command="{Binding SaveScreenCommand}"
+                                Content="保存"
+                                IsDefault="True"
+                                Style="{StaticResource MaterialDesignFlatButton}" />
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:DrawerHost.BottomDrawerContent>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ListBox
+                            Name="Screens"
+                            Grid.Column="0"
+                            ItemContainerStyle="{StaticResource ScreenListBoxItemContainerStyle}"
+                            ItemsSource="{Binding Screens}"
+                            Style="{StaticResource ScreenListBox}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition Height="30" />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="50" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+                                            <materialDesign:PackIcon
+                                                Width="30"
+                                                Height="30"
+                                                Margin="0,0,10,0"
+                                                VerticalAlignment="Center"
+                                                Foreground="#FF002984"
+                                                Kind="MonitorScreenshot" />
+                                            <TextBlock
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                FontSize="14"
+                                                LineHeight="20"
+                                                Text="{Binding NAME, StringFormat={}{0}}" />
+                                        </StackPanel>
+                                        <ToggleButton
+                                            Grid.Column="1"
+                                            IsChecked="{Binding STARTUP, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            Style="{StaticResource MaterialDesignSwitchToggleButton}" />
+
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            Grid.ColumnSpan="2"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource ScreenInfoTextBlockStyle}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="主     机：{0}:{1}">
+                                                    <Binding Path="IP" />
+                                                    <Binding Path="PORT" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock
+                                            Grid.Row="3"
+                                            Grid.ColumnSpan="2"
+                                            Style="{StaticResource ScreenInfoTextBlockStyle}"
+                                            Text="{Binding WORKFACENAME, StringFormat=工 作 面：{0}}" />
+                                        <TextBlock
+                                            Grid.Row="4"
+                                            Grid.ColumnSpan="2"
+                                            Style="{StaticResource ScreenInfoTextBlockStyle}"
+                                            Text="{Binding AREA.NAME, StringFormat=区     域：{0}}" />
+                                        <TextBlock
+                                            Grid.Row="5"
+                                            Grid.ColumnSpan="2"
+                                            Style="{StaticResource ScreenInfoTextBlockStyle}"
+                                            Text="{Binding PUSHINTERVAL, StringFormat=推送间隔：{0}秒}" />
+                                        <StackPanel
+                                            Grid.Row="6"
+                                            Grid.ColumnSpan="2"
+                                            HorizontalAlignment="Right"
+                                            Orientation="Horizontal">
+                                            <Button
+                                                Command="{Binding DataContext.UpdateScreenCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource MaterialDesignFlatButton}">
+                                                <materialDesign:PackIcon
+                                                    Width="20"
+                                                    Height="20"
+                                                    Kind="SquareEditOutline" />
+                                            </Button>
+                                            <Button
+                                                Command="{Binding DataContext.DeleteScreenCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource MaterialDesignFlatButton}">
+                                                <materialDesign:PackIcon
+                                                    Width="20"
+                                                    Height="20"
+                                                    Kind="Delete" />
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                    <Button
+                        Grid.Row="0"
+                        Margin="0,0,28,20"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding ExpandBottomDrawCommand}"
+                        Content="{materialDesign:PackIcon Kind=Plus,
+                                                          Size=22}"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" />
+
+                </Grid>
+            </materialDesign:DrawerHost>
+        </materialDesign:DialogHost>
     </Grid>
 </UserControl>

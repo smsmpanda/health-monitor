@@ -1,4 +1,7 @@
 ﻿using Dapper;
+using Dapper.Contrib.Extensions;
+using DapperExtensions;
+using HealthMonitor.Domain;
 using HealthMonitor.Enums;
 using HealthMonitor.Model.Entity;
 using HealthMonitor.SqlMaps;
@@ -10,6 +13,7 @@ using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -222,6 +226,122 @@ namespace HealthMonitor.Repository
                     transaction.Rollback();
                     throw;
                 }
+            }
+        }
+        #endregion
+
+        #region 限员屏 & 闸门
+        /// <summary>
+        /// 获取限员屏信息
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<IEnumerable<PassengerScreenEntity>> GetPassengerLimitScreensAsync()
+        {
+            using (IDbConnection connection = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync()) 
+            {
+                return await connection.QueryAsync<PassengerScreenEntity>(PassenagerLimitSql.GetList);
+            }
+        }
+
+        /// <summary>
+        /// 新增屏幕信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static async Task<int> InsertPassengerLimitScreenAsync(PassengerScreenEntity model) 
+        {
+            using (IDbConnection connection = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
+            {
+                return await connection.ExecuteAsync(PassenagerLimitSql.Insert,model);
+            }
+        }
+
+        /// <summary>
+        /// 更新屏幕信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static async Task<int> UpdatePassengerLimitScreenAsync(PassengerScreenEntity model)
+        {
+            using (IDbConnection connection = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
+            {
+                return await connection.ExecuteAsync(PassenagerLimitSql.Update,model);
+            }
+        }
+
+        /// <summary>
+        /// 删除屏幕信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static async Task<int> DeletePassengerLimitAsync(int id)
+        {
+            using (IDbConnection connection = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
+            {
+                return await connection.ExecuteAsync(PassenagerLimitSql.Delete,new { ID=id });
+            }
+        }
+
+        /// <summary>
+        /// 获取闸门列表
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<IEnumerable<GateEntity>> GetGatesAsync()
+        {
+            using (IDbConnection connection = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
+            {
+                return await connection.QueryAsync<GateEntity>(GateSql.GetGateSql);
+            }
+        }
+
+        /// <summary>
+        /// 新增闸门信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static async Task<int> InsertGateAsync(GateEntity model)
+        {
+            using (IDbConnection connection = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
+            {
+                return await connection.ExecuteAsync(GateSql.Insert, model);
+            }
+        }
+
+        /// <summary>
+        /// 更新闸门信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static async Task<int> UpdateGateAsync(GateEntity model)
+        {
+            using (IDbConnection connection = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
+            {
+                return await connection.ExecuteAsync(GateSql.Update, model);
+            }
+        }
+
+        /// <summary>
+        /// 删除闸门信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static async Task<int> DeleteGateAsync(int ID)
+        {
+            using (IDbConnection connection = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
+            {
+                return await connection.ExecuteAsync(GateSql.Delete, new { ID = ID });
+            }
+        }
+
+        /// <summary>
+        /// 获取区域信息
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<IEnumerable<AreaModel>> GetAreasAsync()
+        {
+            using (IDbConnection connection = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
+            {
+                return await connection.QueryAsync<AreaModel>(AreaSql.Get);
             }
         }
         #endregion

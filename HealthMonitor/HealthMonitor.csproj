@@ -357,12 +357,14 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Domain\AnotherCommandImplementation.cs" />
-    <Compile Include="Domain\DataCompareDialogViewModel.cs" />
+    <Compile Include="Domain\AreaModel.cs" />
     <Compile Include="Domain\DataCompareFilter.cs" />
     <Compile Include="Domain\DataCompareTask.cs" />
     <Compile Include="Domain\DataBaseItem.cs" />
     <Compile Include="Domain\DemoItem.cs" />
     <Compile Include="Domain\DwInOutwellModel.cs" />
+    <Compile Include="Domain\GateMonitorModel.cs" />
+    <Compile Include="Domain\ScreenModel.cs" />
     <Compile Include="Domain\PassengerLimitScreenViewModel.cs" />
     <Compile Include="Domain\GateMonitorViewModel.cs" />
     <Compile Include="Domain\HongmoKaoqinModel.cs" />
@@ -384,6 +386,8 @@
     <Compile Include="Extensions\ManualMapperExtension.cs" />
     <Compile Include="Extensions\PrismManager.cs" />
     <Compile Include="Model\Entity\AlarmRecordEntity.cs" />
+    <Compile Include="Model\Entity\GateEntity.cs" />
+    <Compile Include="Model\Entity\PassengerScreenEntity.cs" />
     <Compile Include="Model\Entity\UniqueInexitWellEntity.cs" />
     <Compile Include="Repository\IDwRepository.cs" />
     <Compile Include="Repository\IHmRepository.cs" />
@@ -410,9 +414,6 @@
     <Compile Include="Utility\WindowsFullScreenHelper.cs" />
     <Compile Include="Views\DataCompare.xaml.cs">
       <DependentUpon>DataCompare.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\DataCompareDialog.xaml.cs">
-      <DependentUpon>DataCompareDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GateMonitor.xaml.cs">
       <DependentUpon>GateMonitor.xaml</DependentUpon>
@@ -468,10 +469,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DataCompare.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\DataCompareDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

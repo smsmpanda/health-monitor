@@ -1,4 +1,5 @@
-﻿using System.CodeDom;
+﻿using HealthMonitor.Domain;
+using System.CodeDom;
 
 namespace HealthMonitor.SqlMaps
 {
@@ -172,5 +173,84 @@ namespace HealthMonitor.SqlMaps
         /// 转存报警记录
         /// </summary>
         public const string TransferAlarmSql = "INSERT INTO TB_EMP_ALARM_RECORD(ALARMTYPE,ALARMMANID,DESCRIPTION,ALARMMANNAME,STARTDATE) SELECT ALARMTYPE,ALARMMANID,DESCRIPTION,ALARMMANNAME,STARTDATE FROM TB_EMP_REALTIME_ALARM WHERE ALARMTYPE = '{0}' AND ID in ({1})";
+    }
+
+    public struct PassenagerLimitSql
+    {
+        public const string GetList = @"
+            SELECT 
+                screen.ID,
+                screen.IP,
+                screen.PORT,
+                screen.PUSHINTERVAL,
+                screen.NAME,
+                screen.WORKFACENAME,
+                screen.NAME,
+                screen.AREAID,
+                area.AREANAME 
+            FROM TB_BUSINESS_SCREEN screen
+            INNER JOIN TB_EMP_AREA area
+            ON screen.AREAID = area.ID";
+
+        public const string Update = @"
+            UPDATE TB_BUSINESS_SCREEN SET 
+                IP=:IP,
+                PORT=:PORT,
+                PUSHINTERVAL=:PUSHINTERVAL,
+                NAME=:NAME,
+                WORKFACENAME=:WORKFACENAME,
+                AREAID=:AREAID 
+            WHERE ID=:ID";
+
+        public const string Insert = @"
+            INSERT INTO 
+            TB_BUSINESS_SCREEN
+            (IP,PORT,PUSHINTERVAL,NAME,WORKFACENAME,AREAID)  VALUES 
+            (:IP,:PORT,:PUSHINTERVAL,:NAME,:WORKFACENAME,:AREAID)";
+
+
+        public const string Delete = "DELETE FROM TB_BUSINESS_SCREEN WHERE ID=:ID";
+    }
+
+    public struct GateSql
+    {
+        public const string GetGateSql = @"
+        SELECT 
+            gate.ID,
+            gate.IP,
+            gate.NAME,
+            gate.PORT,
+            gate.AREAID,
+            area.AREANAME
+        FROM TB_BUSINESS_GATE gate
+        INNER JOIN TB_EMP_AREA area
+        ON gate.AREAID = area.ID";
+
+        public const string Update = @"
+            UPDATE TB_BUSINESS_GATE SET 
+                IP=:IP,
+                PORT=:PORT,
+                NAME=:NAME,
+                AREAID=:AREAID 
+            WHERE ID=:ID";
+
+        public const string Insert = @"
+            INSERT INTO 
+            TB_BUSINESS_GATE
+            (IP,PORT,NAME,AREAID)  VALUES 
+            (:IP,:PORT,:NAME,:AREAID)";
+
+
+        public const string Delete = "DELETE FROM TB_BUSINESS_GATE WHERE ID=:ID";
+    }
+
+    public struct AreaSql
+    {
+        public const string Get = @"
+            SELECT 
+                ID,
+                AREANAME AS NAME
+            FROM TB_EMP_AREA 
+            WHERE ENABLED=1 start with parentid = 0 CONNECT BY PRIOR id = parentid";
     }
 }

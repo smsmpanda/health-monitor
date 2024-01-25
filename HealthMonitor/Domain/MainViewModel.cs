@@ -22,7 +22,7 @@ namespace HealthMonitor.Domain
                 new DemoItem("TaskPanel","CheckboxMarkedCircleAutoOutline","任务","定时任务"),
                 new DemoItem("LinkAlarm","AlarmLight","报警","报警监测"),
                 new DemoItem("PassengerLimitSceen","ProjectorScreen","限员屏","限员屏显示"),
-                new DemoItem("GateMonitor","BoomGateArrowUpOutline","闸机","闸门监测"),
+                new DemoItem("GateMonitor","BoomGate","闸机","闸门监测"),
             });
 
             _regionManager = regionManager;
