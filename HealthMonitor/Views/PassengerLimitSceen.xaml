@@ -43,16 +43,16 @@
                             <Border
                                 Name="card"
                                 Margin="0"
-                                Padding="5"
-                                Background="#FFF5F5F5">
+                                Padding="10"
+                                Background="#FFEBE9E8">
                                 <ContentPresenter />
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter TargetName="card" Property="Background" Value="#FFFFFF" />
+                                    <Setter TargetName="card" Property="Background" Value="#FFC4C4C5" />
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="card" Property="Background" Value="#FFFFFF" />
+                                    <Setter TargetName="card" Property="Background" Value="#FFCFCFCF" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -164,34 +164,51 @@
                                 <DataTemplate>
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="30" />
                                             <RowDefinition />
-                                            <RowDefinition Height="1" />
+                                            <RowDefinition />
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="30" />
+                                            <ColumnDefinition Width="auto" />
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-                                        <StackPanel
-                                            Grid.ColumnSpan="2"
-                                            VerticalAlignment="Center"
-                                            Orientation="Horizontal">
+                                        <Border
+                                            Grid.RowSpan="2"
+                                            Width="40"
+                                            Height="40"
+                                            Background="#FFFFFF"
+                                            CornerRadius="3">
                                             <materialDesign:PackIcon
                                                 Width="25"
                                                 Height="25"
-                                                Margin="0,0,10,0"
-                                                VerticalAlignment="Top"
-                                                Foreground="Orange"
-                                                Kind="ProjectorScreen" />
-                                            <TextBlock
-                                                Grid.Row="2"
-                                                Grid.Column="1"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Top"
-                                                FontSize="14"
-                                                Text="{Binding IP, StringFormat={}{0}}" />
+                                                Margin="0,0,0,0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center">
+                                                <materialDesign:PackIcon.Style>
+                                                    <Style TargetType="materialDesign:PackIcon">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding STARTUP}" Value="True">
+                                                                <Setter Property="Kind" Value="MonitorScreenshot" />
+                                                                <Setter Property="Foreground" Value="#FF07C160" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding STARTUP}" Value="False">
+                                                                <Setter Property="Kind" Value="MonitorEye" />
+                                                                <Setter Property="Foreground" Value="#ccc" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </materialDesign:PackIcon.Style>
+                                            </materialDesign:PackIcon>
+                                        </Border>
 
-                                        </StackPanel>
+
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Padding="10,0,0,0"
+                                            VerticalAlignment="Bottom"
+                                            FontSize="13"
+                                            FontWeight="UltraLight"
+                                            Text="{Binding IP, StringFormat={}{0}}" />
+
                                         <!--<TextBlock
                                             Grid.Row="1"
                                             Grid.Column="1"
@@ -214,28 +231,31 @@
                                         <StackPanel
                                             Grid.Row="1"
                                             Grid.Column="1"
+                                            HorizontalAlignment="Right"
                                             Orientation="Horizontal">
-                                            <materialDesign:PackIcon
-                                                Width="15"
-                                                Height="15"
-                                                VerticalAlignment="Top"
-                                                Foreground="Green"
-                                                Kind="Location" />
                                             <TextBlock
                                                 VerticalAlignment="Top"
                                                 FontWeight="UltraLight"
                                                 Text="{Binding AREA.NAME, StringFormat={}{0}}" />
+                                            <materialDesign:PackIcon
+                                                Width="15"
+                                                Height="15"
+                                                VerticalAlignment="Top"
+                                                Kind="Location">
+                                                <materialDesign:PackIcon.Style>
+                                                    <Style TargetType="materialDesign:PackIcon">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding STARTUP}" Value="True">
+                                                                <Setter Property="Foreground" Value="#FF07C160" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding STARTUP}" Value="False">
+                                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </materialDesign:PackIcon.Style>
+                                            </materialDesign:PackIcon>
                                         </StackPanel>
-
-                                        <Button
-                                            Grid.Row="2"
-                                            Height="1"
-                                            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
-                                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
-                                            materialDesign:ButtonProgressAssist.Value="-1"
-                                            Content="Indeterminate"
-                                            Style="{StaticResource MaterialDesignFlatButton}"
-                                            Visibility="{Binding STARTUP, Converter={StaticResource ConvBoolToVisibility}}" />
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -363,8 +383,7 @@
                                     <Border
                                         Grid.Row="1"
                                         Grid.ColumnSpan="4"
-                                        Background="#ccc" />
-
+                                        Background="#FFFFFF" />
                                 </Grid>
                             </Border>
                         </Grid>

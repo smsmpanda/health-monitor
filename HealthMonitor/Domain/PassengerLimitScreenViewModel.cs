@@ -44,8 +44,8 @@ namespace HealthMonitor.Domain
         {
             get => _isBottomDrawOpen;
             set => SetProperty(ref _isBottomDrawOpen, value);
-        }
-
+        } 
+        
         /// <summary>
         /// 限员屏数据
         /// </summary>
@@ -111,7 +111,9 @@ namespace HealthMonitor.Domain
                 {
                     await RYDWDbContext.UpdatePassengerLimitScreenAsync(CurrentScreen.ToMapEntity());
                 }
-                GetScreensAsync(() => this.IsBottomDrawOpen = false);
+                GetScreensAsync(() => {
+                    this.IsBottomDrawOpen = false;
+                });
             }
             catch (Exception ex)
             {

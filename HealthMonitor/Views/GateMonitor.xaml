@@ -21,7 +21,7 @@
                 <Setter Property="ItemsPanel">
                     <Setter.Value>
                         <ItemsPanelTemplate>
-                            <WrapPanel />
+                            <StackPanel />
                         </ItemsPanelTemplate>
                     </Setter.Value>
                 </Setter>
@@ -39,14 +39,21 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ListBoxItem">
-                            <materialDesign:Card
+                            <Border
                                 Name="card"
-                                MinWidth="250"
-                                Margin="5"
+                                Margin="0"
                                 Padding="10"
-                                materialDesign:ElevationAssist.Elevation="Dp3">
+                                Background="#FFEBE9E8">
                                 <ContentPresenter />
-                            </materialDesign:Card>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="card" Property="Background" Value="#FFC4C4C5" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="card" Property="Background" Value="#FFCFCFCF" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -119,121 +126,157 @@
                     </Grid>
                 </materialDesign:DrawerHost.BottomDrawerContent>
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Border Margin="0,5,0,0" Background="White">
-                        <CheckBox
-                            HorizontalAlignment="Right"
-                            Command="{Binding OneClickMonitorCommand}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
-                            Content="一键监测"
-                            IsChecked="False"
-                            Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" />
-                    </Border>
-                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <ListBox
                             Name="Gates"
                             ItemContainerStyle="{StaticResource GateListBoxItemContainerStyle}"
                             ItemsSource="{Binding Gates}"
+                            SelectedItem="{Binding SelectGate}"
                             Style="{StaticResource GateListBox}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition />
-                                            <RowDefinition Height="30" />
                                             <RowDefinition />
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                            <RowDefinition Height="3" />
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="50" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-                                        <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+
+                                        <Border
+                                            Grid.RowSpan="2"
+                                            Width="40"
+                                            Height="40"
+                                            Background="#FFFFFF"
+                                            CornerRadius="3">
                                             <materialDesign:PackIcon
-                                                Width="30"
-                                                Height="30"
-                                                Margin="0,0,10,0"
-                                                VerticalAlignment="Center"
-                                                Foreground="#FF002984"
-                                                Kind="BoomGateArrowUpOutline" />
-                                            <TextBlock
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center"
-                                                FontSize="14"
-                                                LineHeight="20"
-                                                Text="{Binding NAME, StringFormat={}{0}}" />
-                                        </StackPanel>
-                                        <ToggleButton
-                                            Grid.Column="1"
-                                            IsChecked="{Binding STARTUP, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                            Style="{StaticResource MaterialDesignSwitchToggleButton}" />
+                                                Width="25"
+                                                Height="25"
+                                                Margin="0,0,0,0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center">
+                                                <materialDesign:PackIcon.Style>
+                                                    <Style TargetType="materialDesign:PackIcon">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding STARTUP}" Value="True">
+                                                                <Setter Property="Kind" Value="BoomGateUpOutline" />
+                                                                <Setter Property="Foreground" Value="#FF07C160" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding STARTUP}" Value="False">
+                                                                <Setter Property="Kind" Value="BoomGate" />
+                                                                <Setter Property="Foreground" Value="#ccc" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </materialDesign:PackIcon.Style>
+                                            </materialDesign:PackIcon>
+                                        </Border>
 
                                         <TextBlock
+                                            Grid.Column="1"
+                                            Padding="10,0,0,0"
+                                            VerticalAlignment="Bottom"
+                                            FontSize="13"
+                                            FontWeight="UltraLight"
+                                            Text="{Binding IP, StringFormat={}{0}}" />
+
+                                        <StackPanel
                                             Grid.Row="1"
-                                            Grid.ColumnSpan="2"
-                                            VerticalAlignment="Center"
-                                            Style="{StaticResource GateInfoTextBlockStyle}">
-                                            <TextBlock.Text>
-                                                <MultiBinding StringFormat="主     机：{0}:{1}">
-                                                    <Binding Path="IP" />
-                                                    <Binding Path="PORT" />
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                        <TextBlock
-                                            Grid.Row="4"
-                                            Grid.ColumnSpan="2"
-                                            Style="{StaticResource GateInfoTextBlockStyle}"
-                                            Text="{Binding AREA.NAME, StringFormat=区     域：{0}}" />
-                                        <materialDesign:PopupBox
-                                            Grid.Row="5"
-                                            Grid.ColumnSpan="2"
-                                            HorizontalAlignment="Right">
-                                            <StackPanel Orientation="Horizontal">
-                                                <Button
-                                                    Command="{Binding DataContext.UpdateGateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
-                                                    CommandParameter="{Binding}"
-                                                    Style="{StaticResource MaterialDesignFlatButton}">
-                                                    <materialDesign:PackIcon
-                                                        Width="20"
-                                                        Height="20"
-                                                        Kind="SquareEditOutline" />
-                                                </Button>
-                                                <Button
-                                                    Command="{Binding DataContext.DeleteGateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
-                                                    CommandParameter="{Binding}"
-                                                    Style="{StaticResource MaterialDesignFlatButton}">
-                                                    <materialDesign:PackIcon
-                                                        Width="20"
-                                                        Height="20"
-                                                        Kind="Delete" />
-                                                </Button>
-                                            </StackPanel>
-                                        </materialDesign:PopupBox>
-                                        <Button
-                                            Grid.Row="6"
-                                            Grid.ColumnSpan="2"
-                                            Height="3"
-                                            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
-                                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
-                                            materialDesign:ButtonProgressAssist.Value="-1"
-                                            Content="Indeterminate"
-                                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                                            Style="{StaticResource MaterialDesignFlatButton}"
-                                            Visibility="{Binding STARTUP, Converter={StaticResource ConvBoolToVisibility}}" />
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Right"
+                                            Orientation="Horizontal">
+                                            <TextBlock
+                                                VerticalAlignment="Top"
+                                                FontWeight="UltraLight"
+                                                Text="{Binding AREA.NAME, StringFormat={}{0}}" />
+                                            <materialDesign:PackIcon
+                                                Width="15"
+                                                Height="15"
+                                                VerticalAlignment="Top"
+                                                Kind="Location">
+                                                <materialDesign:PackIcon.Style>
+                                                    <Style TargetType="materialDesign:PackIcon">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding STARTUP}" Value="True">
+                                                                <Setter Property="Foreground" Value="#FF07C160" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding STARTUP}" Value="False">
+                                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </materialDesign:PackIcon.Style>
+                                            </materialDesign:PackIcon>
+                                        </StackPanel>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </ScrollViewer>
+
+                    <Border
+                        Grid.Column="1"
+                        BorderBrush="#FFE5E5E5"
+                        BorderThickness="1,0,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Border Margin="0,5,0,0" Background="White">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox
+                                        HorizontalAlignment="Right"
+                                        Command="{Binding OneClickMonitorCommand}"
+                                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                                        Content="一键监测"
+                                        IsChecked="False"
+                                        Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" />
+
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal">
+                                        <Button
+                                            Command="{Binding DeleteGateCommand}"
+                                            CommandParameter="{Binding SelectGate}"
+                                            Style="{StaticResource MaterialDesignFlatButton}">
+                                            <materialDesign:PackIcon
+                                                Width="20"
+                                                Height="20"
+                                                Kind="Delete" />
+                                        </Button>
+
+                                        <Button
+                                            Command="{Binding UpdateGateCommand}"
+                                            CommandParameter="{Binding SelectGate}"
+                                            Style="{StaticResource MaterialDesignFlatButton}">
+                                            <materialDesign:PackIcon
+                                                Width="20"
+                                                Height="20"
+                                                Kind="SquareEditOutline" />
+                                        </Button>
+
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            <Border Grid.Row="1" />
+                        </Grid>
+                    </Border>
+
                     <Button
-                        Grid.Row="1"
+                        Grid.Column="1"
                         Margin="0,0,40,40"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
@@ -241,7 +284,6 @@
                         Content="{materialDesign:PackIcon Kind=Plus,
                                                           Size=22}"
                         Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" />
-
                 </Grid>
             </materialDesign:DrawerHost>
         </materialDesign:DialogHost>

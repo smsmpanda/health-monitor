@@ -16,6 +16,7 @@ namespace HealthMonitor.Domain
         private bool _isBottomDrawOpen;
         private GateMonitorModel _currentGate;
         private ObservableCollection<GateMonitorModel> _gates;
+        private GateMonitorModel _selectGate;
 
         public GateMonitorViewModel()
         {
@@ -35,6 +36,12 @@ namespace HealthMonitor.Domain
         {
             get => _isBottomDrawOpen;
             set => SetProperty(ref _isBottomDrawOpen, value);
+        }
+
+        public GateMonitorModel SelectGate
+        {
+            get => _selectGate;
+            set => SetProperty(ref _selectGate, value);
         }
 
         /// <summary>
@@ -142,6 +149,7 @@ namespace HealthMonitor.Domain
             if (Gates != null && Gates.Any())
             {
                 this.Gates = new ObservableCollection<GateMonitorModel>(Gates.Select(s => s.ToMapViewModel()));
+                this.SelectGate = this.SelectGate ?? this.Gates[0];
             }
             after?.Invoke();
         }

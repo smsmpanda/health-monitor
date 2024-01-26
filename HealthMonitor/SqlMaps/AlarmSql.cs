@@ -224,7 +224,7 @@ namespace HealthMonitor.SqlMaps
             area.AREANAME
         FROM TB_BUSINESS_GATE gate
         INNER JOIN TB_EMP_AREA area
-        ON gate.AREAID = area.ID";
+        ON gate.AREAID = area.ID ORDER BY gate.ID";
 
         public const string Update = @"
             UPDATE TB_BUSINESS_GATE SET 

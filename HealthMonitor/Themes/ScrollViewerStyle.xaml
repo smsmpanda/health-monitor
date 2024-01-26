@@ -183,25 +183,25 @@
                                     <DoubleAnimation
                                         Storyboard.TargetName="PART_VerticalScrollBar"
                                         Storyboard.TargetProperty="Opacity"
-                                        To="0.8"
-                                        Duration="0:0:1" />
+                                        To="1"
+                                        Duration="0:0:0.5" />
                                     <DoubleAnimation
-                                        BeginTime="0:0:1"
+                                        BeginTime="0:0:0.5"
                                         Storyboard.TargetName="PART_VerticalScrollBar"
                                         Storyboard.TargetProperty="Opacity"
-                                        To="0.2"
-                                        Duration="0:0:1" />
+                                        To="0"
+                                        Duration="0:0:0.5" />
                                     <DoubleAnimation
                                         Storyboard.TargetName="PART_HorizontalScrollBar"
                                         Storyboard.TargetProperty="Opacity"
-                                        To="0.8"
-                                        Duration="0:0:1" />
+                                        To="1"
+                                        Duration="0:0:0.5" />
                                     <DoubleAnimation
-                                        BeginTime="0:0:1"
+                                        BeginTime="0:0:0.5"
                                         Storyboard.TargetName="PART_HorizontalScrollBar"
                                         Storyboard.TargetProperty="Opacity"
-                                        To="0.2"
-                                        Duration="0:0:1" />
+                                        To="0"
+                                        Duration="0:0:0.5" />
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
