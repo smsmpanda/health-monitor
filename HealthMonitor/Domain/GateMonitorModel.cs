@@ -1,14 +1,17 @@
 ﻿using HealthMonitor.Model.Entity;
+using HealthMonitor.Services.imp;
+using HealthMonitor.Services.PollingService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace HealthMonitor.Domain
 {
-    public class GateMonitorModel : ViewModelBase
+    public class GateMonitorModel : ViewModelBase, IMonitorEntity
     {
         public string _ip;
         public string _name;
@@ -16,7 +19,13 @@ namespace HealthMonitor.Domain
         private bool _startUp;
         private bool _status;
         private AreaModel _area;
-        private decimal _pushInterval = 3;
+        private double _pushInterval = 3;
+
+        public GateMonitorModel()
+        {
+            this.PollingService = new GateMonitorPollingService();
+        }
+
         /// <summary>
         /// 闸门编号
         /// </summary>
@@ -61,8 +70,27 @@ namespace HealthMonitor.Domain
         public bool STARTUP
         {
             get => _startUp;
-            set => SetProperty(ref _startUp, value);
+            set
+            {
+                SetProperty(ref _startUp, value);
+                if (value)
+                {
+                    if (this.TaskTokenSource is null || this.TaskTokenSource.IsCancellationRequested)
+                    {
+                        this.TaskTokenSource = new CancellationTokenSource();
+                    }
+                    this.PollingService.ExecuteAsync(this, this.TaskTokenSource.Token);
+                }
+                else
+                {
+                    this.TaskTokenSource?.Cancel();
+                }
+            }
         }
+
+        public IPollingMonitorService<GateMonitorModel> PollingService { get; set; }
+
+        public CancellationTokenSource TaskTokenSource { get; set; }
 
         /// <summary>
         /// 设备（闸门）状态
@@ -76,10 +104,15 @@ namespace HealthMonitor.Domain
         /// <summary>
         /// 检测间隔
         /// </summary>
-        public decimal PUSHINTERVAL
+        public double PUSHINTERVAL
         {
             get => _pushInterval;
             set => SetProperty(ref _pushInterval, value);
+        }
+
+        public void StartUp(bool? flag)
+        {
+            this.STARTUP = flag.Value;
         }
 
         public GateEntity ToMapEntity()

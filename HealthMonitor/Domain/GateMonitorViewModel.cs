@@ -22,6 +22,7 @@ namespace HealthMonitor.Domain
         {
             _gates = new ObservableCollection<GateMonitorModel>();
             OneClickMonitorCommand = new DelegateCommand<bool?>(OneClickMoniting);
+            StartUpMonitorCommand = new DelegateCommand<bool?>(StartUpMoniting);
             GetGatesAsync();
             GetAreasAsync();
         }
@@ -75,6 +76,8 @@ namespace HealthMonitor.Domain
 
         public DelegateCommand<bool?> OneClickMonitorCommand { get; }
 
+        public DelegateCommand<bool?> StartUpMonitorCommand { get; }
+
         public void ExpandBottomDraw(object m)
         {
             this.CurrentGate = new GateMonitorModel();
@@ -83,7 +86,12 @@ namespace HealthMonitor.Domain
 
         private void OneClickMoniting(bool? flag)
         {
-            Parallel.ForEach(this.Gates, db => db.STARTUP = flag.Value);
+            Parallel.ForEach(this.Gates, db => db.StartUp(flag));
+        }
+
+        private void StartUpMoniting(bool? flag)
+        {
+            this.SelectGate.StartUp(flag);
         }
 
         /// <summary>

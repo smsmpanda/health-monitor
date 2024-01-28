@@ -29,6 +29,7 @@ namespace HealthMonitor.Domain
         {
             _screens = new ObservableCollection<ScreenModel>();
             OneClickMonitorCommand = new DelegateCommand<bool?>(OneClickMoniting);
+            StartUpMonitorCommand = new DelegateCommand<bool?>(StartUpMoniting);
 
             GetScreensAsync();
             GetAreasAsync();
@@ -83,6 +84,7 @@ namespace HealthMonitor.Domain
            new AnotherCommandImplementation(ExpandBottomDraw);
 
         public DelegateCommand<bool?> OneClickMonitorCommand { get; }
+        public DelegateCommand<bool?> StartUpMonitorCommand { get; }
 
         public void ExpandBottomDraw(object m)
         {
@@ -92,7 +94,12 @@ namespace HealthMonitor.Domain
 
         private void OneClickMoniting(bool? flag)
         {
-            Parallel.ForEach(this.Screens, db => db.STARTUP = flag.Value);
+            Parallel.ForEach(this.Screens, db => db.StartUp(flag.Value));
+        }
+
+        private void StartUpMoniting(bool? flag)
+        {
+            this.SelectScreen.StartUp(flag);
         }
 
         /// <summary>

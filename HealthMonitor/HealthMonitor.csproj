@@ -364,6 +364,7 @@
     <Compile Include="Domain\DemoItem.cs" />
     <Compile Include="Domain\DwInOutwellModel.cs" />
     <Compile Include="Domain\GateMonitorModel.cs" />
+    <Compile Include="Domain\IMonitorEntity.cs" />
     <Compile Include="Domain\ScreenModel.cs" />
     <Compile Include="Domain\PassengerLimitScreenViewModel.cs" />
     <Compile Include="Domain\GateMonitorViewModel.cs" />
@@ -396,12 +397,16 @@
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Model\Common\DbConfig.cs" />
     <Compile Include="Repository\SCDbContext.cs" />
+    <Compile Include="Services\imp\GateMonitorPollingService.cs" />
+    <Compile Include="Services\imp\ScreenMonitorPollingService.cs" />
+    <Compile Include="Services\PollingService\DefaultPollingMonitorService.cs" />
     <Compile Include="Services\PollingService\DefultPollingTaskService.cs" />
     <Compile Include="Services\IAlarmMonitService.cs" />
     <Compile Include="Services\imp\DefaultAlarmMonitorService.cs" />
     <Compile Include="Services\imp\DefaultUniqueComparisonAlerts.cs" />
     <Compile Include="Services\imp\SuncunAlarmMonitorService.cs" />
     <Compile Include="Services\imp\ZhaoGuanAlarmMonitorService.cs" />
+    <Compile Include="Services\PollingService\IPollingMonitorService.cs" />
     <Compile Include="Utility\DbConnectionTemplate.cs" />
     <Compile Include="Utility\DbFactory.cs" />
     <Compile Include="Services\IInOutwellDataCompareService.cs" />

@@ -1,16 +1,20 @@
 ﻿using HealthMonitor.Model.Entity;
+using HealthMonitor.Services;
+using HealthMonitor.Services.imp;
+using HealthMonitor.Services.PollingService;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace HealthMonitor.Domain
 {
-    public class ScreenModel : ViewModelBase
+    public class ScreenModel : ViewModelBase,IMonitorEntity
     {
         public string _ip;
         public string _name;
@@ -18,12 +22,12 @@ namespace HealthMonitor.Domain
         private bool _startUp;
         private bool _status;
         private AreaModel _area;
-        private decimal _pushInterval = 3;
+        private double _pushInterval = 3;
         private string _workfaceName;
 
         public ScreenModel()
         {
-            Debug.WriteLine($"{nameof(ScreenModel)}::ctor --> {this.GetHashCode()}");
+            this.PollingService = new ScreenMonitorPollingService();
         }
 
         /// <summary>
@@ -58,8 +62,6 @@ namespace HealthMonitor.Domain
             set => SetProperty(ref _port, value);
         }
 
-        
-
         /// <summary>
         /// 工作面名称
         /// </summary>
@@ -72,7 +74,7 @@ namespace HealthMonitor.Domain
         /// <summary>
         /// 推送间隔
         /// </summary>
-        public decimal PUSHINTERVAL
+        public double PUSHINTERVAL
         {
             get => _pushInterval;
             set => SetProperty(ref _pushInterval, value);
@@ -95,7 +97,7 @@ namespace HealthMonitor.Domain
             get => _area;
             set => SetProperty(ref _area, value);
         }
-        
+
 
         /// <summary>
         /// 开始往设备（屏幕）发送消息
@@ -103,14 +105,36 @@ namespace HealthMonitor.Domain
         public bool STARTUP
         {
             get => _startUp;
-            set => SetProperty(ref _startUp, value);
+            set
+            {
+                SetProperty(ref _startUp, value);
+                if (value)
+                {
+                    if (this.TaskTokenSource is null || this.TaskTokenSource.IsCancellationRequested)
+                    {
+                        this.TaskTokenSource = new CancellationTokenSource();
+                    }
+                    this.PollingService.ExecuteAsync(this,this.TaskTokenSource.Token);
+                }
+                else
+                {
+                    this.TaskTokenSource?.Cancel();
+                }
+            }
         }
+
+        /// <summary>
+        /// 关联任务
+        /// </summary>
+        public IPollingMonitorService<ScreenModel> PollingService { get; set; }
 
         public ScreenModel SetID(int id)
         {
             this.ID = id;
             return this;
         }
+
+        public CancellationTokenSource TaskTokenSource { get; set; }
 
         public PassengerScreenEntity ToMapEntity()
         {
@@ -124,6 +148,11 @@ namespace HealthMonitor.Domain
                 WORKFACENAME = this.WORKFACENAME,
                 PUSHINTERVAL = this.PUSHINTERVAL,
             };
+        }
+
+        public void StartUp(bool? flag) 
+        {
+            this.STARTUP = flag.Value;
         }
     }
 }

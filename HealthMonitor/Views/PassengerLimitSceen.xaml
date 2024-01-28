@@ -66,6 +66,19 @@
                 <Setter Property="FontSize" Value="14" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
+            <Style
+                x:Key="ScreenStartUpCbx"
+                BasedOn="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}"
+                TargetType="CheckBox">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}" Value="True">
+                        <Setter Property="Content" Value="停止监测" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}" Value="False">
+                        <Setter Property="Content" Value="开启监测" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
             <conv:BoolToVisibilityConverter x:Key="ConvBoolToVisibility" />
         </ResourceDictionary>
     </UserControl.Resources>
@@ -276,17 +289,24 @@
                                         <ColumnDefinition Width="auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox
-                                        HorizontalAlignment="Left"
-                                        Command="{Binding OneClickMonitorCommand}"
-                                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
-                                        Content="一键监测"
-                                        IsChecked="False"
-                                        Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox
+                                            HorizontalAlignment="Left"
+                                            IsChecked="{Binding SelectScreen.STARTUP, Mode=TwoWay}"
+                                            Style="{StaticResource ScreenStartUpCbx}" />
+                                        <CheckBox
+                                            HorizontalAlignment="Left"
+                                            Command="{Binding OneClickMonitorCommand}"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                                            Content="一键监测"
+                                            IsChecked="False"
+                                            Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" />
+                                    </StackPanel>
                                     <StackPanel
                                         Grid.Column="1"
                                         HorizontalAlignment="Right"
                                         Orientation="Horizontal">
+
                                         <Button
                                             Command="{Binding UpdateScreenCommand}"
                                             CommandParameter="{Binding SelectScreen}"

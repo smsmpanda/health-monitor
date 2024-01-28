@@ -37,7 +37,7 @@ namespace HealthMonitor.Model.Entity
         /// <summary>
         /// 推送间隔
         /// </summary>
-        public decimal PUSHINTERVAL { get; set; }
+        public double PUSHINTERVAL { get; set; }
 
         /// <summary>
         /// 关联区域编号
