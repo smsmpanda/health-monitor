@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HealthMonitor.Utility;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace HealthMonitor.Services.imp
         {
             get
             {
-                string intervalSetting = ConfigurationManager.AppSettings["UniqueComparsionInterval"].ToString();
+                string intervalSetting = ApplicationConfig.GetValue("UniqueComparsionInterval");
                 if (string.IsNullOrWhiteSpace(intervalSetting))
                 {
                     return 30;

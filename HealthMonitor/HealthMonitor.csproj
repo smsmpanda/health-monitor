@@ -105,6 +105,9 @@
     <Reference Include="DynamicExpresso.Core, Version=2.3.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DynamicExpresso.Core.2.3.3\lib\net461\DynamicExpresso.Core.dll</HintPath>
     </Reference>
+    <Reference Include="EasyModbus, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyModbusTCP.5.6.0\lib\net40\EasyModbus.dll</HintPath>
+    </Reference>
     <Reference Include="FluentFTP, Version=44.0.1.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentFTP.44.0.1\lib\net472\FluentFTP.dll</HintPath>
     </Reference>
@@ -387,9 +390,14 @@
     <Compile Include="Extensions\ManualMapperExtension.cs" />
     <Compile Include="Extensions\PrismManager.cs" />
     <Compile Include="Model\Entity\AlarmRecordEntity.cs" />
+    <Compile Include="Model\Entity\AreaRealDataEntity.cs" />
     <Compile Include="Model\Entity\GateEntity.cs" />
     <Compile Include="Model\Entity\PassengerScreenEntity.cs" />
     <Compile Include="Model\Entity\UniqueInexitWellEntity.cs" />
+    <Compile Include="Proto\Screen\Phy1.cs" />
+    <Compile Include="Proto\Screen\PacketBuild.cs" />
+    <Compile Include="Proto\Screen\PacketDirector.cs" />
+    <Compile Include="Proto\Screen\ScreenCommunicateBuilder.cs" />
     <Compile Include="Repository\IDwRepository.cs" />
     <Compile Include="Repository\IHmRepository.cs" />
     <Compile Include="Repository\imp\DwRepository.cs" />
@@ -407,6 +415,10 @@
     <Compile Include="Services\imp\SuncunAlarmMonitorService.cs" />
     <Compile Include="Services\imp\ZhaoGuanAlarmMonitorService.cs" />
     <Compile Include="Services\PollingService\IPollingMonitorService.cs" />
+    <Compile Include="Utility\ApplicationConfig.cs" />
+    <Compile Include="Utility\ByteHelper.cs" />
+    <Compile Include="Utility\CRCHelper.cs" />
+    <Compile Include="Utility\DateTimeHelper.cs" />
     <Compile Include="Utility\DbConnectionTemplate.cs" />
     <Compile Include="Utility\DbFactory.cs" />
     <Compile Include="Services\IInOutwellDataCompareService.cs" />
@@ -415,6 +427,7 @@
     <Compile Include="Services\imp\SuncunUniqueComparisonAlerts.cs" />
     <Compile Include="Services\imp\ZhaoguanUniqueComparisonAlerts.cs" />
     <Compile Include="SqlMaps\AlarmSql.cs" />
+    <Compile Include="Utility\EncodingHelper.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Utility\WindowsFullScreenHelper.cs" />
     <Compile Include="Views\DataCompare.xaml.cs">

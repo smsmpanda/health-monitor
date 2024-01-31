@@ -267,16 +267,6 @@
                                         HorizontalAlignment="Right"
                                         Orientation="Horizontal">
                                         <Button
-                                            Command="{Binding DeleteGateCommand}"
-                                            CommandParameter="{Binding SelectGate}"
-                                            Style="{StaticResource MaterialDesignFlatButton}">
-                                            <materialDesign:PackIcon
-                                                Width="20"
-                                                Height="20"
-                                                Kind="Delete" />
-                                        </Button>
-
-                                        <Button
                                             Command="{Binding UpdateGateCommand}"
                                             CommandParameter="{Binding SelectGate}"
                                             Style="{StaticResource MaterialDesignFlatButton}">
@@ -284,6 +274,16 @@
                                                 Width="20"
                                                 Height="20"
                                                 Kind="SquareEditOutline" />
+                                        </Button>
+
+                                        <Button
+                                            Command="{Binding DeleteGateCommand}"
+                                            CommandParameter="{Binding SelectGate}"
+                                            Style="{StaticResource MaterialDesignFlatButton}">
+                                            <materialDesign:PackIcon
+                                                Width="20"
+                                                Height="20"
+                                                Kind="Delete" />
                                         </Button>
 
                                     </StackPanel>

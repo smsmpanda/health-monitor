@@ -344,6 +344,22 @@ namespace HealthMonitor.Repository
                 return await connection.QueryAsync<AreaModel>(AreaSql.Get);
             }
         }
+
+        public static async Task<AreaRealDataEntity> GetAreaRealDataAsync(int areaID) 
+        {
+            using (IDbConnection connection = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
+            {
+                return await connection.QueryFirstAsync<AreaRealDataEntity>(AreaSql.GetAreaRealData,new { ID = areaID });
+            }
+        }
+
+        public static async Task<IEnumerable<AreaRealEmployeeEntity>> GetAreaRealEmployeesAsync(int areaID) 
+        {
+            using (IDbConnection connection = await DbFactory.GetDbInstance(_connectionString, Enums.DbType.ORACLE).CreateConnectionAsync())
+            {
+                return await connection.QueryAsync<AreaRealEmployeeEntity>(AreaSql.GetRealAreaEmployee, new { AreaID = areaID });
+            }
+        }
         #endregion
     }
 }
