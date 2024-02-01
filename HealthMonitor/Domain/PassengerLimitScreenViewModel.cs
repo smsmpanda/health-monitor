@@ -28,8 +28,6 @@ namespace HealthMonitor.Domain
         public PassengerLimitScreenViewModel()
         {
             _screens = new ObservableCollection<ScreenModel>();
-            OneClickMonitorCommand = new DelegateCommand<bool?>(OneClickMoniting);
-            StartUpMonitorCommand = new DelegateCommand<bool?>(StartUpMoniting);
 
             GetScreensAsync();
             GetAreasAsync();
@@ -45,7 +43,14 @@ namespace HealthMonitor.Domain
         {
             get => _isBottomDrawOpen;
             set => SetProperty(ref _isBottomDrawOpen, value);
-        } 
+        }
+
+        public bool _screenIsEmpty = true;
+        public bool ScreenIsEmpty 
+        {
+            get => _screenIsEmpty;
+            set => SetProperty(ref _screenIsEmpty,value);
+        }
         
         /// <summary>
         /// 限员屏数据
@@ -60,7 +65,11 @@ namespace HealthMonitor.Domain
         public ScreenModel SelectScreen
         {
             get => _selectScreen;
-            set => SetProperty(ref _selectScreen, value);
+            set
+            {
+                SetProperty(ref _selectScreen, value);
+                this.ScreenIsEmpty = this.SelectScreen is null;
+            }
         }
 
         /// <summary>
@@ -75,16 +84,29 @@ namespace HealthMonitor.Domain
             new AnotherCommandImplementation(SaveScreen,CanSaveScreen);
 
         public ICommand UpdateScreenCommand =>
-            new AnotherCommandImplementation(UpdateScreen);
+            new AnotherCommandImplementation(UpdateScreen,CanOperator);
+
+        private bool CanOperator(object arg)
+        {
+            return this.Screens.Any();
+        }
 
         public ICommand DeleteScreenCommand =>
-            new AnotherCommandImplementation(DeleteScreen);
+            new AnotherCommandImplementation(DeleteScreen, CanOperator);
 
         public ICommand ExpandBottomDrawCommand =>
            new AnotherCommandImplementation(ExpandBottomDraw);
 
-        public DelegateCommand<bool?> OneClickMonitorCommand { get; }
-        public DelegateCommand<bool?> StartUpMonitorCommand { get; }
+        public ICommand OneClickMonitorCommand =>
+                new AnotherCommandImplementation(OneClickMoniting,CanHandleLogic);
+
+        public ICommand StartUpMonitorCommand =>
+            new AnotherCommandImplementation(StartUpMoniting, CanHandleLogic);
+
+        private bool CanHandleLogic(object arg)
+        {
+            return SelectScreen != null;
+        }
 
         public void ExpandBottomDraw(object m)
         {
@@ -92,14 +114,16 @@ namespace HealthMonitor.Domain
             IsBottomDrawOpen = !IsBottomDrawOpen;
         }
 
-        private void OneClickMoniting(bool? flag)
+        private void OneClickMoniting(object flag)
         {
-            Parallel.ForEach(this.Screens, db => db.StartUp(flag.Value));
+            bool enable = (bool)flag;
+            Parallel.ForEach(this.Screens, db => db.StartUp(enable));
         }
 
-        private void StartUpMoniting(bool? flag)
+        private void StartUpMoniting(object flag)
         {
-            this.SelectScreen.StartUp(flag);
+            bool enable = (bool)flag;
+            this.SelectScreen.StartUp(enable);
         }
 
         /// <summary>
@@ -154,6 +178,7 @@ namespace HealthMonitor.Domain
                 int id = ((ScreenModel)obj).ID;
                 await RYDWDbContext.DeletePassengerLimitAsync(id);
                 this.Screens.Remove(this.Screens.FirstOrDefault(s => s.ID == id));
+                this.SelectScreen = this.Screens?.FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -162,7 +187,7 @@ namespace HealthMonitor.Domain
         }
 
 
-        private async void GetScreensAsync(Action after = null)
+        private async void GetScreensAsync(Action callback = null)
         {
             var screens = await RYDWDbContext.GetPassengerLimitScreensAsync();
             if (screens != null && screens.Any())
@@ -170,7 +195,7 @@ namespace HealthMonitor.Domain
                 this.Screens = new ObservableCollection<ScreenModel>(screens.Select(s => s.ToMapViewModel()));
                 this.SelectScreen = this.SelectScreen ?? this.Screens[0];
             }
-            after?.Invoke();
+            callback?.Invoke();
         }
 
         private async void GetAreasAsync() 

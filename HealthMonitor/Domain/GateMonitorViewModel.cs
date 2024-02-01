@@ -42,7 +42,11 @@ namespace HealthMonitor.Domain
         public GateMonitorModel SelectGate
         {
             get => _selectGate;
-            set => SetProperty(ref _selectGate, value);
+            set
+            {
+                SetProperty(ref _selectGate, value);
+                this.ScreenIsEmpty = this.SelectGate is null;
+            }
         }
 
         /// <summary>
@@ -52,6 +56,13 @@ namespace HealthMonitor.Domain
         {
             get => _gates;
             set => SetProperty(ref _gates, value);
+        }
+
+        public bool _screenIsEmpty = true;
+        public bool ScreenIsEmpty
+        {
+            get => _screenIsEmpty;
+            set => SetProperty(ref _screenIsEmpty, value);
         }
 
         /// <summary>
@@ -143,6 +154,7 @@ namespace HealthMonitor.Domain
                 int id = ((GateMonitorModel)obj).ID;
                 await RYDWDbContext.DeletePassengerLimitAsync(id);
                 this.Gates.Remove(this.Gates.FirstOrDefault(s => s.ID == id));
+                this.SelectGate = this.Gates?.FirstOrDefault();
             }
             catch (Exception ex)
             {

@@ -239,57 +239,62 @@
                         BorderBrush="#FFE5E5E5"
                         BorderThickness="1,0,0,0">
                         <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Border Margin="0,5,0,0" Background="White">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Orientation="Horizontal">
-                                        <CheckBox
-                                            HorizontalAlignment="Left"
-                                            IsChecked="{Binding SelectGate.STARTUP, Mode=TwoWay}"
-                                            Style="{StaticResource GateStartUpCbx}" />
-                                        <CheckBox
-                                            HorizontalAlignment="Left"
-                                            Command="{Binding OneClickMonitorCommand}"
-                                            CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
-                                            Content="一键监测"
-                                            IsChecked="False"
-                                            Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" />
-                                    </StackPanel>
-                                    <StackPanel
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Right"
-                                        Orientation="Horizontal">
-                                        <Button
-                                            Command="{Binding UpdateGateCommand}"
-                                            CommandParameter="{Binding SelectGate}"
-                                            Style="{StaticResource MaterialDesignFlatButton}">
-                                            <materialDesign:PackIcon
-                                                Width="20"
-                                                Height="20"
-                                                Kind="SquareEditOutline" />
-                                        </Button>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Border Margin="0,5,0,0" Background="White">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox
+                                                HorizontalAlignment="Left"
+                                                IsChecked="{Binding SelectGate.STARTUP, Mode=TwoWay}"
+                                                Style="{StaticResource GateStartUpCbx}" />
+                                            <CheckBox
+                                                HorizontalAlignment="Left"
+                                                Command="{Binding OneClickMonitorCommand}"
+                                                CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                                                Content="一键监测"
+                                                IsChecked="False"
+                                                Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" />
+                                        </StackPanel>
+                                        <StackPanel
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Right"
+                                            Orientation="Horizontal">
+                                            <Button
+                                                Command="{Binding UpdateGateCommand}"
+                                                CommandParameter="{Binding SelectGate}"
+                                                Style="{StaticResource MaterialDesignFlatButton}">
+                                                <materialDesign:PackIcon
+                                                    Width="20"
+                                                    Height="20"
+                                                    Kind="SquareEditOutline" />
+                                            </Button>
 
-                                        <Button
-                                            Command="{Binding DeleteGateCommand}"
-                                            CommandParameter="{Binding SelectGate}"
-                                            Style="{StaticResource MaterialDesignFlatButton}">
-                                            <materialDesign:PackIcon
-                                                Width="20"
-                                                Height="20"
-                                                Kind="Delete" />
-                                        </Button>
+                                            <Button
+                                                Command="{Binding DeleteGateCommand}"
+                                                CommandParameter="{Binding SelectGate}"
+                                                Style="{StaticResource MaterialDesignFlatButton}">
+                                                <materialDesign:PackIcon
+                                                    Width="20"
+                                                    Height="20"
+                                                    Kind="Delete" />
+                                            </Button>
 
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                            <Border Grid.Row="1" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                                <Border Grid.Row="1" />
+                            </Grid>
+                            <Grid Background="#FFFFFF" Visibility="{Binding ScreenIsEmpty, Converter={StaticResource ConvBoolToVisibility}}">
+                                <Image Width="85" Source="pack://application:,,,/Resource/empty.png" />
+                            </Grid>
                         </Grid>
                     </Border>
 

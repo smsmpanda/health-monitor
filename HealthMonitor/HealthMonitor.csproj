@@ -415,6 +415,12 @@
     <Compile Include="Services\imp\SuncunAlarmMonitorService.cs" />
     <Compile Include="Services\imp\ZhaoGuanAlarmMonitorService.cs" />
     <Compile Include="Services\PollingService\IPollingMonitorService.cs" />
+    <Compile Include="SqlMaps\AreaSql.cs" />
+    <Compile Include="SqlMaps\CompareDwSql.cs" />
+    <Compile Include="SqlMaps\CompareHmSql.cs" />
+    <Compile Include="SqlMaps\GateSql.cs" />
+    <Compile Include="SqlMaps\PassenagerLimitSql.cs" />
+    <Compile Include="SqlMaps\UniqueComparsionSql.cs" />
     <Compile Include="Utility\ApplicationConfig.cs" />
     <Compile Include="Utility\ByteHelper.cs" />
     <Compile Include="Utility\CRCHelper.cs" />
@@ -540,6 +546,7 @@
     <None Include="app.manifest" />
     <None Include="crash_reporter.cfg" />
     <Resource Include="Fonts\iconfont.ttf" />
+    <Resource Include="Font\iconfont.ttf" />
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -589,6 +596,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExternalDll\MySql.Data.dll" />
+    <Resource Include="Resource\empty.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resource\home.png" />
     <Resource Include="Resource\homebg.png" />
   </ItemGroup>

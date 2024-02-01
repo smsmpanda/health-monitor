@@ -80,6 +80,7 @@
                 </Style.Triggers>
             </Style>
             <conv:BoolToVisibilityConverter x:Key="ConvBoolToVisibility" />
+            <conv:NullToBoolConverter x:Key="ConNullToBool" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -166,7 +167,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer Background="#FFFFFF" VerticalScrollBarVisibility="Auto">
                         <ListBox
                             Name="Screens"
                             ItemContainerStyle="{StaticResource ScreenListBoxItemContainerStyle}"
@@ -279,133 +280,138 @@
                         BorderBrush="#FFE5E5E5"
                         BorderThickness="1,0,0,0">
                         <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <Border Background="White">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Orientation="Horizontal">
-                                        <CheckBox
-                                            HorizontalAlignment="Left"
-                                            IsChecked="{Binding SelectScreen.STARTUP, Mode=TwoWay}"
-                                            Style="{StaticResource ScreenStartUpCbx}" />
-                                        <CheckBox
-                                            HorizontalAlignment="Left"
-                                            Command="{Binding OneClickMonitorCommand}"
-                                            CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
-                                            Content="一键监测"
-                                            IsChecked="False"
-                                            Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" />
-                                    </StackPanel>
-                                    <StackPanel
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Right"
-                                        Orientation="Horizontal">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Border Background="White">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox
+                                                HorizontalAlignment="Left"
+                                                IsChecked="{Binding SelectScreen.STARTUP, Mode=TwoWay}"
+                                                Style="{StaticResource ScreenStartUpCbx}" />
+                                            <CheckBox
+                                                HorizontalAlignment="Left"
+                                                Command="{Binding OneClickMonitorCommand}"
+                                                CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                                                Content="一键监测"
+                                                IsChecked="False"
+                                                Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" />
+                                        </StackPanel>
+                                        <StackPanel
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Right"
+                                            Orientation="Horizontal">
 
-                                        <Button
-                                            Command="{Binding UpdateScreenCommand}"
-                                            CommandParameter="{Binding SelectScreen}"
-                                            Style="{StaticResource MaterialDesignFlatButton}">
+                                            <Button
+                                                Command="{Binding UpdateScreenCommand}"
+                                                CommandParameter="{Binding SelectScreen}"
+                                                Style="{StaticResource MaterialDesignFlatButton}">
+                                                <materialDesign:PackIcon
+                                                    Width="20"
+                                                    Height="20"
+                                                    Kind="SquareEditOutline" />
+                                            </Button>
+                                            <Button
+                                                Command="{Binding DeleteScreenCommand}"
+                                                CommandParameter="{Binding SelectScreen}"
+                                                Style="{StaticResource MaterialDesignFlatButton}">
+                                                <materialDesign:PackIcon
+                                                    Width="20"
+                                                    Height="20"
+                                                    Kind="Delete" />
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    BorderBrush="#FFE5E5E5"
+                                    BorderThickness="0,1,0,0">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="35" />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*" />
+                                            <ColumnDefinition Width="1*" />
+                                            <ColumnDefinition Width="1*" />
+                                            <ColumnDefinition Width="1*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
                                             <materialDesign:PackIcon
                                                 Width="20"
                                                 Height="20"
-                                                Kind="SquareEditOutline" />
-                                        </Button>
-                                        <Button
-                                            Command="{Binding DeleteScreenCommand}"
-                                            CommandParameter="{Binding SelectScreen}"
-                                            Style="{StaticResource MaterialDesignFlatButton}">
+                                                Foreground="#FF002984"
+                                                Kind="Ip" />
+                                            <TextBlock Style="{StaticResource ScreenOtherInfoTextBlockStyle}" Text="{Binding SelectScreen.IP, StringFormat=主机：{0}}" />
+                                        </StackPanel>
+
+                                        <StackPanel
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
                                             <materialDesign:PackIcon
                                                 Width="20"
                                                 Height="20"
-                                                Kind="Delete" />
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                            <Border
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                BorderBrush="#FFE5E5E5"
-                                BorderThickness="0,1,0,0">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="35" />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*" />
-                                        <ColumnDefinition Width="1*" />
-                                        <ColumnDefinition Width="1*" />
-                                        <ColumnDefinition Width="1*" />
-                                    </Grid.ColumnDefinitions>
+                                                Foreground="#FF002984"
+                                                Kind="MapMarker" />
+                                            <TextBlock Grid.Column="1" Text="{Binding AREA.NAME, StringFormat={}{0}}" />
+                                            <TextBlock Style="{StaticResource ScreenOtherInfoTextBlockStyle}" Text="{Binding SelectScreen.AREA.NAME, StringFormat=区域：{0}}" />
+                                        </StackPanel>
 
-                                    <StackPanel
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <materialDesign:PackIcon
-                                            Width="20"
-                                            Height="20"
-                                            Foreground="#FF002984"
-                                            Kind="Ip" />
-                                        <TextBlock Style="{StaticResource ScreenOtherInfoTextBlockStyle}" Text="{Binding SelectScreen.IP, StringFormat=主机：{0}}" />
-                                    </StackPanel>
-
-                                    <StackPanel
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <materialDesign:PackIcon
-                                            Width="20"
-                                            Height="20"
-                                            Foreground="#FF002984"
-                                            Kind="MapMarker" />
-                                        <TextBlock Grid.Column="1" Text="{Binding AREA.NAME, StringFormat={}{0}}" />
-                                        <TextBlock Style="{StaticResource ScreenOtherInfoTextBlockStyle}" Text="{Binding SelectScreen.AREA.NAME, StringFormat=区域：{0}}" />
-                                    </StackPanel>
-
-                                    <StackPanel
-                                        Grid.Column="2"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <materialDesign:PackIcon
-                                            Width="20"
-                                            Height="20"
-                                            Foreground="#FF002984"
-                                            Kind="MapMarker" />
-                                        <TextBlock Style="{StaticResource ScreenOtherInfoTextBlockStyle}" Text="{Binding SelectScreen.WORKFACENAME, StringFormat=工作面：{0}}" />
-                                    </StackPanel>
-
-                                    <StackPanel
-                                        Grid.Column="3"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <materialDesign:PackIcon
-                                            Width="20"
-                                            Height="20"
-                                            Foreground="#FF002984"
-                                            Kind="TimerSyncOutline" />
-                                        <TextBlock
+                                        <StackPanel
                                             Grid.Column="2"
-                                            Style="{StaticResource ScreenOtherInfoTextBlockStyle}"
-                                            Text="{Binding SelectScreen.PUSHINTERVAL, StringFormat=推送间隔：{0}秒}" />
-                                    </StackPanel>
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                            <materialDesign:PackIcon
+                                                Width="20"
+                                                Height="20"
+                                                Foreground="#FF002984"
+                                                Kind="MapMarker" />
+                                            <TextBlock Style="{StaticResource ScreenOtherInfoTextBlockStyle}" Text="{Binding SelectScreen.WORKFACENAME, StringFormat=工作面：{0}}" />
+                                        </StackPanel>
 
-                                    <Border
-                                        Grid.Row="1"
-                                        Grid.ColumnSpan="4"
-                                        Background="#FFFFFF" />
-                                </Grid>
-                            </Border>
+                                        <StackPanel
+                                            Grid.Column="3"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                            <materialDesign:PackIcon
+                                                Width="20"
+                                                Height="20"
+                                                Foreground="#FF002984"
+                                                Kind="TimerSyncOutline" />
+                                            <TextBlock
+                                                Grid.Column="2"
+                                                Style="{StaticResource ScreenOtherInfoTextBlockStyle}"
+                                                Text="{Binding SelectScreen.PUSHINTERVAL, StringFormat=推送间隔：{0}秒}" />
+                                        </StackPanel>
+
+                                        <Border
+                                            Grid.Row="1"
+                                            Grid.ColumnSpan="4"
+                                            Background="#FFFFFF" />
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                            <Grid Background="#FFFFFF" Visibility="{Binding ScreenIsEmpty, Converter={StaticResource ConvBoolToVisibility}}">
+                                <Image Width="85" Source="pack://application:,,,/Resource/empty.png" />
+                            </Grid>
                         </Grid>
                     </Border>
                     <Button
