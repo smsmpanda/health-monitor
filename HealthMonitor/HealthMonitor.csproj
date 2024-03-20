@@ -546,7 +546,6 @@
     <None Include="app.manifest" />
     <None Include="crash_reporter.cfg" />
     <Resource Include="Fonts\iconfont.ttf" />
-    <Resource Include="Font\iconfont.ttf" />
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
